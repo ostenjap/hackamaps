@@ -92,20 +92,6 @@ const Index = () => {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gradient-primary">
-                <Map className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Global Hackathon Map
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  Discover hackathons worldwide
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -124,6 +110,21 @@ const Index = () => {
                   </Badge>
                 )}
               </Button>
+              
+              <div className="p-2 rounded-lg bg-gradient-primary">
+                <Map className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  Global Hackathon Map
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  Discover hackathons worldwide
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
               <SubmitHackathonDialog />
               <ThemeToggle />
             </div>
