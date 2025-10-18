@@ -120,6 +120,8 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
   useEffect(() => {
     if (!map.current) return;
 
+    console.log("Adding markers for", hackathons.length, "hackathons");
+
     // Remove existing markers
     markers.current.forEach((marker) => marker.remove());
     markers.current = [];

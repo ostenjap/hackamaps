@@ -50,6 +50,7 @@ const Index = () => {
       return;
     }
 
+    console.log("Fetched hackathons:", data?.length, "hackathons");
     setHackathons(data || []);
     setFilteredHackathons(data || []);
   };
