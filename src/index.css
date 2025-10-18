@@ -152,4 +152,33 @@ All colors MUST be HSL.
   .gradient-hero {
     background: var(--gradient-hero);
   }
+  
+  /* Leaflet popup styling */
+  .leaflet-popup-content-wrapper {
+    background: hsl(var(--card));
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-elevated);
+    border-radius: 12px;
+    padding: 0;
+  }
+  
+  .leaflet-popup-content {
+    margin: 16px;
+  }
+  
+  .leaflet-popup-tip {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .leaflet-container a.leaflet-popup-close-button {
+    color: hsl(var(--foreground));
+    font-size: 24px;
+    padding: 8px 12px;
+  }
+  
+  .leaflet-container a.leaflet-popup-close-button:hover {
+    color: hsl(var(--primary));
+  }
 }
