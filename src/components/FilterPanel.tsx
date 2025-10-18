@@ -135,16 +135,6 @@ export function FilterPanel({
               onChange={(e) => setLocationSearch(e.target.value)}
               className="w-full"
             />
-            {locationSearch && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setLocationSearch("")}
-                className="w-full"
-              >
-                Clear Search
-              </Button>
-            )}
           </div>
 
           {/* Continents */}
