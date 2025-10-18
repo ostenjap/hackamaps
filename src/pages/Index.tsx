@@ -88,7 +88,7 @@ const Index = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-30 backdrop-blur-xl bg-card/80 border-b border-border shadow-lg">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-card/80 border-b border-border shadow-lg">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -146,7 +146,7 @@ const Index = () => {
           />
 
           <div className={`h-full transition-all duration-300 ${isFilterOpen ? "lg:pl-80" : ""}`}>
-            <div className="h-full p-4">
+            <div className="h-full p-4 relative z-10">
               <div className="h-full rounded-xl overflow-hidden shadow-2xl border border-border">
                 <HackathonMap hackathons={filteredHackathons} />
               </div>

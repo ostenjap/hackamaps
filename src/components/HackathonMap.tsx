@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface Hackathon {
   id: string;
@@ -48,6 +49,11 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<L.Marker[]>([]);
+  const tileLayer = useRef<L.TileLayer | null>(null);
+  const { theme } = useTheme();
+
+  // Determine if dark mode is active
+  const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -61,8 +67,12 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       maxBoundsViscosity: 1.0,
     });
 
-    // Add dark tile layer
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    // Add initial tile layer based on theme
+    const tileUrl = isDark 
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+    tileLayer.current = L.tileLayer(tileUrl, {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       subdomains: ['a', 'b', 'c', 'd'],
       maxZoom: 19,
@@ -95,6 +105,17 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       }
     };
   }, []);
+
+  // Update tile layer when theme changes
+  useEffect(() => {
+    if (!map.current || !tileLayer.current) return;
+
+    const tileUrl = isDark 
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+    tileLayer.current.setUrl(tileUrl);
+  }, [isDark]);
 
   useEffect(() => {
     if (!map.current) return;
