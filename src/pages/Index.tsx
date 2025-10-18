@@ -133,7 +133,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="pt-16 h-screen">
-        <div className="relative h-full">
+        <div className="relative h-full flex">
           <FilterPanel
             isOpen={isFilterOpen}
             onClose={() => setIsFilterOpen(false)}
@@ -145,7 +145,7 @@ const Index = () => {
             setLocationSearch={setLocationSearch}
           />
 
-          <div className={`h-full transition-all duration-300 ${isFilterOpen ? "lg:pl-80" : ""}`}>
+          <div className="flex-1 h-full">
             <div className="h-full p-4 relative z-10">
               <div className="h-full rounded-xl overflow-hidden shadow-2xl border border-border">
                 <HackathonMap hackathons={filteredHackathons} />
