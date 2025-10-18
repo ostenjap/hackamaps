@@ -1,73 +1,95 @@
-# Welcome to your Lovable project
+# 🌍 Hackathon Finder
 
-## Project info
+> Find hackathons worldwide, see them on a map, explore prizes and just vibe 🚀
 
-**URL**: https://lovable.dev/projects/aeab8248-783a-45b4-9ba1-964dd1b30117
+## 🎯 What is this?
 
-## How can I edit this code?
+A simple web app that shows you hackathons happening around the world. You can:
 
-There are several ways of editing your application.
+- 🗺️ See hackathons on an interactive map
+- 🔍 Filter by category, location, or date
+- 💰 Check out prize pools
+- 🎨 Switch between light/dark mode
+- ✨ Submit your own hackathon
 
-**Use Lovable**
+## 🛠️ Built with
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/aeab8248-783a-45b4-9ba1-964dd1b30117) and start prompting.
+- React (for the UI stuff)
+- TypeScript (so we don't break things)
+- Tailwind CSS (makes it look pretty)
+- Leaflet (for the cool map)
+- Supabase (database magic ✨)
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Want to run this locally?
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Super easy. Just:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# 1. Clone it
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# 2. Go into the folder
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
+# 3. Install stuff
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. Run it
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+That's it! Open localhost:8080 and you're good 👍
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📝 Edit this project
 
-**Use GitHub Codespaces**
+### Option 1: Use Lovable (easiest)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Just go to [your Lovable project](https://lovable.dev/projects/aeab8248-783a-45b4-9ba1-964dd1b30117) and tell the AI what you want. It'll code it for you 🤖
 
-## What technologies are used for this project?
+### Option 2: Code it yourself
 
-This project is built with:
+Clone this repo, make changes, push them. Whatever you push will sync to Lovable automatically 🔄
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Option 3: GitHub web editor
 
-## How can I deploy this project?
+Click the pencil icon on any file in GitHub and edit right there. Super simple.
 
-Simply open [Lovable](https://lovable.dev/projects/aeab8248-783a-45b4-9ba1-964dd1b30117) and click on Share -> Publish.
+### Option 4: GitHub Codespaces
 
-## Can I connect a custom domain to my Lovable project?
+Click the green "Code" button → Codespaces → New codespace. It's like VS Code but in your browser 💻
 
-Yes, you can!
+## 🌐 Deploy this thing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Open [Lovable](https://lovable.dev/projects/aeab8248-783a-45b4-9ba1-964dd1b30117)
+2. Click Share → Publish
+3. Done ✅
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Your app is now live for the world to see!
+
+## 🎨 Custom domain?
+
+Yeah you can do that. Go to Project → Settings → Domains → Connect Domain
+
+(You need a paid plan tho)
+
+[Read more about domains](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## 💡 Ideas for making this better
+
+- Add more hackathon data sources
+- Let people upvote hackathons
+- Add notifications for upcoming deadlines
+- Make the map even cooler with clusters
+- Add user profiles
+
+## 🤝 Contributing
+
+Found a bug? Have an idea? Just open an issue or submit a PR. All contributions welcome! 🎉
+
+## 📄 License
+
+MIT - do whatever you want with this
+
+---
+
+Made with 💜 and lots of ☕
