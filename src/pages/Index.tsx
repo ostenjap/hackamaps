@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Filter, Map } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
@@ -112,9 +112,6 @@ const Index = () => {
                 )}
               </Button>
 
-              <div className="p-2 rounded-lg bg-gradient-primary">
-                <Map className="h-6 w-6 text-white" />
-              </div>
               <div>
                 <h1 className="text-2xl font-bold font-['Exo_2'] tracking-tight">
                   hackermaps.io
