@@ -2,6 +2,47 @@
 
 > Find hackathons worldwide, see them on a map, explore prizes and just vibe 🚀
 
+## 🗺️ How does the map work?
+
+The map pulls hackathon data from a **Supabase database** (via Lovable Cloud). Here's the deal:
+
+### Where the data comes from
+- All hackathon data is stored in the `hackathons` table in Supabase
+- Each hackathon has `latitude` and `longitude` fields that position it on the map
+- Data includes: name, location, dates, categories, prize pools, website URLs, etc.
+
+### How to edit data manually
+
+**Option 1: Through Lovable Cloud UI**
+1. Open your project in Lovable
+2. Go to the backend/database section
+3. Find the `hackathons` table
+4. Edit records directly in the UI
+
+**Option 2: Via SQL**
+You can run SQL queries directly in Lovable Cloud to insert/update data:
+
+```sql
+-- Example: Insert a new hackathon
+INSERT INTO hackathons (name, location, city, country, continent, latitude, longitude, start_date, end_date, categories, prize_pool, website_url)
+VALUES ('My Hackathon', 'Cool Venue', 'San Francisco', 'USA', 'North America', 37.7749, -122.4194, '2025-03-01', '2025-03-03', ARRAY['AI', 'Blockchain'], '$50,000', 'https://example.com');
+
+-- Example: Update coordinates for better accuracy
+UPDATE hackathons 
+SET latitude = 37.7749, longitude = -122.4194 
+WHERE name = 'My Hackathon';
+```
+
+### Getting accurate coordinates
+For precise map positioning, use these methods:
+
+1. **Google Maps**: Right-click any location → Copy coordinates
+2. **OpenStreetMap**: Click "Show address" → Copy lat/long
+3. **geocoding.xyz API**: Convert addresses to coordinates programmatically
+4. **Google Geocoding API**: Most accurate but needs API key
+
+Pro tip: Always double-check coordinates match the actual venue location!
+
 ## 🎯 What is this?
 
 A simple web app that shows you hackathons happening around the world. You can:
