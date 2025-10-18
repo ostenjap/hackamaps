@@ -1,11 +1,165 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from "react";
+import { Filter, Map } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { FilterPanel } from "@/components/FilterPanel";
+import { HackathonMap } from "@/components/HackathonMap";
+import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { Badge } from "@/components/ui/badge";
+
+interface Hackathon {
+  id: string;
+  name: string;
+  description: string | null;
+  location: string;
+  latitude: number;
+  longitude: number;
+  start_date: string;
+  end_date: string;
+  categories: string[];
+  continent: string;
+  country: string;
+  city: string;
+  website_url: string | null;
+  prize_pool: string | null;
+  is_online: boolean;
+  max_participants: number | null;
+}
 
 const Index = () => {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedContinents, setSelectedContinents] = useState<string[]>([]);
+  const [locationSearch, setLocationSearch] = useState("");
+  const [hackathons, setHackathons] = useState<Hackathon[]>([]);
+  const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
+
+  useEffect(() => {
+    fetchHackathons();
+  }, []);
+
+  const fetchHackathons = async () => {
+    const { data, error } = await supabase
+      .from("hackathons")
+      .select("*")
+      .order("start_date", { ascending: true });
+
+    if (error) {
+      console.error("Error fetching hackathons:", error);
+      return;
+    }
+
+    setHackathons(data || []);
+    setFilteredHackathons(data || []);
+  };
+
+  useEffect(() => {
+    let filtered = hackathons;
+
+    // Filter by categories
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((h) =>
+        h.categories.some((cat) => selectedCategories.includes(cat))
+      );
+    }
+
+    // Filter by continents
+    if (selectedContinents.length > 0) {
+      filtered = filtered.filter((h) =>
+        selectedContinents.includes(h.continent)
+      );
+    }
+
+    // Filter by location search
+    if (locationSearch.trim()) {
+      const search = locationSearch.toLowerCase();
+      filtered = filtered.filter(
+        (h) =>
+          h.location.toLowerCase().includes(search) ||
+          h.city.toLowerCase().includes(search) ||
+          h.country.toLowerCase().includes(search)
+      );
+    }
+
+    setFilteredHackathons(filtered);
+  }, [selectedCategories, selectedContinents, locationSearch, hackathons]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-30 backdrop-blur-xl bg-card/80 border-b border-border shadow-lg">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-gradient-primary">
+                <Map className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  Global Hackathon Map
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  Discover hackathons worldwide
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="gap-2"
+              >
+                <Filter className="h-4 w-4" />
+                Filters
+                {(selectedCategories.length +
+                  selectedContinents.length +
+                  (locationSearch ? 1 : 0)) > 0 && (
+                  <Badge variant="secondary" className="ml-1">
+                    {selectedCategories.length +
+                      selectedContinents.length +
+                      (locationSearch ? 1 : 0)}
+                  </Badge>
+                )}
+              </Button>
+              <SubmitHackathonDialog />
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="pt-16 h-screen">
+        <div className="relative h-full">
+          <FilterPanel
+            isOpen={isFilterOpen}
+            onClose={() => setIsFilterOpen(false)}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            selectedContinents={selectedContinents}
+            setSelectedContinents={setSelectedContinents}
+            locationSearch={locationSearch}
+            setLocationSearch={setLocationSearch}
+          />
+
+          <div className={`h-full transition-all duration-300 ${isFilterOpen ? "lg:pl-80" : ""}`}>
+            <div className="h-full p-4">
+              <div className="h-full rounded-xl overflow-hidden shadow-2xl border border-border">
+                <HackathonMap hackathons={filteredHackathons} />
+              </div>
+            </div>
+
+            {/* Stats Badge */}
+            <div className="absolute bottom-8 right-8 glass-card rounded-lg p-4 z-20">
+              <div className="text-sm font-medium">
+                Showing {filteredHackathons.length} of {hackathons.length} hackathons
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
