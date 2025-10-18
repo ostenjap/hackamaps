@@ -140,12 +140,12 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
 
       // Create popup content
       const popupContent = `
-        <div style="min-width: 280px; color: #e5e7eb; font-family: system-ui;">
-          <h3 style="font-size: 18px; font-weight: bold; margin: 0 0 8px 0; color: #f9fafb;">
+        <div style="min-width: 280px; color: #000000; font-family: system-ui;">
+          <h3 style="font-size: 18px; font-weight: bold; margin: 0 0 8px 0; color: #000000;">
             ${hackathon.name}
           </h3>
           ${hackathon.description ? `
-            <p style="font-size: 14px; margin: 0 0 12px 0; color: #d1d5db; line-height: 1.5;">
+            <p style="font-size: 14px; margin: 0 0 12px 0; color: #1a1a1a; line-height: 1.5;">
               ${hackathon.description}
             </p>
           ` : ''}
