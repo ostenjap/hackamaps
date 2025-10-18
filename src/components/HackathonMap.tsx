@@ -1,11 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { format } from "date-fns";
-import { ExternalLink, MapPin, Calendar, Trophy, Users } from "lucide-react";
 
-// You'll need to add your Mapbox token here
-// Get it from https://mapbox.com
+// Using Mapbox's demo token - for production, get your own at https://mapbox.com
 const MAPBOX_TOKEN = "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
 
 interface Hackathon {
@@ -54,32 +51,60 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
-  const [mapboxToken, setMapboxToken] = useState(MAPBOX_TOKEN);
 
   useEffect(() => {
     if (!mapContainer.current) return;
-    if (!mapboxToken) return;
 
-    mapboxgl.accessToken = mapboxToken;
+    mapboxgl.accessToken = MAPBOX_TOKEN;
 
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/dark-v11",
         center: [20, 20],
-        zoom: 2,
-        projection: "globe" as any,
+        zoom: 2.5,
+        projection: { name: "globe" },
+        renderWorldCopies: false,
       });
 
-      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+      // Add navigation controls
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: true,
+        }),
+        "top-right"
+      );
 
+      // Add fog and atmosphere
       map.current.on("style.load", () => {
-        map.current?.setFog({
+        if (!map.current) return;
+        
+        map.current.setFog({
           color: "rgb(50, 40, 80)",
           "high-color": "rgb(30, 20, 50)",
           "horizon-blend": 0.1,
+          "space-color": "rgb(10, 5, 20)",
+          "star-intensity": 0.6,
         });
       });
+
+      // Slow rotation
+      let userInteracting = false;
+      const spinGlobe = () => {
+        if (!map.current || userInteracting) return;
+        const center = map.current.getCenter();
+        center.lng -= 0.2;
+        map.current.easeTo({ center, duration: 1000, easing: (n) => n });
+      };
+
+      map.current.on("mousedown", () => { userInteracting = true; });
+      map.current.on("mouseup", () => { userInteracting = false; spinGlobe(); });
+      map.current.on("dragstart", () => { userInteracting = true; });
+      map.current.on("dragend", () => { userInteracting = false; spinGlobe(); });
+      map.current.on("moveend", spinGlobe);
+      
+      spinGlobe();
+
     } catch (error) {
       console.error("Error initializing map:", error);
     }
@@ -89,7 +114,7 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       markers.current = [];
       map.current?.remove();
     };
-  }, [mapboxToken]);
+  }, []);
 
   useEffect(() => {
     if (!map.current) return;
@@ -98,135 +123,30 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
     markers.current.forEach((marker) => marker.remove());
     markers.current = [];
 
-    // Add new markers
+    // Add new markers - simple dots without hover popups
     hackathons.forEach((hackathon) => {
       const color = getCategoryColor(hackathon.categories);
 
       // Create custom marker element
       const el = document.createElement("div");
       el.className = "custom-marker";
-      el.style.width = "30px";
-      el.style.height = "30px";
+      el.style.width = "24px";
+      el.style.height = "24px";
       el.style.borderRadius = "50%";
       el.style.backgroundColor = color;
-      el.style.border = "3px solid white";
-      el.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+      el.style.border = "3px solid rgba(255, 255, 255, 0.8)";
+      el.style.boxShadow = `0 0 20px ${color}, 0 4px 12px rgba(0,0,0,0.5)`;
       el.style.cursor = "pointer";
-      el.style.transition = "all 0.3s";
-
-      // Hover effect
-      el.addEventListener("mouseenter", () => {
-        el.style.transform = "scale(1.3)";
-        el.style.zIndex = "1000";
-      });
-      el.addEventListener("mouseleave", () => {
-        el.style.transform = "scale(1)";
-        el.style.zIndex = "1";
-      });
-
-      // Create popup content
-      const popupContent = `
-        <div class="p-4 min-w-[300px]">
-          <h3 class="text-lg font-bold mb-2 text-foreground">${hackathon.name}</h3>
-          ${hackathon.description ? `<p class="text-sm text-muted-foreground mb-3">${hackathon.description}</p>` : ""}
-          
-          <div class="space-y-2 text-sm">
-            <div class="flex items-start gap-2">
-              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-              <span>${hackathon.location}${hackathon.is_online ? " (Online)" : ""}</span>
-            </div>
-            
-            <div class="flex items-start gap-2">
-              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              <span>${format(new Date(hackathon.start_date), "MMM d")} - ${format(new Date(hackathon.end_date), "MMM d, yyyy")}</span>
-            </div>
-            
-            ${hackathon.prize_pool ? `
-              <div class="flex items-start gap-2">
-                <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
-                </svg>
-                <span>Prize: ${hackathon.prize_pool}</span>
-              </div>
-            ` : ""}
-            
-            ${hackathon.max_participants ? `
-              <div class="flex items-start gap-2">
-                <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-                <span>Max ${hackathon.max_participants} participants</span>
-              </div>
-            ` : ""}
-          </div>
-
-          <div class="flex flex-wrap gap-1 mt-3">
-            ${hackathon.categories.map(cat => `
-              <span class="px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                ${cat}
-              </span>
-            `).join("")}
-          </div>
-
-          ${hackathon.website_url ? `
-            <a href="${hackathon.website_url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
-              Visit Website
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-              </svg>
-            </a>
-          ` : ""}
-        </div>
-      `;
-
-      const popup = new mapboxgl.Popup({
-        offset: 25,
-        closeButton: false,
-        maxWidth: "400px",
-      }).setHTML(popupContent);
+      el.style.transition = "all 0.3s ease";
+      el.style.opacity = "0.9";
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([hackathon.longitude, hackathon.latitude])
-        .setPopup(popup)
         .addTo(map.current!);
 
       markers.current.push(marker);
     });
   }, [hackathons]);
-
-  // Show token input if no token is set
-  if (!mapboxToken || mapboxToken.length === 0) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-card p-8">
-        <div className="max-w-md text-center space-y-4">
-          <h3 className="text-lg font-semibold">Mapbox Token Required</h3>
-          <p className="text-sm text-muted-foreground">
-            Please enter your Mapbox public token to display the map. Get one at{" "}
-            <a
-              href="https://mapbox.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              mapbox.com
-            </a>
-          </p>
-          <input
-            type="text"
-            placeholder="pk.eyJ1..."
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-full h-full">
