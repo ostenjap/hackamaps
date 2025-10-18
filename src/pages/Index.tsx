@@ -110,17 +110,14 @@ const Index = () => {
                   </Badge>
                 )}
               </Button>
-              
+
               <div className="p-2 rounded-lg bg-gradient-primary">
                 <Map className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Global Hackathon Map
+                <h1 className="text-2xl font-bold font-['Exo_2'] tracking-tight">
+                  hackermaps.io
                 </h1>
-                <p className="text-xs text-muted-foreground">
-                  Discover hackathons worldwide
-                </p>
               </div>
             </div>
 
