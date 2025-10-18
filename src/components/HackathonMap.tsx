@@ -1,9 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ExternalLink } from "lucide-react";
 
-// Using Mapbox's demo token - for production, get your own at https://mapbox.com
-const MAPBOX_TOKEN = "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw";
+// Mapbox token - user needs to add their own from https://mapbox.com
+const DEFAULT_TOKEN = "";
 
 interface Hackathon {
   id: string;
@@ -51,11 +55,22 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const [mapboxToken, setMapboxToken] = useState(() => {
+    return localStorage.getItem("mapbox_token") || DEFAULT_TOKEN;
+  });
+  const [tokenInput, setTokenInput] = useState("");
+
+  const saveToken = () => {
+    if (tokenInput.trim()) {
+      localStorage.setItem("mapbox_token", tokenInput.trim());
+      setMapboxToken(tokenInput.trim());
+    }
+  };
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current || !mapboxToken) return;
 
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    mapboxgl.accessToken = mapboxToken;
 
     try {
       map.current = new mapboxgl.Map({
@@ -114,7 +129,7 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       markers.current = [];
       map.current?.remove();
     };
-  }, []);
+  }, [mapboxToken]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -147,6 +162,70 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       markers.current.push(marker);
     });
   }, [hackathons]);
+
+  // Show token input if no token is set
+  if (!mapboxToken) {
+    return (
+      <div className="w-full h-full flex items-center justify-center glass-card p-8">
+        <div className="max-w-md text-center space-y-6">
+          <div className="space-y-2">
+            <h3 className="text-2xl font-bold">Mapbox Token Required</h3>
+            <p className="text-muted-foreground">
+              To display the interactive 3D globe, you need a free Mapbox API token.
+            </p>
+          </div>
+
+          <div className="glass-card p-6 space-y-4 text-left">
+            <div className="space-y-2">
+              <Label htmlFor="mapbox-token" className="text-base font-semibold">
+                Steps to get your token:
+              </Label>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                <li>Visit Mapbox and create a free account</li>
+                <li>Go to your Account → Tokens</li>
+                <li>Copy your "Default public token"</li>
+                <li>Paste it below</li>
+              </ol>
+            </div>
+
+            <a
+              href="https://account.mapbox.com/access-tokens/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Get your free token at mapbox.com
+            </a>
+
+            <div className="space-y-2">
+              <Label htmlFor="mapbox-token">Mapbox Public Token</Label>
+              <Input
+                id="mapbox-token"
+                type="text"
+                placeholder="pk.eyJ1..."
+                value={tokenInput}
+                onChange={(e) => setTokenInput(e.target.value)}
+                className="font-mono text-sm"
+              />
+            </div>
+
+            <Button 
+              onClick={saveToken} 
+              className="w-full"
+              disabled={!tokenInput.trim()}
+            >
+              Save Token & Load Map
+            </Button>
+          </div>
+
+          <p className="text-xs text-muted-foreground">
+            Your token is stored locally and never sent to our servers.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-full">
