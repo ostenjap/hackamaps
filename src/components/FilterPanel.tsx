@@ -135,6 +135,13 @@ export function FilterPanel({
               onChange={(e) => setLocationSearch(e.target.value)}
               className="w-full"
             />
+            <Button
+              variant="outline"
+              onClick={clearAllFilters}
+              className="w-full"
+            >
+              Clear All Filters
+            </Button>
           </div>
 
           {/* Continents */}
