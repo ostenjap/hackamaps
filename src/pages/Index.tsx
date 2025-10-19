@@ -100,7 +100,7 @@ const Index = () => {
                 className="gap-2"
               >
                 <Filter className="h-4 w-4" />
-                Filters
+                <span className="hidden md:inline">Filters</span>
                 {(selectedCategories.length +
                   selectedContinents.length +
                   (locationSearch ? 1 : 0)) > 0 && (
@@ -113,7 +113,7 @@ const Index = () => {
               </Button>
 
               <div>
-                <h1 className="text-2xl font-bold font-['Exo_2'] tracking-tight">
+                <h1 className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">
                   hackermaps.io
                 </h1>
               </div>
