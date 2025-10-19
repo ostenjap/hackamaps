@@ -120,7 +120,7 @@ Contact Email: ${formData.contactEmail}
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="h-4 w-4" />
-          Submit Hackathon
+          <span className="hidden md:inline">Submit Hackathon</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
