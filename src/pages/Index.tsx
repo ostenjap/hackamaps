@@ -114,7 +114,7 @@ const Index = () => {
 
               <div>
                 <h1 className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">
-                  hackermaps.io
+                  hackamaps.com
                 </h1>
               </div>
             </div>
