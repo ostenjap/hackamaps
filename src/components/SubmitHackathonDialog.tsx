@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Plus } from "lucide-react";
 
 export function SubmitHackathonDialog() {
   const [open, setOpen] = useState(false);
@@ -21,6 +21,7 @@ export function SubmitHackathonDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
+        <Plus className="h-4 w-4" />
           <span className="hidden md:inline">Submit Hackathon</span>
         </Button>
       </DialogTrigger>
