@@ -40,10 +40,7 @@ const Index = () => {
   }, []);
 
   const fetchHackathons = async () => {
-    const { data, error } = await supabase
-      .from("hackathons")
-      .select("*")
-      .order("start_date", { ascending: true });
+    const { data, error } = await supabase.from("hackathons").select("*").order("start_date", { ascending: true });
 
     if (error) {
       console.error("Error fetching hackathons:", error);
@@ -60,16 +57,12 @@ const Index = () => {
 
     // Filter by categories
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((h) =>
-        h.categories.some((cat) => selectedCategories.includes(cat))
-      );
+      filtered = filtered.filter((h) => h.categories.some((cat) => selectedCategories.includes(cat)));
     }
 
-    // Filter by continents
+    // Filter by continents usus
     if (selectedContinents.length > 0) {
-      filtered = filtered.filter((h) =>
-        selectedContinents.includes(h.continent)
-      );
+      filtered = filtered.filter((h) => selectedContinents.includes(h.continent));
     }
 
     // Filter by location search
@@ -79,7 +72,7 @@ const Index = () => {
         (h) =>
           h.location.toLowerCase().includes(search) ||
           h.city.toLowerCase().includes(search) ||
-          h.country.toLowerCase().includes(search)
+          h.country.toLowerCase().includes(search),
       );
     }
 
@@ -93,29 +86,18 @@ const Index = () => {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="gap-2"
-              >
+              <Button variant="outline" size="sm" onClick={() => setIsFilterOpen(!isFilterOpen)} className="gap-2">
                 <Filter className="h-4 w-4" />
                 <span className="hidden md:inline">Filters</span>
-                {(selectedCategories.length +
-                  selectedContinents.length +
-                  (locationSearch ? 1 : 0)) > 0 && (
+                {selectedCategories.length + selectedContinents.length + (locationSearch ? 1 : 0) > 0 && (
                   <Badge variant="secondary" className="ml-1">
-                    {selectedCategories.length +
-                      selectedContinents.length +
-                      (locationSearch ? 1 : 0)}
+                    {selectedCategories.length + selectedContinents.length + (locationSearch ? 1 : 0)}
                   </Badge>
                 )}
               </Button>
 
               <div>
-                <h1 className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">
-                  hackamaps.com
-                </h1>
+                <h1 className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">hackamaps.com</h1>
               </div>
             </div>
 
