@@ -181,14 +181,16 @@ export function FilterPanel({
                 <span className="text-sm text-muted-foreground">Filter by date</span>
                 <button
                   type="button"
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    isDateFilterEnabled ? 'bg-blue-500' : 'bg-gray-200'
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                    isDateFilterEnabled
+                      ? 'bg-primary border-primary/20 shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]'
+                      : 'bg-gradient-to-b from-gray-300 to-gray-400 border-gray-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.25),0_1px_2px_rgba(255,255,255,0.95)]'
                   }`}
                   onClick={() => setIsDateFilterEnabled(!isDateFilterEnabled)}
                 >
                   <span className="sr-only">Toggle date filter</span>
                   <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-[0_3px_8px_rgba(0,0,0,0.15),0_1px_2px_rgba(0,0,0,0.1),inset_0_-1px_1px_rgba(0,0,0,0.05)] ring-0 transition-all duration-200 ease-in-out ${
                       isDateFilterEnabled ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
