@@ -49,22 +49,19 @@ All colors MUST be HSL.
     --category-gaming: 330 80% 60%;
     --category-education: 25 100% 60%;
     --category-social: 340 75% 55%;
-    --category-defense: 9 100% 64%; /* Tomato red */
+    --category-defense: 9 100% 64%;
+    /* Tomato red */
     --category-open: 280 100% 70%;
     --category-aiml: 210 100% 65%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(250, 70%, 55%) 0%,
-      hsl(210, 100%, 65%) 100%
-    );
-    --gradient-hero: linear-gradient(
-      135deg,
-      hsl(250, 80%, 60%) 0%,
-      hsl(280, 70%, 55%) 50%,
-      hsl(210, 100%, 65%) 100%
-    );
+    --gradient-primary: linear-gradient(135deg,
+        hsl(250, 70%, 55%) 0%,
+        hsl(210, 100%, 65%) 100%);
+    --gradient-hero: linear-gradient(135deg,
+        hsl(250, 80%, 60%) 0%,
+        hsl(280, 70%, 55%) 50%,
+        hsl(210, 100%, 65%) 100%);
 
     /* Glass effect */
     --glass-bg: hsla(0, 0%, 100%, 0.7);
