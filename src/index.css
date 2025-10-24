@@ -41,7 +41,7 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Custom colors for categories */
-    --category-ai: 210 100% 65%;
+    --category-ai: 220 90% 40%;
     --category-web3: 280 80% 65%;
     --category-healthcare: 140 60% 50%;
     --category-climate: 170 70% 50%;
@@ -49,8 +49,9 @@ All colors MUST be HSL.
     --category-gaming: 330 80% 60%;
     --category-education: 25 100% 60%;
     --category-social: 340 75% 55%;
-    --category-datetime: 200 90% 55%;
+    --category-defense: 9 100% 64%; /* Tomato red */
     --category-open: 280 100% 70%;
+    --category-aiml: 210 100% 65%;
 
     /* Gradients */
     --gradient-primary: linear-gradient(
