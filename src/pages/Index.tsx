@@ -32,6 +32,8 @@ const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedContinents, setSelectedContinents] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState("");
+  const [selectedMonthsAhead, setSelectedMonthsAhead] = useState(0);
+  const [isDateFilterEnabled, setIsDateFilterEnabled] = useState(false);
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
 
@@ -75,9 +77,19 @@ const Index = () => {
           h.country.toLowerCase().includes(search),
       );
     }
+  // Filter by date - show hackathons AFTER the selected date if date filter is enabled
+  if (isDateFilterEnabled) {
+    const selectedDate = new Date();
+    selectedDate.setMonth(selectedDate.getMonth() + selectedMonthsAhead);
 
-    setFilteredHackathons(filtered);
-  }, [selectedCategories, selectedContinents, locationSearch, hackathons]);
+    filtered = filtered.filter((h) => {
+      const hackathonDate = new Date(h.start_date);
+      return hackathonDate >= selectedDate; // Only hackathons AFTER the selected date
+    });
+  }
+
+  setFilteredHackathons(filtered);
+  }, [selectedCategories, selectedContinents, locationSearch, selectedMonthsAhead, isDateFilterEnabled, hackathons]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -121,6 +133,10 @@ const Index = () => {
             setSelectedContinents={setSelectedContinents}
             locationSearch={locationSearch}
             setLocationSearch={setLocationSearch}
+            selectedMonthsAhead={selectedMonthsAhead}
+            setSelectedMonthsAhead={setSelectedMonthsAhead}
+            isDateFilterEnabled={isDateFilterEnabled}
+            setIsDateFilterEnabled={setIsDateFilterEnabled}
           />
 
           <div className="flex-1 h-full">

@@ -36,6 +36,10 @@ interface FilterPanelProps {
   setSelectedContinents: (continents: string[]) => void;
   locationSearch: string;
   setLocationSearch: (search: string) => void;
+  selectedMonthsAhead: number;
+  setSelectedMonthsAhead: (months: number) => void;
+  isDateFilterEnabled: boolean;
+  setIsDateFilterEnabled: (enabled: boolean) => void;
 }
 
 export function FilterPanel({
@@ -47,6 +51,10 @@ export function FilterPanel({
   setSelectedContinents,
   locationSearch,
   setLocationSearch,
+  selectedMonthsAhead,
+  setSelectedMonthsAhead,
+  isDateFilterEnabled,
+  setIsDateFilterEnabled,
 }: FilterPanelProps) {
   const toggleCategory = (category: string) => {
     setSelectedCategories(
@@ -68,12 +76,15 @@ export function FilterPanel({
     setSelectedCategories([]);
     setSelectedContinents([]);
     setLocationSearch("");
+    setSelectedMonthsAhead(0);
+    setIsDateFilterEnabled(false);
   };
 
   const activeFilterCount =
     selectedCategories.length +
     selectedContinents.length +
-    (locationSearch ? 1 : 0);
+    (locationSearch ? 1 : 0) +
+    (isDateFilterEnabled ? 1 : 0);
 
   return (
     <>
@@ -159,6 +170,58 @@ export function FilterPanel({
                   </label>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Date Range */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium">Time Frame</h3>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-muted-foreground">Filter by date</span>
+                <button
+                  type="button"
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    isDateFilterEnabled ? 'bg-blue-500' : 'bg-gray-200'
+                  }`}
+                  onClick={() => setIsDateFilterEnabled(!isDateFilterEnabled)}
+                >
+                  <span className="sr-only">Toggle date filter</span>
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isDateFilterEnabled ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+            <div className={`space-y-2 ${!isDateFilterEnabled ? 'opacity-50' : ''}`}>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Next {selectedMonthsAhead} month{selectedMonthsAhead !== 1 ? 's' : ''}</span>
+                <span>
+                  Until {new Date(new Date().setMonth(new Date().getMonth() + selectedMonthsAhead)).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="6"
+                value={selectedMonthsAhead}
+                onChange={(e) => setSelectedMonthsAhead(Number(e.target.value))}
+                disabled={!isDateFilterEnabled}
+                className={`w-full h-2 rounded-lg appearance-none cursor-pointer accent-primary ${
+                  isDateFilterEnabled ? 'bg-gray-200' : 'bg-gray-100 cursor-not-allowed'
+                }`}
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Today</span>
+                <span>6 months</span>
+              </div>
+              {!isDateFilterEnabled && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Toggle date filter to enable time frame selection
+                </p>
+              )}
             </div>
           </div>
 
