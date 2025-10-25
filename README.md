@@ -250,6 +250,70 @@ When you click a pin, a popup appears showing:
 
 ---
 
+🗺️ Map Marker Color System Documentation
+Overview
+
+The map markers (dots) on HackaMaps.com
+are colored based on the first category assigned to each hackathon.
+This provides an instant visual cue for users to identify hackathon themes at a glance.
+
+🎨 How Colors Are Determined
+Color Selection Logic
+
+Each hackathon has an array of categories (e.g. ["ML/AI", "Social Good"]).
+
+The system uses only the first category (categories[0]) to determine the marker color.
+
+If a hackathon has no categories or the category is unrecognized, the default color is purple (#8b5cf6).
+
+Category-to-Color Mapping
+Category Hex Color Visual Description
+AI/ML #3b82f6 Blue
+Web3 / Blockchain #a855f7 Purple
+Healthcare #10b981 Green
+Climate Tech #14b8a6 Teal
+FinTech #f59e0b Amber / Orange
+Gaming #ec4899 Pink
+Education #f97316 Orange
+Social Impact #f43f5e Rose / Red
+DateTime #06b6d4 Cyan
+Open Theme #c084fc Light Purple
+Default / Unknown #8b5cf6 Purple
+🧩 Where Colors Are Applied
+
+The selected color is used across multiple UI elements:
+
+Marker dot background – the main circular marker color
+
+Glow effect – box shadow around the marker for emphasis
+
+Category badges – background tint in popup category pills
+
+“Visit Website” button – background color in the hackathon popup
+
+⚙️ Implementation Details
+
+Location:
+
+src/components/HackathonMap.tsx
+
+Function:
+
+getCategoryColor(categories: string[]): string
+
+Defined around lines 29–46.
+
+Usage:
+
+// Called once per hackathon when rendering markers
+// (around line 131 in HackathonMap.tsx)
+
+🧠 Notes
+
+Only the first category determines the color — future iterations may support multi-category blending or user-customizable palettes.
+
+Keep category names consistent across data sources for reliable color mapping.
+
 ## Connection to Supabase (The Data Flow)
 
 Here's how the data travels from Supabase to your map:
