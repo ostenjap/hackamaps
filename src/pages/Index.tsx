@@ -153,7 +153,7 @@ const Index = () => {
             </div>
 
             {/* Stats Badge */}
-            <div className="absolute bottom-8 right-8 glass-card rounded-lg p-4 z-20">
+            <div className="absolute bottom-8 right-8 glass-card rounded-lg p-4 z-20 stats-badge">
               <div className="text-sm font-medium">
                 Showing {filteredHackathons.length} of {hackathons.length} hackathons
               </div>

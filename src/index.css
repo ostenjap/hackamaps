@@ -154,6 +154,13 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-glow);
   }
 
+  /* Adjust stats badge position for mobile */
+  @media (max-width: 768px) {
+    .stats-badge {
+      bottom: 5rem !important;
+    }
+  }
+
   .gradient-primary {
     background: var(--gradient-primary);
   }
