@@ -443,7 +443,6 @@ This HackathonMap component is like a smart bulletin board:
 
 Yeah you can do that. Go to Project → Settings → Domains → Connect Domain
 
-(You need a paid plan tho)
 
 [Read more about domains](https://docs.lovable.dev/features/custom-domain#custom-domain)
 
