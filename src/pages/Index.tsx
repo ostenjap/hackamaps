@@ -59,7 +59,13 @@ const Index = () => {
 
     // Filter by categories
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter((h) => h.categories.some((cat) => selectedCategories.includes(cat)));
+      filtered = filtered.filter((h) =>
+        Array.isArray(h.categories) && h.categories.some((cat) =>
+          selectedCategories.some((selectedCat) =>
+            cat.toLowerCase().includes(selectedCat.toLowerCase())
+          )
+        )
+      );
     }
 
     // Filter by continents usus
