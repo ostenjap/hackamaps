@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 const CATEGORIES = [
-  { id: "AI/ML", label: "ML/AI", color: "hsl(var(--category-aiml))" },
+  // { id: "AI/ML", label: "ML/AI", color: "hsl(var(--category-aiml))" },
   { id: "AI", label: "AI", color: "hsl(var(--category-ai))" },
   { id: "Web3/Blockchain", label: "Web3/Blockchain", color: "hsl(var(--category-web3))" },
   { id: "Defense", label: "Defense", color: "hsl(var(--category-defense))" },
