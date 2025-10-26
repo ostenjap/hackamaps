@@ -147,101 +147,99 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Pricing Tiers */}
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="glass-card border-2 hover:border-muted-foreground/50 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-2xl">Basic Listing</CardTitle>
-                <div className="text-4xl font-bold">Free</div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Basic map pin</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Event details page</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Category filtering</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="glass-card border-2 border-primary shadow-lg hover:shadow-xl transition-all duration-300 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                  Popular
-                </span>
+          {/* Pricing Comparison Table */}
+          <div className="overflow-x-auto">
+            <div className="min-w-[768px]">
+              {/* Table Header */}
+              <div className="grid grid-cols-4 gap-4 mb-4">
+                <div className="p-6"></div>
+                <Card className="glass-card border-2 hover:border-muted-foreground/50 transition-all duration-300">
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-2xl mb-2">Basic</CardTitle>
+                    <div className="text-4xl font-bold">Free</div>
+                  </CardHeader>
+                </Card>
+                <Card className="glass-card border-2 border-primary shadow-lg relative">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                      Popular
+                    </span>
+                  </div>
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-2xl mb-2">Featured</CardTitle>
+                    <div className="text-4xl font-bold">
+                      $49<span className="text-lg text-muted-foreground">/mo</span>
+                    </div>
+                  </CardHeader>
+                </Card>
+                <Card className="glass-card border-2 hover:border-secondary/50 transition-all duration-300">
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-2xl mb-2">Premium</CardTitle>
+                    <div className="text-4xl font-bold">
+                      $99<span className="text-lg text-muted-foreground">/mo</span>
+                    </div>
+                  </CardHeader>
+                </Card>
               </div>
-              <CardHeader>
-                <CardTitle className="text-2xl">Featured Placement</CardTitle>
-                <div className="text-4xl font-bold">
-                  $49<span className="text-lg text-muted-foreground">/month</span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Highlighted map pin</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Top of search listings</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Enhanced event page</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Analytics dashboard</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
 
-            <Card className="glass-card border-2 hover:border-secondary/50 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-2xl">Premium Package</CardTitle>
-                <div className="text-4xl font-bold">
-                  $99<span className="text-lg text-muted-foreground">/month</span>
+              {/* Features Comparison */}
+              {[
+                { feature: "Map pin visibility", free: "Basic", featured: "Highlighted", premium: "Premium" },
+                { feature: "Event details page", free: true, featured: true, premium: true },
+                { feature: "Category filtering", free: true, featured: true, premium: true },
+                { feature: "Top of search results", free: false, featured: true, premium: true },
+                { feature: "Enhanced event page", free: false, featured: true, premium: true },
+                { feature: "Analytics dashboard", free: false, featured: true, premium: true },
+                { feature: "Social media promotion", free: false, featured: false, premium: true },
+                { feature: "Newsletter feature", free: false, featured: false, premium: true },
+                { feature: "Dedicated support", free: false, featured: false, premium: true },
+              ].map((row, idx) => (
+                <div key={idx} className="grid grid-cols-4 gap-4 items-center py-4 border-t border-border">
+                  <div className="font-medium px-6">{row.feature}</div>
+                  <div className="flex justify-center">
+                    {typeof row.free === 'boolean' ? (
+                      row.free ? <Check className="h-5 w-5 text-primary" /> : <span className="text-muted-foreground">—</span>
+                    ) : (
+                      <span className="text-sm">{row.free}</span>
+                    )}
+                  </div>
+                  <div className="flex justify-center">
+                    {typeof row.featured === 'boolean' ? (
+                      row.featured ? <Check className="h-5 w-5 text-primary" /> : <span className="text-muted-foreground">—</span>
+                    ) : (
+                      <span className="text-sm">{row.featured}</span>
+                    )}
+                  </div>
+                  <div className="flex justify-center">
+                    {typeof row.premium === 'boolean' ? (
+                      row.premium ? <Check className="h-5 w-5 text-primary" /> : <span className="text-muted-foreground">—</span>
+                    ) : (
+                      <span className="text-sm">{row.premium}</span>
+                    )}
+                  </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>All Featured benefits</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Social media promotion</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Newsletter feature spot</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span>Dedicated support</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+              ))}
 
-          <div className="text-center mt-12">
-            <Link to="/map">
-              <Button size="lg" className="gap-2 text-lg px-8 py-6">
-                Promote Your Event Now
-              </Button>
-            </Link>
+              {/* CTA Buttons */}
+              <div className="grid grid-cols-4 gap-4 mt-8">
+                <div className="p-6"></div>
+                <div className="flex justify-center">
+                  <Button variant="outline" size="lg" className="w-full max-w-[200px]">
+                    Select Plan
+                  </Button>
+                </div>
+                <div className="flex justify-center">
+                  <Button size="lg" className="w-full max-w-[200px]">
+                    Select Plan
+                  </Button>
+                </div>
+                <div className="flex justify-center">
+                  <Button variant="secondary" size="lg" className="w-full max-w-[200px]">
+                    Select Plan
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
