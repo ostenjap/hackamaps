@@ -39,11 +39,11 @@ const Home = () => {
             <Link to="/map">
               <Button size="lg" className="gap-2 text-lg px-8 py-6">
                 <MapPin className="h-5 w-5" />
-                Explore Hackathons on Map
+                Launch Hackamaps
               </Button>
             </Link>
             <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6" onClick={scrollToPromotion}>
-              List Your Hackathon
+              List Your Hackathon Now
             </Button>
           </div>
         </div>
