@@ -122,7 +122,13 @@ const Map = () => {
 
             <div className="flex items-center gap-2">
               <Link to="/">
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button
+                  variant="outline"
+                  size="lg"
+                    className="gap-2 relative overflow-hidden text-white bg-gradient-to-r from-cyan-500 to-blue-500
+                      hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800
+                      hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all duration-2000"
+                  >
                   <Home className="h-4 w-4" />
                   <span className="hidden md:inline">Home</span>
                 </Button>

@@ -63,7 +63,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Find events in your dream destinations across all continents. From Silicon Valley to Singapore, discover hackathons wherever you want to travel.
+                  Find events in your dream destinations across all continents. From <strong>Silicon Valley</strong>, <strong>Berlin</strong> to <strong>Singapore</strong>, discover hackathons wherever you want to travel.
                 </CardDescription>
               </CardContent>
             </Card>
