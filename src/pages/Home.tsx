@@ -15,7 +15,7 @@ const Home = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-card/80 border-b border-border shadow-lg">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <h1 className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">hackamaps.com</h1>
+            <div className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">hackamaps.com</div>
             <ThemeToggle />
           </div>
         </div>
@@ -29,21 +29,27 @@ const Home = () => {
         </div>
 
         <div className="max-w-screen-xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl md:text-6xl font-bold font-['Exo_2'] mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
-            Plan Your Next Adventure Around Hackathons Worldwide
-          </h2>
+          <h1 className="text-4xl md:text-6xl font-bold font-['Exo_2'] mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+            Discover Hackathons Worldwide — Plan Your Next Coding Adventure
+          </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Discover hackathons across 6 continents and build your perfect coding vacation
+            Search an interactive global map of hackathons by city, date, and topic. Find tech events, join developer communities, and combine travel with hands-on coding.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/map">
+            <Link to="/map" aria-label="Open hackathon map">
               <Button size="lg" className="gap-2 text-lg px-8 py-6">
                 <MapPin className="h-5 w-5" />
-                Launch Hackamaps
+                Explore the Hackathon Map
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="gap-2 text-lg px-8 py-6" onClick={scrollToPromotion}>
-              List Your Hackathon Now
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="gap-2 text-lg px-8 py-6" 
+              onClick={scrollToPromotion}
+              aria-label="List your hackathon for developers"
+            >
+              List Your Hackathon
             </Button>
           </div>
         </div>
