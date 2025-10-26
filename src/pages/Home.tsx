@@ -160,7 +160,7 @@ const Home = () => {
                   </CardHeader>
                 </Card>
                 <Card className="glass-card border-2 border-primary shadow-lg relative">
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
                     <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
                       Popular
                     </span>
@@ -168,7 +168,7 @@ const Home = () => {
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-2xl mb-2">Featured</CardTitle>
                     <div className="text-4xl font-bold">
-                      $49<span className="text-lg text-muted-foreground">/mo</span>
+                      $20<span className="text-lg text-muted-foreground">/mo</span>
                     </div>
                   </CardHeader>
                 </Card>
