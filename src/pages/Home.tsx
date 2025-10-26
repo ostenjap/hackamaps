@@ -33,7 +33,7 @@ const Home = () => {
             Discover Hackathons Worldwide — Plan Your Next Coding Adventure
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Search an interactive global map of hackathons by city, date, and topic. Find tech events, join developer communities, and combine travel with hands-on coding.
+            Search an interactive global hackathon map by city, date, and topic. Find tech events, join developer communities, and combine travel with hands-on coding.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link to="/map" aria-label="Open hackathon map">
@@ -42,10 +42,10 @@ const Home = () => {
                 Explore the Hackathon Map
               </Button>
             </Link>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="gap-2 text-lg px-8 py-6" 
+            <Button
+              size="lg"
+              variant="outline"
+              className="gap-2 text-lg px-8 py-6"
               onClick={scrollToPromotion}
               aria-label="List your hackathon for developers"
             >
@@ -59,7 +59,7 @@ const Home = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
         <div className="max-w-screen-xl mx-auto">
           <h3 className="text-3xl md:text-4xl font-bold text-center mb-12 font-['Exo_2']">
-            Why Hackamaps?
+            Why Our Hackathon Map?
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="glass-card border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-lg">
@@ -123,10 +123,10 @@ const Home = () => {
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold mb-4 font-['Exo_2']">
-              Get Your Hackathon Noticed by Traveling Developers
+              Get Your Hackathon Noticed by Traveling Developers and Indie Hackers
             </h3>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Reach a global audience of developers who are actively planning their next coding adventure
+              Reach a global audience of developers who are actively planning their next coding adventure and indie hackers who are looking for new projects to work on.
             </p>
           </div>
 
