@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Filter } from "lucide-react";
+import { Filter, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
@@ -7,6 +7,7 @@ import { HackathonMap } from "@/components/HackathonMap";
 import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface Hackathon {
   id: string;
@@ -27,7 +28,7 @@ interface Hackathon {
   max_participants: number | null;
 }
 
-const Index = () => {
+const Map = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedContinents, setSelectedContinents] = useState<string[]>([]);
@@ -120,6 +121,12 @@ const Index = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              <Link to="/">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Home className="h-4 w-4" />
+                  <span className="hidden md:inline">Home</span>
+                </Button>
+              </Link>
               <SubmitHackathonDialog />
               <ThemeToggle />
             </div>
@@ -165,4 +172,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Map;
