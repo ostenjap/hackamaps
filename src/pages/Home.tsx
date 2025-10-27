@@ -29,7 +29,7 @@ const Home = () => {
         </div>
 
         <div className="max-w-screen-xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold font-['Exo_2'] mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+          <h1 className="text-4xl md:text-6xl font-bold font-['Exo_2'] mb-10 pb-4 px-4 sm:px-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
             Discover Hackathons Worldwide — Plan Your Next Coding Adventure
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
