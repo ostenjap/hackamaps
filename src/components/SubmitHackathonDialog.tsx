@@ -8,23 +8,39 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ExternalLink, Plus } from "lucide-react";
+import { User } from "@supabase/supabase-js";
+import { AuthDialog } from "./AuthDialog";
 
-export function SubmitHackathonDialog() {
+interface SubmitHackathonDialogProps {
+  user: User | null;
+}
+
+export function SubmitHackathonDialog({ user }: SubmitHackathonDialogProps) {
   const [open, setOpen] = useState(false);
-  const [text, setText] = useState("");
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+
+  const handleClick = () => {
+    if (!user) {
+      setAuthDialogOpen(true);
+    } else {
+      setOpen(true);
+    }
+  };
 
   const handleRedirect = () => {
     window.open("https://docs.google.com/forms/d/e/1FAIpQLSf94pHc2lmCIOXPU9GDmFbWTL5WD4Z766l-JsEB8pmVgQP_Ww/viewform?usp=dialog", "_blank");
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="gap-2">
+    <>
+      <Button className="gap-2" onClick={handleClick}>
         <Plus className="h-4 w-4" />
-          <span className="hidden md:inline">Submit Hackathon</span>
-        </Button>
-      </DialogTrigger>
+        <span className="hidden md:inline">Submit Hackathon</span>
+      </Button>
+
+      <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
+
+      <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Submit a Hackathon</DialogTitle>
@@ -49,5 +65,6 @@ export function SubmitHackathonDialog() {
         </div>
       </DialogContent>
     </Dialog>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { User } from "@supabase/supabase-js";
 
 interface Hackathon {
   id: string;
@@ -37,9 +38,24 @@ const Map = () => {
   const [isDateFilterEnabled, setIsDateFilterEnabled] = useState(false);
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     fetchHackathons();
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const fetchHackathons = async () => {
@@ -134,7 +150,7 @@ const Map = () => {
                   <span className="hidden md:inline">Home</span>
                 </Button>
               </Link>
-              <SubmitHackathonDialog />
+              <SubmitHackathonDialog user={user} />
               <ThemeToggle />
             </div>
           </div>
