@@ -121,7 +121,7 @@ const Map = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link to="/">
+              <Link to="/home">
                 <Button
                   variant="outline"
                   size="lg"

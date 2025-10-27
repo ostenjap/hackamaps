@@ -36,7 +36,7 @@ const Home = () => {
             Search an interactive global hackathon map by city, date, and topic. Find tech events, join developer communities, and combine travel with hands-on coding.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/map" aria-label="Open hackathon map">
+            <Link to="/" aria-label="Open hackathon map">
               <Button size="lg" className="gap-2 text-lg px-8 py-6">
                 <MapPin className="h-5 w-5" />
                 Explore the Hackathon Map
