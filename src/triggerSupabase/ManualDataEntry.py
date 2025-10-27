@@ -8,7 +8,7 @@ Instructions:
 1. Fill in the HACKATHONS_DATA list below with your hackathon information
 2. Set your Supabase credentials as environment variables:
    - SUPABASE_URL
-   - SUPABASE_SERVICE_ROLE_KEY
+   - oj1
 3. Run: python ManualDataEntry.py
 
 Dependencies:
@@ -74,12 +74,12 @@ HACKATHONS_DATA = [
 def get_supabase_client() -> Client:
     """Initialize and return Supabase client"""
     url = os.getenv("SUPABASE_URL")
-    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    key = os.getenv("oj1")
     
     if not url or not key:
         raise ValueError(
             "Missing Supabase credentials!\n"
-            "Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.\n"
+            "Please set SUPABASE_URL and oj1 environment variables.\n"
             "You can find these in your Lovable Cloud backend settings."
         )
     
