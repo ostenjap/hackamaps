@@ -287,10 +287,19 @@ const Home = () => {
 
       {/* Footer */}
       <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-border bg-card/30">
-        <div className="max-w-screen-xl mx-auto text-center">
+        <div className="max-w-screen-xl mx-auto text-center space-y-2">
           <p className="text-muted-foreground">
             © 2025 Hackamaps.com - Plan Your Coding Adventures Worldwide
           </p>
+          <div className="flex justify-center gap-4 text-sm text-muted-foreground">
+            <Link to="/privacy-policy" className="hover:underline hover:text-foreground transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link to="/terms-of-service" className="hover:underline hover:text-foreground transition-colors">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
