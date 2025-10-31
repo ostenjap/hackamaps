@@ -5,19 +5,46 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { ExternalLink, Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Plus } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { AuthDialog } from "./AuthDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface SubmitHackathonDialogProps {
   user: User | null;
+  onSubmitSuccess?: () => void;
 }
 
-export function SubmitHackathonDialog({ user }: SubmitHackathonDialogProps) {
+export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathonDialogProps) {
   const [open, setOpen] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    location: "",
+    city: "",
+    country: "",
+    continent: "",
+    latitude: "",
+    longitude: "",
+    start_date: "",
+    end_date: "",
+    categories: "",
+    website_url: "",
+    prize_pool: "",
+    is_online: false,
+    max_participants: "",
+    organizer_email: user?.email || "",
+  });
 
   const handleClick = () => {
     if (!user) {
@@ -27,8 +54,69 @@ export function SubmitHackathonDialog({ user }: SubmitHackathonDialogProps) {
     }
   };
 
-  const handleRedirect = () => {
-    window.open("https://docs.google.com/forms/d/e/1FAIpQLSf94pHc2lmCIOXPU9GDmFbWTL5WD4Z766l-JsEB8pmVgQP_Ww/viewform?usp=dialog", "_blank");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from("hackathons").insert({
+        name: formData.name,
+        description: formData.description || null,
+        location: formData.location,
+        city: formData.city,
+        country: formData.country,
+        continent: formData.continent,
+        latitude: parseFloat(formData.latitude),
+        longitude: parseFloat(formData.longitude),
+        start_date: formData.start_date,
+        end_date: formData.end_date,
+        categories: formData.categories.split(",").map(c => c.trim()),
+        website_url: formData.website_url || null,
+        prize_pool: formData.prize_pool || null,
+        is_online: formData.is_online,
+        max_participants: formData.max_participants ? parseInt(formData.max_participants) : null,
+        organizer_email: formData.organizer_email || null,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "Hackathon submitted successfully.",
+      });
+
+      setOpen(false);
+      setFormData({
+        name: "",
+        description: "",
+        location: "",
+        city: "",
+        country: "",
+        continent: "",
+        latitude: "",
+        longitude: "",
+        start_date: "",
+        end_date: "",
+        categories: "",
+        website_url: "",
+        prize_pool: "",
+        is_online: false,
+        max_participants: "",
+        organizer_email: user?.email || "",
+      });
+
+      if (onSubmitSuccess) {
+        onSubmitSuccess();
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to submit hackathon.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,30 +129,199 @@ export function SubmitHackathonDialog({ user }: SubmitHackathonDialogProps) {
       <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
 
       <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Submit a Hackathon</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4 mt-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium leading-none">
-            Click the button below to fill out our submission form. Your hackathon will be reviewed and added to the map shortly after approval.
-            </label>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Submit a Hackathon</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label htmlFor="name">Hackathon Name *</Label>
+                <Input
+                  id="name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+              </div>
 
-          </div>
-          <div className="flex justify-end">
-            <Button
-              type="button"
-              onClick={handleRedirect}
-              className="gap-2"
-            >
-              Go to Website
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+              <div className="col-span-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="location">Location *</Label>
+                <Input
+                  id="location"
+                  required
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  placeholder="e.g., Convention Center, City"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="city">City *</Label>
+                <Input
+                  id="city"
+                  required
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="country">Country *</Label>
+                <Input
+                  id="country"
+                  required
+                  value={formData.country}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="continent">Continent *</Label>
+                <Input
+                  id="continent"
+                  required
+                  value={formData.continent}
+                  onChange={(e) => setFormData({ ...formData, continent: e.target.value })}
+                  placeholder="e.g., Europe, Asia, Africa"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="latitude">Latitude *</Label>
+                <Input
+                  id="latitude"
+                  type="number"
+                  step="any"
+                  required
+                  value={formData.latitude}
+                  onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                  placeholder="e.g., 40.7128"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="longitude">Longitude *</Label>
+                <Input
+                  id="longitude"
+                  type="number"
+                  step="any"
+                  required
+                  value={formData.longitude}
+                  onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                  placeholder="e.g., -74.0060"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="start_date">Start Date *</Label>
+                <Input
+                  id="start_date"
+                  type="datetime-local"
+                  required
+                  value={formData.start_date}
+                  onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="end_date">End Date *</Label>
+                <Input
+                  id="end_date"
+                  type="datetime-local"
+                  required
+                  value={formData.end_date}
+                  onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                />
+              </div>
+
+              <div className="col-span-2">
+                <Label htmlFor="categories">Categories * (comma-separated)</Label>
+                <Input
+                  id="categories"
+                  required
+                  value={formData.categories}
+                  onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
+                  placeholder="e.g., AI, Blockchain, Web3"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="website_url">Website URL</Label>
+                <Input
+                  id="website_url"
+                  type="url"
+                  value={formData.website_url}
+                  onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="prize_pool">Prize Pool</Label>
+                <Input
+                  id="prize_pool"
+                  value={formData.prize_pool}
+                  onChange={(e) => setFormData({ ...formData, prize_pool: e.target.value })}
+                  placeholder="e.g., $10,000"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="max_participants">Max Participants</Label>
+                <Input
+                  id="max_participants"
+                  type="number"
+                  value={formData.max_participants}
+                  onChange={(e) => setFormData({ ...formData, max_participants: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="organizer_email">Organizer Email</Label>
+                <Input
+                  id="organizer_email"
+                  type="email"
+                  value={formData.organizer_email}
+                  onChange={(e) => setFormData({ ...formData, organizer_email: e.target.value })}
+                />
+              </div>
+
+              <div className="col-span-2 flex items-center space-x-2">
+                <Checkbox
+                  id="is_online"
+                  checked={formData.is_online}
+                  onCheckedChange={(checked) => 
+                    setFormData({ ...formData, is_online: checked as boolean })
+                  }
+                />
+                <Label htmlFor="is_online" className="cursor-pointer">
+                  This is an online hackathon
+                </Label>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit Hackathon"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

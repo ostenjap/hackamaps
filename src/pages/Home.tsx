@@ -1,12 +1,41 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Globe, MapPin, Users, Check } from "lucide-react";
+import { Globe, MapPin, Users, Check, LogIn, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { AuthDialog } from "@/components/AuthDialog";
 
 const Home = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const scrollToPromotion = () => {
     document.getElementById("promotion")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleAuthClick = () => {
+    if (user) {
+      supabase.auth.signOut();
+    } else {
+      setAuthDialogOpen(true);
+    }
   };
 
   return (
@@ -16,10 +45,22 @@ const Home = () => {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="text-lg md:text-2xl font-bold font-['Exo_2'] tracking-tight">hackamaps.com</div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleAuthClick}
+                title={user ? "Sign out" : "Sign in"}
+              >
+                {user ? <LogOut className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
+              </Button>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </nav>
+
+      <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">

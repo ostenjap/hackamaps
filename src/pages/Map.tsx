@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Filter, Home } from "lucide-react";
+import { Filter, Home, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
@@ -69,6 +69,12 @@ const Map = () => {
     console.log("Fetched hackathons:", data?.length, "hackathons");
     setHackathons(data || []);
     setFilteredHackathons(data || []);
+  };
+
+  const handleAuthClick = () => {
+    if (user) {
+      supabase.auth.signOut();
+    }
   };
 
   useEffect(() => {
@@ -150,7 +156,15 @@ const Map = () => {
                   <span className="hidden md:inline">Home</span>
                 </Button>
               </Link>
-              <SubmitHackathonDialog user={user} />
+              <SubmitHackathonDialog user={user} onSubmitSuccess={fetchHackathons} />
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={handleAuthClick}
+                title={user ? "Sign out" : "Sign in"}
+              >
+                {user ? <LogOut className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
+              </Button>
               <ThemeToggle />
             </div>
           </div>
