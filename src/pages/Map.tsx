@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Filter, Home, LogIn, LogOut } from "lucide-react";
+import { Filter, Home, LogIn, LogOut, Cloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
@@ -157,13 +157,13 @@ const Map = () => {
                 </Button>
               </Link>
               <SubmitHackathonDialog user={user} onSubmitSuccess={fetchHackathons} />
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={handleAuthClick}
                 title={user ? "Sign out" : "Sign in"}
               >
-                {user ? <LogOut className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
+                {user ? <Cloud className="h-5 w-5 text-blue-500" /> : <LogIn className="h-5 w-5" />}
               </Button>
               <ThemeToggle />
             </div>
