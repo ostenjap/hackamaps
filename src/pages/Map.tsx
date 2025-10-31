@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
 import { HackathonMap } from "@/components/HackathonMap";
 import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
+import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -39,6 +40,7 @@ const Map = () => {
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchHackathons();
@@ -74,6 +76,8 @@ const Map = () => {
   const handleAuthClick = () => {
     if (user) {
       supabase.auth.signOut();
+    } else {
+      setIsAuthDialogOpen(true);
     }
   };
 
@@ -205,6 +209,9 @@ const Map = () => {
           </div>
         </div>
       </div>
+
+      {/* Auth Dialog */}
+      <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
     </div>
   );
 };
