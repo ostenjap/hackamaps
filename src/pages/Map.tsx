@@ -40,6 +40,7 @@ const Map = () => {
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<any>(null);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -48,12 +49,14 @@ const Map = () => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        setSession(session);
         setUser(session?.user ?? null);
       }
     );
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
       setUser(session?.user ?? null);
     });
 
