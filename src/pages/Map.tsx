@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { FilterPanel } from "@/components/FilterPanel";
 import { HackathonMap } from "@/components/HackathonMap";
 import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
+import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -39,6 +40,7 @@ const Map = () => {
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchHackathons();
@@ -74,6 +76,8 @@ const Map = () => {
   const handleAuthClick = () => {
     if (user) {
       supabase.auth.signOut();
+    } else {
+      setIsAuthDialogOpen(true);
     }
   };
 
@@ -157,14 +161,27 @@ const Map = () => {
                 </Button>
               </Link>
               <SubmitHackathonDialog user={user} onSubmitSuccess={fetchHackathons} />
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleAuthClick}
-                title={user ? "Sign out" : "Sign in"}
-              >
-                {user ? <Cloud className="h-5 w-5 text-blue-500" /> : <LogIn className="h-5 w-5" />}
-              </Button>
+              {user ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAuthClick}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden md:inline">Sign Out</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleAuthClick}
+                  className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Sign Up / Login</span>
+                </Button>
+              )}
               <ThemeToggle />
             </div>
           </div>
@@ -205,6 +222,9 @@ const Map = () => {
           </div>
         </div>
       </div>
+
+      {/* Auth Dialog */}
+      <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
     </div>
   );
 };
