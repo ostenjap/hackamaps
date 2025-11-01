@@ -15,6 +15,7 @@ import { AuthDialog } from "./AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import { MapPin, Link as LinkIcon, Check, X } from "lucide-react";
 
 interface SubmitHackathonDialogProps {
   user: User | null;
@@ -24,6 +25,8 @@ interface SubmitHackathonDialogProps {
 export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathonDialogProps) {
   const [open, setOpen] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [mapUrl, setMapUrl] = useState('');
+  const [extractionError, setExtractionError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -46,6 +49,71 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
     organizer_email: user?.email || "",
   });
 
+  const extractCoordinates = (url: string) => {
+    // Reset previous results
+    setExtractionError('');
+
+    if (!url.trim()) {
+      setExtractionError('Please enter a Google Maps URL');
+      return;
+    }
+
+    // Regular expressions to match different Google Maps URL formats
+    const patterns = [
+      // Pattern 1: @lat,lng,zoom format
+      /@(-?\d+\.\d+),(-?\d+\.\d+),/,
+      
+      // Pattern 2: ?q=lat,lng format
+      /\?q=(-?\d+\.\d+),(-?\d+\.\d+)/,
+      
+      // Pattern 3: /place/.../@lat,lng format
+      /place\/[^/]+\/@(-?\d+\.\d+),(-?\d+\.\d+)/,
+      
+      // Pattern 4: !3d and !4d format (alternative encoding)
+      /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/,
+      
+      // Pattern 5: ll=lat,lng format
+      /ll=(-?\d+\.\d+),(-?\d+\.\d+)/,
+    ];
+
+    let match = null;
+    let patternIndex = -1;
+
+    // Try each pattern until we find a match
+    for (let i = 0; i < patterns.length; i++) {
+      match = url.match(patterns[i]);
+      if (match) {
+        patternIndex = i;
+        break;
+      }
+    }
+
+    if (match) {
+      const lat = parseFloat(match[1]);
+      const lng = parseFloat(match[2]);
+
+      // Validate coordinates
+      if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+        setFormData(prev => ({
+          ...prev,
+          latitude: lat.toString(),
+          longitude: lng.toString()
+        }));
+        setExtractionError('');
+      } else {
+        setExtractionError('Invalid coordinates found in URL');
+      }
+    } else {
+      setExtractionError('No coordinates found in URL. Please make sure it\'s a valid Google Maps link.');
+    }
+  };
+
+  const handleMapUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value;
+    setMapUrl(url);
+    extractCoordinates(url);
+  };
+
   const handleClick = () => {
     if (!user) {
       setAuthDialogOpen(true);
@@ -56,6 +124,14 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Log coordinates to console
+    console.log('Submitting hackathon with coordinates:', {
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+      mapUrl: mapUrl
+    });
+    
     setIsSubmitting(true);
 
     try {
@@ -198,7 +274,27 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
               </div>
 
               <div>
-                <Label htmlFor="latitude">Latitude *</Label>
+                <Label htmlFor="google_maps">Google Maps URL *</Label>
+                <div className="relative">
+                  <Input
+                    id="google_maps"
+                    type="text"
+                    value={mapUrl}
+                    onChange={handleMapUrlChange}
+                    placeholder="Paste Google Maps link to extract coordinates"
+                    className="pr-10"
+                  />
+                  <MapPin className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                </div>
+                {extractionError && (
+                  <p className="text-sm text-red-500 mt-1 flex items-center">
+                    <X className="h-4 w-4 mr-1" /> {extractionError}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="latitude">Latitude </Label>
                 <Input
                   id="latitude"
                   type="number"
@@ -211,7 +307,7 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
               </div>
 
               <div>
-                <Label htmlFor="longitude">Longitude *</Label>
+                <Label htmlFor="longitude">Longitude </Label>
                 <Input
                   id="longitude"
                   type="number"
@@ -301,7 +397,7 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
                 <Checkbox
                   id="is_online"
                   checked={formData.is_online}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={(checked) =>
                     setFormData({ ...formData, is_online: checked as boolean })
                   }
                 />
