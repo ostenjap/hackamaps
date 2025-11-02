@@ -1,0 +1,23 @@
+function forceClearAuth() {
+  // Clear Supabase-specific storage
+  localStorage.removeItem('supabase.auth.token');
+  localStorage.removeItem('sb-juoazyindrfetdkzngtm-auth-token'); // Your project-specific
+
+  // Clear all related storage
+  sessionStorage.clear();
+
+  // Clear cookies for your domain
+  document.cookie.split(";").forEach(cookie => {
+    const name = cookie.split("=")[0].trim();
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+  });
+
+  console.log('Auth data cleared. Reloading...');
+  setTimeout(() => location.reload(), 1000);
+}
+
+// Run this in console
+forceClearAuth();
+
+
+// paste this in console to clear auth data
