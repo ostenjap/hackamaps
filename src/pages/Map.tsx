@@ -7,6 +7,7 @@ import { HackathonMap } from "@/components/HackathonMap";
 import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
 import { AuthDialog } from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
@@ -42,6 +43,7 @@ const Map = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<any>(null);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [showSignupPopup, setShowSignupPopup] = useState(false);
 
   useEffect(() => {
     fetchHackathons();
@@ -60,8 +62,18 @@ const Map = () => {
       setUser(session?.user ?? null);
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    // Show signup popup after 15 seconds if user is not authenticated
+    const timer = setTimeout(() => {
+      if (!session && !user) {
+        setShowSignupPopup(true);
+      }
+    }, 15000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timer);
+    };
+  }, [session, user]);
 
   const fetchHackathons = async () => {
     const { data, error } = await supabase.from("hackathons").select("*").order("start_date", { ascending: true });
@@ -228,6 +240,36 @@ const Map = () => {
 
       {/* Auth Dialog */}
       <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
+
+      {/* Signup Popup */}
+      <Dialog open={showSignupPopup} onOpenChange={setShowSignupPopup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">🍫 Sign up with a chocolate bar!</DialogTitle>
+            <DialogDescription className="text-base pt-2">
+              Lol we totally made that up. He "wiecen@gmail.com" can sure find you something more tasty. Give it a try!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowSignupPopup(false)}
+              className="w-full sm:w-auto"
+            >
+              I am a dog I don't eat chocolate 🐕
+            </Button>
+            <Button 
+              onClick={() => {
+                setShowSignupPopup(false);
+                setIsAuthDialogOpen(true);
+              }}
+              className="w-full sm:w-auto"
+            >
+              Sign me up! 🚀
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
