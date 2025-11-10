@@ -46,15 +46,22 @@ const ProfilePublic = () => {
   }, []);
 
   const fetchProfileByEmail = async (email: string) => {
-    // First get the user_id from auth.users via profiles
+    // Get the first profile (or you can filter by specific criteria)
     const { data: profileData, error: profileError } = await supabase
       .from("profiles")
       .select("*")
       .limit(1)
       .maybeSingle();
 
-    if (profileError || !profileData) {
-      console.error("Error fetching profile");
+    if (profileError) {
+      console.error("Error fetching profile:", profileError);
+      setProfile(null);
+      return;
+    }
+
+    if (!profileData) {
+      console.error("No profile found");
+      setProfile(null);
       return;
     }
 
@@ -102,7 +109,14 @@ const ProfilePublic = () => {
 
       {/* Profile Content */}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {!profile ? (
+        {profile === null ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Profile not found</CardTitle>
+              <CardDescription>This profile does not exist or has been removed.</CardDescription>
+            </CardHeader>
+          </Card>
+        ) : !profile ? (
           <Card>
             <CardHeader>
               <CardTitle>Loading profile...</CardTitle>
