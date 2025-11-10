@@ -5,9 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Github, Mail, Trophy, Calendar, Upload, Edit, Plus, Trash2, ExternalLink } from "lucide-react";
+import { Github, Mail, Trophy, Calendar, Upload, Edit, Plus, Trash2, ExternalLink, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -38,6 +38,7 @@ interface HackathonAttended {
 }
 
 const ProfilePrivate = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -73,17 +74,31 @@ const ProfilePrivate = () => {
       setUser(session?.user ?? null);
       if (session?.user) {
         fetchProfile(session.user.id);
+      } else {
+        navigate("/auth");
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const checkUser = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user ?? null);
     if (session?.user) {
       fetchProfile(session.user.id);
+    } else {
+      navigate("/auth");
+    }
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({ title: "Error signing out", variant: "destructive" });
+    } else {
+      toast({ title: "Signed out successfully" });
+      navigate("/auth");
     }
   };
 
@@ -312,7 +327,15 @@ const ProfilePrivate = () => {
           <Link to="/" className="text-2xl font-bold text-foreground hover:text-primary transition-colors">
             HackathonMap
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            {user && (
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            )}
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -321,8 +344,8 @@ const ProfilePrivate = () => {
         {!user ? (
           <Card>
             <CardHeader>
-              <CardTitle>Please sign in to view profile</CardTitle>
-              <CardDescription>You need to be signed in to access this page</CardDescription>
+              <CardTitle>Redirecting...</CardTitle>
+              <CardDescription>Please wait while we redirect you to the sign in page</CardDescription>
             </CardHeader>
           </Card>
         ) : (
