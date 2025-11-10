@@ -37,7 +37,7 @@ interface HackathonAttended {
   date_attended: string;
 }
 
-const ProfilePrivate = () => {
+const Profile = () => {
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -690,4 +690,4 @@ const ProfilePrivate = () => {
   );
 };
 
-export default ProfilePrivate;
+export default Profile;
