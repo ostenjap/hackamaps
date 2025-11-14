@@ -62,16 +62,16 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
     const patterns = [
       // Pattern 1: @lat,lng,zoom format
       /@(-?\d+\.\d+),(-?\d+\.\d+),/,
-      
+
       // Pattern 2: ?q=lat,lng format
       /\?q=(-?\d+\.\d+),(-?\d+\.\d+)/,
-      
+
       // Pattern 3: /place/.../@lat,lng format
       /place\/[^/]+\/@(-?\d+\.\d+),(-?\d+\.\d+)/,
-      
+
       // Pattern 4: !3d and !4d format (alternative encoding)
       /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/,
-      
+
       // Pattern 5: ll=lat,lng format
       /ll=(-?\d+\.\d+),(-?\d+\.\d+)/,
     ];
@@ -124,14 +124,14 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Log coordinates to console
     console.log('Submitting hackathon with coordinates:', {
       latitude: formData.latitude,
       longitude: formData.longitude,
       mapUrl: mapUrl
     });
-    
+
     setIsSubmitting(true);
 
     try {
