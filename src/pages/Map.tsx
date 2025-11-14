@@ -243,22 +243,27 @@ const Map = () => {
 
       {/* Signup Popup */}
       <Dialog open={showSignupPopup} onOpenChange={setShowSignupPopup}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="w-[90%] max-w-xs sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-2xl">🍫 Sign up with a chocolate bar!</DialogTitle>
+            <DialogTitle className="text-2xl">🍫 Sign up, win a chocolate bar!</DialogTitle>
             <DialogDescription className="text-base pt-2">
-              Lol we totally made that up. He "wiecen@gmail.com" can sure find you something more tasty. Give it a try!
+              <div className="hidden sm:block">
+                Lol we totally made that up.<br /> He "wiecen@gmail.com" can sure find you something more tasty. Give it a try!
+              </div>
+              <div className="block sm:hidden">
+                Lol we totally made that up. Give it a try!
+              </div>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => setShowSignupPopup(false)}
               className="w-full sm:w-auto"
             >
               I am a dog I don't eat chocolate 🐕
             </Button>
-            <Button 
+            <Button
               onClick={() => {
                 setShowSignupPopup(false);
                 setIsAuthDialogOpen(true);
