@@ -16,11 +16,34 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MapPin, Link as LinkIcon, Check, X } from "lucide-react";
+import { z } from "zod";
 
 interface SubmitHackathonDialogProps {
   user: User | null;
   onSubmitSuccess?: () => void;
 }
+
+const hackathonSchema = z.object({
+  name: z.string().trim().min(3, "Name must be at least 3 characters").max(200, "Name must be less than 200 characters"),
+  description: z.string().trim().max(5000, "Description must be less than 5000 characters").optional(),
+  location: z.string().trim().min(2, "Location must be at least 2 characters").max(200, "Location must be less than 200 characters"),
+  city: z.string().trim().min(2, "City must be at least 2 characters").max(100, "City must be less than 100 characters"),
+  country: z.string().trim().min(2, "Country must be at least 2 characters").max(100, "Country must be less than 100 characters"),
+  continent: z.string().trim().min(2, "Continent must be at least 2 characters").max(50, "Continent must be less than 50 characters"),
+  latitude: z.number().min(-90, "Latitude must be between -90 and 90").max(90, "Latitude must be between -90 and 90"),
+  longitude: z.number().min(-180, "Longitude must be between -180 and 180").max(180, "Longitude must be between -180 and 180"),
+  start_date: z.string().datetime("Invalid start date format"),
+  end_date: z.string().datetime("Invalid end date format"),
+  categories: z.string().trim().min(1, "At least one category is required").max(500, "Categories must be less than 500 characters"),
+  website_url: z.union([z.string().url("Invalid URL format"), z.literal("")]).optional(),
+  organizer_email: z.union([z.string().email("Invalid email format"), z.literal("")]).optional(),
+  max_participants: z.union([z.number().int().positive().max(100000, "Maximum participants must be less than 100,000"), z.null()]).optional(),
+  prize_pool: z.string().max(100, "Prize pool must be less than 100 characters").optional(),
+  is_online: z.boolean()
+}).refine(data => new Date(data.end_date) > new Date(data.start_date), {
+  message: "End date must be after start date",
+  path: ["end_date"]
+});
 
 export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathonDialogProps) {
   const [open, setOpen] = useState(false);
@@ -124,20 +147,13 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Log coordinates to console
-    console.log('Submitting hackathon with coordinates:', {
-      latitude: formData.latitude,
-      longitude: formData.longitude,
-      mapUrl: mapUrl
-    });
-
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("hackathons").insert({
+      // Prepare data for validation
+      const dataToValidate = {
         name: formData.name,
-        description: formData.description || null,
+        description: formData.description || undefined,
         location: formData.location,
         city: formData.city,
         country: formData.country,
@@ -146,12 +162,35 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
         longitude: parseFloat(formData.longitude),
         start_date: formData.start_date,
         end_date: formData.end_date,
-        categories: formData.categories.split(",").map(c => c.trim()),
-        website_url: formData.website_url || null,
-        prize_pool: formData.prize_pool || null,
-        is_online: formData.is_online,
+        categories: formData.categories,
+        website_url: formData.website_url || undefined,
+        organizer_email: formData.organizer_email || undefined,
         max_participants: formData.max_participants ? parseInt(formData.max_participants) : null,
-        organizer_email: formData.organizer_email || null,
+        prize_pool: formData.prize_pool || undefined,
+        is_online: formData.is_online
+      };
+
+      // Validate input data
+      const validatedData = hackathonSchema.parse(dataToValidate);
+
+      // Insert validated data
+      const { error } = await supabase.from("hackathons").insert({
+        name: validatedData.name,
+        description: validatedData.description || null,
+        location: validatedData.location,
+        city: validatedData.city,
+        country: validatedData.country,
+        continent: validatedData.continent,
+        latitude: validatedData.latitude,
+        longitude: validatedData.longitude,
+        start_date: validatedData.start_date,
+        end_date: validatedData.end_date,
+        categories: validatedData.categories.split(",").map(c => c.trim()),
+        website_url: validatedData.website_url || null,
+        prize_pool: validatedData.prize_pool || null,
+        is_online: validatedData.is_online,
+        max_participants: validatedData.max_participants,
+        organizer_email: validatedData.organizer_email || null,
       });
 
       if (error) throw error;
@@ -185,11 +224,21 @@ export function SubmitHackathonDialog({ user, onSubmitSuccess }: SubmitHackathon
         onSubmitSuccess();
       }
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to submit hackathon.",
-        variant: "destructive",
-      });
+      // Handle Zod validation errors
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Validation Error",
+          description: firstError.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to submit hackathon.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
