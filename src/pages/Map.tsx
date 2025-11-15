@@ -6,6 +6,7 @@ import { FilterPanel } from "@/components/FilterPanel";
 import { HackathonMap } from "@/components/HackathonMap";
 import { SubmitHackathonDialog } from "@/components/SubmitHackathonDialog";
 import { AuthDialog } from "@/components/AuthDialog";
+import { PrivacyBanner } from "@/components/PrivacyBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -240,6 +241,7 @@ const Map = () => {
 
       {/* Auth Dialog */}
       <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
+      <PrivacyBanner />
 
       {/* Signup Popup */}
       <Dialog open={showSignupPopup} onOpenChange={setShowSignupPopup}>
