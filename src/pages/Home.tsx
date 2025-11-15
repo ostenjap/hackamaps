@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { AuthDialog } from "@/components/AuthDialog";
+import { PrivacyBanner } from "@/components/PrivacyBanner";
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -61,6 +62,7 @@ const Home = () => {
       </nav>
 
       <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
+      <PrivacyBanner />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
