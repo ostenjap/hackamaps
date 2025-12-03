@@ -37,11 +37,25 @@ interface FilterPanelProps {
   setSelectedContinents: (continents: string[]) => void;
   locationSearch: string;
   setLocationSearch: (search: string) => void;
-  selectedMonthsAhead: number;
-  setSelectedMonthsAhead: (months: number) => void;
+  selectedWeeksAhead: number;
+  setSelectedWeeksAhead: (weeks: number) => void;
   isDateFilterEnabled: boolean;
   setIsDateFilterEnabled: (enabled: boolean) => void;
 }
+
+// Helper function to format date like "7th of December"
+const formatDateWithOrdinal = (date: Date): string => {
+  const day = date.getDate();
+  const month = date.toLocaleDateString('en-US', { month: 'long' });
+  
+  const getOrdinal = (n: number): string => {
+    const s = ["th", "st", "nd", "rd"];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+  
+  return `${getOrdinal(day)} of ${month}`;
+};
 
 export function FilterPanel({
   isOpen,
@@ -52,8 +66,8 @@ export function FilterPanel({
   setSelectedContinents,
   locationSearch,
   setLocationSearch,
-  selectedMonthsAhead,
-  setSelectedMonthsAhead,
+  selectedWeeksAhead,
+  setSelectedWeeksAhead,
   isDateFilterEnabled,
   setIsDateFilterEnabled,
 }: FilterPanelProps) {
@@ -77,8 +91,15 @@ export function FilterPanel({
     setSelectedCategories([]);
     setSelectedContinents([]);
     setLocationSearch("");
-    setSelectedMonthsAhead(0);
+    setSelectedWeeksAhead(0);
     setIsDateFilterEnabled(false);
+  };
+
+  // Calculate the target date based on weeks ahead
+  const getTargetDate = (): Date => {
+    const date = new Date();
+    date.setDate(date.getDate() + (selectedWeeksAhead * 7));
+    return date;
   };
 
   const activeFilterCount =
@@ -200,17 +221,17 @@ export function FilterPanel({
             </div>
             <div className={`space-y-2 ${!isDateFilterEnabled ? 'opacity-50' : ''}`}>
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Next {selectedMonthsAhead} month{selectedMonthsAhead !== 1 ? 's' : ''}</span>
+                <span>+{selectedWeeksAhead} week{selectedWeeksAhead !== 1 ? 's' : ''}</span>
                 <span>
-                  Until {new Date(new Date().setMonth(new Date().getMonth() + selectedMonthsAhead)).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  {formatDateWithOrdinal(getTargetDate())}
                 </span>
               </div>
               <input
                 type="range"
                 min="0"
-                max="6"
-                value={selectedMonthsAhead}
-                onChange={(e) => setSelectedMonthsAhead(Number(e.target.value))}
+                max="26"
+                value={selectedWeeksAhead}
+                onChange={(e) => setSelectedWeeksAhead(Number(e.target.value))}
                 disabled={!isDateFilterEnabled}
                 className={`w-full h-2 rounded-lg appearance-none cursor-pointer accent-primary ${
                   isDateFilterEnabled ? 'bg-gray-200' : 'bg-gray-100 cursor-not-allowed'
