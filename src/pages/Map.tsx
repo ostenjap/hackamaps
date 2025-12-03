@@ -37,7 +37,7 @@ const Map = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedContinents, setSelectedContinents] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState("");
-  const [selectedMonthsAhead, setSelectedMonthsAhead] = useState(0);
+  const [selectedWeeksAhead, setSelectedWeeksAhead] = useState(0);
   const [isDateFilterEnabled, setIsDateFilterEnabled] = useState(false);
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
   const [filteredHackathons, setFilteredHackathons] = useState<Hackathon[]>([]);
@@ -129,7 +129,7 @@ const Map = () => {
   // Filter by date - show hackathons AFTER the selected date if date filter is enabled
   if (isDateFilterEnabled) {
     const selectedDate = new Date();
-    selectedDate.setMonth(selectedDate.getMonth() + selectedMonthsAhead);
+    selectedDate.setDate(selectedDate.getDate() + (selectedWeeksAhead * 7));
 
     filtered = filtered.filter((h) => {
       const hackathonDate = new Date(h.start_date);
@@ -138,7 +138,7 @@ const Map = () => {
   }
 
   setFilteredHackathons(filtered);
-  }, [selectedCategories, selectedContinents, locationSearch, selectedMonthsAhead, isDateFilterEnabled, hackathons]);
+  }, [selectedCategories, selectedContinents, locationSearch, selectedWeeksAhead, isDateFilterEnabled, hackathons]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -216,8 +216,8 @@ const Map = () => {
             setSelectedContinents={setSelectedContinents}
             locationSearch={locationSearch}
             setLocationSearch={setLocationSearch}
-            selectedMonthsAhead={selectedMonthsAhead}
-            setSelectedMonthsAhead={setSelectedMonthsAhead}
+            selectedWeeksAhead={selectedWeeksAhead}
+            setSelectedWeeksAhead={setSelectedWeeksAhead}
             isDateFilterEnabled={isDateFilterEnabled}
             setIsDateFilterEnabled={setIsDateFilterEnabled}
           />
