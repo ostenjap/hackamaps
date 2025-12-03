@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useTheme } from "@/components/ThemeProvider";
+import hackerHouseIcon from "@/assets/hacker-house-icon.png";
 
 interface Hackathon {
   id: string;
@@ -22,9 +23,36 @@ interface Hackathon {
   max_participants: number | null;
 }
 
+interface HackerHouse {
+  id: string;
+  name: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+}
+
 interface HackathonMapProps {
   hackathons: Hackathon[];
 }
+
+// Berlin Hacker House data
+const hackerHouses: HackerHouse[] = [
+  {
+    id: "berlin-hacker-house-1",
+    name: "Berlin Hacker House",
+    description: `• Creation of power grid diagrams for Berlin, covering both high-voltage and medium-voltage networks.
+
+• Automation of data analysis processes for business reporting.
+
+• Use of SQL for data querying and Power BI for data analysis. Powershell used to automate troubleshooting tasks.
+
+• Led a team responsible for resolving issues related to data inconsistencies, which manifested as discrepancies between availability and performance metrics. (Team leadership/collaboration)`,
+    latitude: 52.52,
+    longitude: 13.405,
+    city: "Berlin",
+  },
+];
 
 const getCategoryColor = (categories: string[]): string => {
   if (categories.length === 0) return "#8b5cf6";
@@ -265,6 +293,66 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
         .addTo(map.current!);
 
       markers.current.push(marker);
+    });
+
+    // Add hacker house markers
+    hackerHouses.forEach((house) => {
+      const hackerHouseMarkerIcon = L.divIcon({
+        className: 'hacker-house-marker',
+        html: `
+          <div style="
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 20px rgba(34, 197, 94, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+          ">
+            <img src="${hackerHouseIcon}" alt="Hacker House" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>
+        `,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+      });
+
+      const hackerHousePopupContent = `
+        <div style="min-width: 320px; color: #000000; font-family: system-ui;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <img src="${hackerHouseIcon}" alt="Hacker House" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;" />
+            <h3 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">
+              ${house.name}
+            </h3>
+          </div>
+          
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink: 0; margin-top: 2px;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span style="color: #22c55e; font-weight: 600;">${house.city}</span>
+          </div>
+          
+          <div style="font-size: 14px; color: #1a1a1a; line-height: 1.6; white-space: pre-line;">
+            ${house.description}
+          </div>
+          
+          <div style="margin-top: 16px; padding: 8px 12px; background: linear-gradient(135deg, #22c55e22, #16a34a22); border-radius: 8px; border: 1px solid #22c55e44;">
+            <span style="font-size: 12px; font-weight: 600; color: #22c55e;">🏠 Hacker House</span>
+          </div>
+        </div>
+      `;
+
+      const hackerHouseMarker = L.marker([house.latitude, house.longitude], {
+        icon: hackerHouseMarkerIcon,
+      })
+        .bindPopup(hackerHousePopupContent, {
+          maxWidth: 400,
+          className: 'custom-popup hacker-house-popup',
+        })
+        .addTo(map.current!);
+
+      markers.current.push(hackerHouseMarker);
     });
   }, [hackathons]);
 
