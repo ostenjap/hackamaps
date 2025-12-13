@@ -77,16 +77,22 @@ const Map = () => {
   }, [session, user]);
 
   const fetchHackathons = async () => {
-    const { data, error } = await supabase.from("hackathons").select("*").order("start_date", { ascending: true });
+    // Use the secure RPC function that excludes organizer_email from public queries
+    const { data, error } = await supabase.rpc("get_hackathons_public");
 
     if (error) {
       console.error("Error fetching hackathons:", error);
       return;
     }
 
-    console.log("Fetched hackathons:", data?.length, "hackathons");
-    setHackathons(data || []);
-    setFilteredHackathons(data || []);
+    // Sort by start_date since RPC doesn't have built-in ordering
+    const sortedData = (data || []).sort((a: Hackathon, b: Hackathon) => 
+      new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+    );
+
+    console.log("Fetched hackathons:", sortedData.length, "hackathons");
+    setHackathons(sortedData);
+    setFilteredHackathons(sortedData);
   };
 
   const handleAuthClick = () => {
