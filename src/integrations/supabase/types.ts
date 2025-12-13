@@ -178,10 +178,94 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      hackathons_public: {
+        Row: {
+          categories: string[] | null
+          city: string | null
+          continent: string | null
+          country: string | null
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string | null
+          is_online: boolean | null
+          latitude: number | null
+          location: string | null
+          longitude: number | null
+          max_participants: number | null
+          name: string | null
+          prize_pool: string | null
+          start_date: string | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          categories?: string[] | null
+          city?: string | null
+          continent?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string | null
+          is_online?: boolean | null
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          max_participants?: number | null
+          name?: string | null
+          prize_pool?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          categories?: string[] | null
+          city?: string | null
+          continent?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string | null
+          is_online?: boolean | null
+          latitude?: number | null
+          location?: string | null
+          longitude?: number | null
+          max_participants?: number | null
+          name?: string | null
+          prize_pool?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_hackathons_public: {
+        Args: never
+        Returns: {
+          categories: string[]
+          city: string
+          continent: string
+          country: string
+          created_at: string
+          description: string
+          end_date: string
+          id: string
+          is_online: boolean
+          latitude: number
+          location: string
+          longitude: number
+          max_participants: number
+          name: string
+          prize_pool: string
+          start_date: string
+          updated_at: string
+          website_url: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
