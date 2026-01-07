@@ -1,0 +1,7 @@
+﻿src/App.tsx(7,10): error TS1484: 'ViewState' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/App.tsx(7,21): error TS1484: 'UserCommand' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Discover/Discover.tsx(4,10): error TS1484: 'HackathonEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Discover/Discover.tsx(4,26): error TS1484: 'ViewState' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Home/Home.tsx(4,10): error TS1484: 'ViewState' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Map/MapView.tsx(2,10): error TS1484: 'HackathonEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/hooks/useEvents.ts(2,10): error TS1484: 'HackathonEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
