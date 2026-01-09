@@ -1,56 +1,72 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient';
 import type { HackathonEvent } from '../types';
-
-export const MOCK_EVENTS: HackathonEvent[] = [
-    {
-        id: '1',
-        title: 'ETHGlobal London',
-        date: 'Mar 15-17',
-        location: 'London, UK',
-        coords: [51.5074, -0.1278],
-        prize: '$250,000',
-        tags: ['Web3', 'Ethereum'],
-        type: 'web3'
-    },
-    {
-        id: '2',
-        title: 'OpenAI Hack',
-        date: 'Apr 05',
-        location: 'Remote',
-        coords: [37.7749, -122.4194],
-        prize: '$1M Credits',
-        tags: ['AI', 'LLM'],
-        type: 'ai'
-    },
-    {
-        id: '3',
-        title: 'Tokyo CyberSummit',
-        date: 'May 20-22',
-        location: 'Tokyo, Japan',
-        coords: [35.6762, 139.6503],
-        prize: '¥10,000,000',
-        tags: ['Cybersec', 'IoT'],
-        type: 'generic'
-    }
-];
 
 export function useEvents() {
     const [data, setData] = useState<HackathonEvent[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            const stored = localStorage.getItem('hackamaps_events');
-            if (stored) {
-                setData(JSON.parse(stored));
-            } else {
-                setData(MOCK_EVENTS);
-                localStorage.setItem('hackamaps_events', JSON.stringify(MOCK_EVENTS));
+        async function fetchEvents() {
+            console.log("Attempting to fetch events from Supabase...");
+            try {
+                const { data: events, error } = await supabase
+                    .from('hackathons')
+                    .select('*');
+
+                if (error) {
+                    console.error('Supabase Error fetching events:', error);
+                    console.error('Error Details:', error.message, error.details, error.hint);
+                    return;
+                }
+
+                console.log("Raw Supabase Data:", events);
+
+                if (events) {
+                    const mappedEvents: HackathonEvent[] = events.map((event) => {
+                        try {
+                            return {
+                                id: event.id,
+                                title: event.name,
+                                date: new Date(event.start_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+                                location: event.is_online ? 'Remote' : `${event.city || ''}, ${event.country || ''}`,
+                                coords: [event.latitude || 0, event.longitude || 0],
+                                prize: event.prize_pool || 'N/A',
+                                tags: event.categories || [],
+                                type: determineType(event.categories)
+                            };
+                        } catch (mapErr) {
+                            console.error("Error mapping event:", event, mapErr);
+                            return null;
+                        }
+                    }).filter(Boolean) as HackathonEvent[]; // Type assertion to remove nulls
+
+                    console.log("Mapped Events:", mappedEvents);
+                    setData(mappedEvents);
+                } else {
+                    console.warn("No events found in Supabase (data is null or empty).");
+                }
+            } catch (err) {
+                console.error('Unexpected error in fetchEvents:', err);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
-        }, 800);
-        return () => clearTimeout(timer);
+        }
+
+        fetchEvents();
     }, []);
 
     return { data, isLoading };
+}
+
+// Helper to map DB categories to the UI 'type' (used for icon/color logic if needed)
+function determineType(categories: string[] | null): 'web3' | 'ai' | 'cloud' | 'generic' {
+    if (!categories || categories.length === 0) return 'generic';
+    const lowerCats = categories.map(c => c.toLowerCase());
+
+    if (lowerCats.some(c => c.includes('web3') || c.includes('blockchain') || c.includes('crypto'))) return 'web3';
+    if (lowerCats.some(c => c.includes('ai') || c.includes('ml') || c.includes('llm'))) return 'ai';
+    if (lowerCats.some(c => c.includes('cloud') || c.includes('devops'))) return 'cloud';
+
+    return 'generic';
 }
