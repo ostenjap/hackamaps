@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Terminal,
   Mic,
-  ChevronRight
+  ChevronRight,
+  Filter
 } from 'lucide-react';
-import type { ViewState, UserCommand } from './types';
+import type { ViewState, UserCommand, FilterState } from './types';
 import { useEvents } from './hooks/useEvents';
 import { Home } from './components/Home/Home';
 import { Discover } from './components/Discover/Discover';
 import { MapView } from './components/Map/MapView';
+import { FilterPanel } from './components/FilterPanel';
 
 export default function App() {
   const [view, setView] = useState<ViewState>('home');
@@ -18,6 +20,20 @@ export default function App() {
   const { data: events, isLoading } = useEvents();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // --- Filter State ---
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>({
+    selectedCategories: [],
+    selectedContinents: [],
+    locationSearch: "",
+    selectedWeeksAhead: 0,
+    isDateFilterEnabled: false
+  });
+
+  const handleSetFilters = (updates: Partial<FilterState>) => {
+    setFilters(prev => ({ ...prev, ...updates }));
+  };
 
   // --- Keyboard Navigation & Shortcuts ---
   useEffect(() => {
@@ -41,6 +57,9 @@ export default function App() {
         case 'h':
           setView('home');
           break;
+        case 'f':
+          setIsFilterOpen(prev => !prev);
+          break;
       }
     };
 
@@ -62,6 +81,9 @@ export default function App() {
     } else if (lower.includes('home')) {
       response = "Returning to dashboard.";
       setView('home');
+    } else if (lower.includes('filter')) {
+      response = "Opening filter panel.";
+      setIsFilterOpen(true);
     } else {
       response = "Command not recognized. Try 'Show Map' or 'List Events'.";
     }
@@ -102,6 +124,14 @@ export default function App() {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
 
+      {/* FILTER PANEL */}
+      <FilterPanel
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        {...filters}
+        setFilters={handleSetFilters}
+      />
+
       {/* BACKGROUND EFFECTS */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] rounded-full bg-blue-600/10 blur-[120px] animate-pulse" />
@@ -110,14 +140,24 @@ export default function App() {
       </div>
 
       {/* HEADER / NAV */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 py-6 flex items-center justify-between bg-gradient-to-b from-[#050505] to-transparent pointer-events-none">
-        <div className="pointer-events-auto cursor-pointer" onClick={() => setView('home')}>
-          <div className="px-3 py-1 bg-white/5 border border-white/10 rounded backdrop-blur-md hover:bg-white/10 transition-colors">
+      <header className="fixed top-0 left-0 right-0 z-40 px-6 py-6 flex items-center justify-between pointer-events-none">
+        <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-32" />
+
+        <div className="relative z-10 pointer-events-auto cursor-pointer flex items-center gap-4">
+          <div onClick={() => setView('home')} className="px-3 py-1 bg-white/5 border border-white/10 rounded backdrop-blur-md hover:bg-white/10 transition-colors">
             <span className="font-mono font-bold text-xs tracking-widest">HACKA_MAPS</span>
           </div>
+
+          <button
+            onClick={() => setIsFilterOpen(true)}
+            className="flex items-center gap-2 px-3 py-1 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-600/20 hover:border-blue-500/40 transition-all text-xs font-mono"
+          >
+            <Filter className="w-3 h-3" />
+            FILTER
+          </button>
         </div>
 
-        <nav className="pointer-events-auto hidden md:flex items-center gap-1 bg-neutral-900/50 border border-white/5 p-1 rounded-full backdrop-blur-md">
+        <nav className="relative z-10 pointer-events-auto hidden md:flex items-center gap-1 bg-neutral-900/50 border border-white/5 p-1 rounded-full backdrop-blur-md">
           <button
             onClick={() => setView('home')}
             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${view === 'home' ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-400 hover:text-white'}`}
@@ -138,7 +178,7 @@ export default function App() {
           </button>
         </nav>
 
-        <div className="pointer-events-auto flex items-center gap-4">
+        <div className="relative z-10 pointer-events-auto flex items-center gap-4">
           <a href="#" className="text-xs font-mono text-neutral-500 hover:text-white transition-colors hidden md:block">GITHUB</a>
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20" />
         </div>
