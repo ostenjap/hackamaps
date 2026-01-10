@@ -27,13 +27,13 @@ export function useEvents() {
                         try {
                             return {
                                 id: event.id,
-                                title: event.name,
-                                date: new Date(event.start_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+                                title: event.name || 'Untitled Event',
+                                date: event.start_date ? new Date(event.start_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'TBA',
                                 startDate: new Date(event.start_date || Date.now()),
                                 location: event.is_online ? 'Remote' : `${event.city || ''}, ${event.country || ''}`,
                                 country: event.country || '',
                                 continent: determineContinent(event.country, event.city),
-                                coords: [event.latitude || 0, event.longitude || 0],
+                                coords: [Number(event.latitude) || 0, Number(event.longitude) || 0],
                                 prize: event.prize_pool || 'N/A',
                                 tags: event.categories || [],
                                 type: determineType(event.categories)

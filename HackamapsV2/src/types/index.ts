@@ -25,7 +25,6 @@ export interface FilterState {
     selectedContinents: string[];
     locationSearch: string;
     selectedWeeksAhead: number;
-    isDateFilterEnabled: boolean;
 }
 
 export const CATEGORIES = [

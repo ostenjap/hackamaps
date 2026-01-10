@@ -30,7 +30,6 @@ export function FilterPanel({
     selectedContinents,
     locationSearch,
     selectedWeeksAhead,
-    isDateFilterEnabled,
     setFilters,
 }: FilterPanelProps) {
 
@@ -55,8 +54,7 @@ export function FilterPanel({
             selectedCategories: [],
             selectedContinents: [],
             locationSearch: "",
-            selectedWeeksAhead: 0,
-            isDateFilterEnabled: false
+            selectedWeeksAhead: 0
         });
     };
 
@@ -64,7 +62,7 @@ export function FilterPanel({
         selectedCategories.length +
         selectedContinents.length +
         (locationSearch ? 1 : 0) +
-        (isDateFilterEnabled ? 1 : 0);
+        (selectedWeeksAhead > 0 ? 1 : 0);
 
     const getTargetDate = (): Date => {
         const date = new Date();
@@ -202,26 +200,20 @@ export function FilterPanel({
                     {/* Time Frame */}
                     <div className="space-y-4 p-4 rounded-xl bg-white/5 border border-white/10">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-neutral-300">Time Frame</span>
-                            <button
-                                onClick={() => setFilters({ isDateFilterEnabled: !isDateFilterEnabled })}
-                                className={`w-10 h-5 rounded-full relative transition-colors ${isDateFilterEnabled ? "bg-blue-600" : "bg-neutral-700"
-                                    }`}
-                            >
-                                <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-transform duration-200 ${isDateFilterEnabled ? "left-6" : "left-1"
-                                    }`} />
-                            </button>
+                            <span className="text-sm font-medium text-neutral-300">Starting Time</span>
+                            <span className="text-xs text-blue-400 font-mono">
+                                {selectedWeeksAhead === 0 ? "All Time" : `+${selectedWeeksAhead} Weeks`}
+                            </span>
                         </div>
 
-                        <div className={`space-y-4 transition-all duration-300 ${!isDateFilterEnabled ? 'opacity-30 pointer-events-none' : ''}`}>
-                            <div className="flex justify-between text-xs text-blue-400 font-mono">
-                                <span>Next {selectedWeeksAhead} weeks</span>
-                                <span>{formatDateWithOrdinal(getTargetDate())}</span>
+                        <div className="space-y-4">
+                            <div className="flex justify-between text-xs text-neutral-500 font-mono">
+                                <span>{selectedWeeksAhead === 0 ? "Showing all events" : `Events starting after ${formatDateWithOrdinal(getTargetDate())}`}</span>
                             </div>
                             <input
                                 type="range"
                                 min="0"
-                                max="26"
+                                max="52"
                                 value={selectedWeeksAhead}
                                 onChange={(e) => setFilters({ selectedWeeksAhead: Number(e.target.value) })}
                                 className="w-full h-1 bg-neutral-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(59,130,246,0.5)]"

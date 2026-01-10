@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import type { HackathonEvent } from '../../types';
+import { CATEGORIES } from '../../types';
 import { Globe } from 'lucide-react';
 import { Badge } from '../ui';
 
@@ -10,25 +11,42 @@ interface MapViewProps {
 const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
-
     const markerLayerRef = useRef<any>(null);
 
+    // Initialize Map
     useEffect(() => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-        document.head.appendChild(link);
+        // If Leaflet is already loaded, init map immediately
+        if ((window as any).L) {
+            initMap();
+        } else {
+            // Check if script is already present to avoid duplicates
+            if (!document.querySelector('script[src*="leaflet.js"]')) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+                document.head.appendChild(link);
 
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        script.async = true;
-        script.onload = initMap;
-        document.body.appendChild(script);
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+                script.async = true;
+                script.onload = initMap;
+                document.body.appendChild(script);
+            } else {
+                // Script exists but maybe not loaded? Wait a bit or check L again
+                const checkL = setInterval(() => {
+                    if ((window as any).L) {
+                        clearInterval(checkL);
+                        initMap();
+                    }
+                }, 100);
+            }
+        }
 
         return () => {
             if (mapInstance.current) {
                 mapInstance.current.remove();
                 mapInstance.current = null;
+                markerLayerRef.current = null;
             }
         };
     }, []);
@@ -50,32 +68,52 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         markerLayerRef.current = markerLayer;
 
         mapInstance.current = map;
-        updateMarkers(); // Initial render of markers
+        updateMarkers();
     };
 
     const updateMarkers = () => {
         if (!markerLayerRef.current || !(window as any).L) return;
-
         const L = (window as any).L;
-        markerLayerRef.current.clearLayers();
 
-        events.forEach(ev => {
-            L.circleMarker(ev.coords, {
-                radius: 6,
-                color: '#3b82f6',
-                fillColor: '#3b82f6',
-                fillOpacity: 0.8
-            })
-                .bindPopup(`
-        <div style="font-family: 'JetBrains Mono'; font-size: 12px;">
-          <strong>${ev.title}</strong><br/>
-          ${ev.location}
-        </div>
-      `)
-                .addTo(markerLayerRef.current);
-        });
+        try {
+            // console.log("Updating markers. Events count:", events?.length);
+            markerLayerRef.current.clearLayers();
+
+            if (!Array.isArray(events)) return;
+
+            events.forEach(ev => {
+                if (!ev || !ev.coords || ev.coords.length !== 2) return;
+
+                const lat = Number(ev.coords[0]);
+                const lng = Number(ev.coords[1]);
+                if (isNaN(lat) || isNaN(lng)) return;
+
+                const categoryColor = CATEGORIES ? (CATEGORIES.find(c => c.id === ev.type)?.color || '#3b82f6') : '#3b82f6';
+
+                try {
+                    L.circleMarker([lat, lng], {
+                        radius: 6,
+                        color: categoryColor,
+                        fillColor: categoryColor,
+                        fillOpacity: 0.8
+                    })
+                        .bindPopup(`
+                        <div style="font-family: 'JetBrains Mono'; font-size: 12px;">
+                          <strong>${ev.title || 'Untitled'}</strong><br/>
+                          ${ev.location || 'Unknown Location'}
+                        </div>
+                    `)
+                        .addTo(markerLayerRef.current);
+                } catch (e) {
+                    console.error("Marker error", e);
+                }
+            });
+        } catch (err) {
+            console.error("Error updating markers", err);
+        }
     }
 
+    // Update markers when events change
     useEffect(() => {
         if (mapInstance.current && (window as any).L) {
             updateMarkers();

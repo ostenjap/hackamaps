@@ -27,8 +27,7 @@ export default function App() {
     selectedCategories: [],
     selectedContinents: [],
     locationSearch: "",
-    selectedWeeksAhead: 0,
-    isDateFilterEnabled: false
+    selectedWeeksAhead: 0
   });
 
   const handleSetFilters = (updates: Partial<FilterState>) => {
@@ -36,13 +35,10 @@ export default function App() {
   };
 
   // --- FILTERING LOGIC ---
-  const filteredEvents = events.filter(event => {
+  const filteredEvents = React.useMemo(() => events.filter(event => {
     // 1. Categories
     if (filters.selectedCategories.length > 0) {
       const typeMatch = filters.selectedCategories.includes(event.type);
-      // Also check tags if type doesn't match? Or just stick to primary type?
-      // Let's assume strict type matching for now, or match if tags overlap
-      // const tagMatch = event.tags.some(t => filters.selectedCategories.includes(t));
       if (!typeMatch) return false;
     }
 
@@ -57,27 +53,26 @@ export default function App() {
     if (filters.locationSearch) {
       const search = filters.locationSearch.toLowerCase();
       const matches =
-        event.title.toLowerCase().includes(search) ||
-        event.location.toLowerCase().includes(search) ||
-        event.country?.toLowerCase().includes(search);
+        (event.title || '').toLowerCase().includes(search) ||
+        (event.location || '').toLowerCase().includes(search) ||
+        (event.country || '').toLowerCase().includes(search);
 
       if (!matches) return false;
     }
 
-    // 4. Time Frame
-    if (filters.isDateFilterEnabled && filters.selectedWeeksAhead > 0) {
-      const now = new Date();
-      const future = new Date();
-      future.setDate(now.getDate() + (filters.selectedWeeksAhead * 7));
+    // 4. Time Frame (Start Date Threshold)
+    if (filters.selectedWeeksAhead > 0) {
+      const thresholdDate = new Date();
+      thresholdDate.setDate(thresholdDate.getDate() + (filters.selectedWeeksAhead * 7));
 
-      const evtDate = event.startDate;
-      if (evtDate < now || evtDate > future) {
+      // Show events that start AFTER this future threshold
+      if (event.startDate < thresholdDate) {
         return false;
       }
     }
 
     return true;
-  });
+  }), [events, filters]);
 
 
   // --- Keyboard Navigation & Shortcuts ---
