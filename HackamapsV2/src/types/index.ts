@@ -4,7 +4,10 @@ export interface HackathonEvent {
     id: string;
     title: string;
     date: string;
+    startDate: Date; // For filtering
     location: string;
+    country: string; // For filtering
+    continent: string; // For filtering
     coords: [number, number];
     prize: string;
     tags: string[];

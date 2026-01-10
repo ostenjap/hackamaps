@@ -11,6 +11,8 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
 
+    const markerLayerRef = useRef<any>(null);
+
     useEffect(() => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -24,7 +26,10 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         document.body.appendChild(script);
 
         return () => {
-            // Cleanup if needed
+            if (mapInstance.current) {
+                mapInstance.current.remove();
+                mapInstance.current = null;
+            }
         };
     }, []);
 
@@ -41,6 +46,19 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
             maxZoom: 19
         }).addTo(map);
 
+        const markerLayer = L.layerGroup().addTo(map);
+        markerLayerRef.current = markerLayer;
+
+        mapInstance.current = map;
+        updateMarkers(); // Initial render of markers
+    };
+
+    const updateMarkers = () => {
+        if (!markerLayerRef.current || !(window as any).L) return;
+
+        const L = (window as any).L;
+        markerLayerRef.current.clearLayers();
+
         events.forEach(ev => {
             L.circleMarker(ev.coords, {
                 radius: 6,
@@ -54,15 +72,13 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
           ${ev.location}
         </div>
       `)
-                .addTo(map);
+                .addTo(markerLayerRef.current);
         });
-
-        mapInstance.current = map;
-    };
+    }
 
     useEffect(() => {
         if (mapInstance.current && (window as any).L) {
-            // Logic to update markers would go here
+            updateMarkers();
         }
     }, [events]);
 

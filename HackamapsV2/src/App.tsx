@@ -35,6 +35,51 @@ export default function App() {
     setFilters(prev => ({ ...prev, ...updates }));
   };
 
+  // --- FILTERING LOGIC ---
+  const filteredEvents = events.filter(event => {
+    // 1. Categories
+    if (filters.selectedCategories.length > 0) {
+      const typeMatch = filters.selectedCategories.includes(event.type);
+      // Also check tags if type doesn't match? Or just stick to primary type?
+      // Let's assume strict type matching for now, or match if tags overlap
+      // const tagMatch = event.tags.some(t => filters.selectedCategories.includes(t));
+      if (!typeMatch) return false;
+    }
+
+    // 2. Continents
+    if (filters.selectedContinents.length > 0) {
+      if (!event.continent || !filters.selectedContinents.includes(event.continent)) {
+        return false;
+      }
+    }
+
+    // 3. Location / Search
+    if (filters.locationSearch) {
+      const search = filters.locationSearch.toLowerCase();
+      const matches =
+        event.title.toLowerCase().includes(search) ||
+        event.location.toLowerCase().includes(search) ||
+        event.country?.toLowerCase().includes(search);
+
+      if (!matches) return false;
+    }
+
+    // 4. Time Frame
+    if (filters.isDateFilterEnabled && filters.selectedWeeksAhead > 0) {
+      const now = new Date();
+      const future = new Date();
+      future.setDate(now.getDate() + (filters.selectedWeeksAhead * 7));
+
+      const evtDate = event.startDate;
+      if (evtDate < now || evtDate > future) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+
   // --- Keyboard Navigation & Shortcuts ---
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -184,12 +229,13 @@ export default function App() {
         </div>
       </header>
 
+
       {/* MAIN CONTENT AREA */}
       <main className="relative z-10 w-full h-full pt-20 pb-24 px-4 overflow-y-auto scrollbar-none">
         <div className="max-w-7xl mx-auto h-full flex flex-col justify-center">
-          {view === 'home' && <Home eventCount={events.length} setView={setView} />}
-          {view === 'discover' && <Discover events={events} isLoading={isLoading} setView={setView} />}
-          {view === 'map' && <MapView events={events} />}
+          {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
+          {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
+          {view === 'map' && <MapView events={filteredEvents} />}
           {view === 'organizers' && (
             <div className="text-center animate-in fade-in">
               <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>

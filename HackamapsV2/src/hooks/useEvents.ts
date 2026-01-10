@@ -29,7 +29,10 @@ export function useEvents() {
                                 id: event.id,
                                 title: event.name,
                                 date: new Date(event.start_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+                                startDate: new Date(event.start_date || Date.now()),
                                 location: event.is_online ? 'Remote' : `${event.city || ''}, ${event.country || ''}`,
+                                country: event.country || '',
+                                continent: determineContinent(event.country, event.city),
                                 coords: [event.latitude || 0, event.longitude || 0],
                                 prize: event.prize_pool || 'N/A',
                                 tags: event.categories || [],
@@ -69,4 +72,18 @@ function determineType(categories: string[] | null): 'web3' | 'ai' | 'cloud' | '
     if (lowerCats.some(c => c.includes('cloud') || c.includes('devops'))) return 'cloud';
 
     return 'generic';
+}
+
+function determineContinent(country?: string, city?: string): string {
+    if (!country) return 'Unknown';
+    const c = country.toLowerCase();
+
+    if (['united states', 'usa', 'canada', 'mexico'].some(x => c.includes(x))) return 'North America';
+    if (['united kingdom', 'uk', 'germany', 'france', 'spain', 'italy', 'poland', 'netherlands', 'sweden', 'switzerland'].some(x => c.includes(x))) return 'Europe';
+    if (['china', 'japan', 'india', 'singapore', 'korea', 'thailand', 'vietnam', 'uae', 'dubai'].some(x => c.includes(x))) return 'Asia';
+    if (['brazil', 'argentina', 'colombia', 'peru', 'chile'].some(x => c.includes(x))) return 'South America';
+    if (['australia', 'new zealand'].some(x => c.includes(x))) return 'Oceania';
+    if (['nigeria', 'kenya', 'south africa', 'egypt', 'ghana'].some(x => c.includes(x))) return 'Africa';
+
+    return 'Other';
 }
