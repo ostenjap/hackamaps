@@ -226,13 +226,13 @@ export default function App() {
 
 
       {/* MAIN CONTENT AREA */}
-      <main className="relative z-10 w-full h-full pt-20 pb-24 px-4 overflow-y-auto scrollbar-none">
-        <div className="max-w-7xl mx-auto h-full flex flex-col justify-center">
+      <main className="relative z-10 w-full h-full pt-32 pb-24 px-4 overflow-y-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto min-h-full flex flex-col">
           {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
           {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
           {view === 'map' && <MapView events={filteredEvents} />}
           {view === 'organizers' && (
-            <div className="text-center animate-in fade-in">
+            <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">
               <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>
               <p className="text-neutral-400">Restricted Access. Login required.</p>
             </div>
