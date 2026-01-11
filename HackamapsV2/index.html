@@ -1,11 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hackamaps-v2</title>
+
+  <!-- CSP: Modified to allow Leaflet, Fonts, and CartoDB Tiles -->
+  <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self'; 
+      script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://unpkg.com; 
+      style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; 
+      font-src 'self' https://fonts.gstatic.com; 
+      img-src 'self' data: blob: https://*.basemaps.cartocdn.com; 
+      connect-src 'self' https://*.supabase.co https://api.supabase.io https://unpkg.com;
+      frame-src 'self' https://accounts.google.com;
+    ">
+
+  <title>Hackamaps - Plan Your Coding Vacation | Discover Global Hackathons</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta name="description"
+    content="Plan your coding vacation with Hackamaps - discover hackathons across 6 continents and travel the world while building amazing projects. Find hackathon travel opportunities worldwide.">
+  <meta name="keywords"
+    content="hackathon travel, coding vacation, global hackathons, developer events worldwide, hackathon map, coding retreats, developer travel, hackathons, hackathon map, hackathon travel, coding events, developer meetups, programming competitions, hackathon calendar">
+  <meta name="author" content="Hackamaps" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Google Fonts: Roboto & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Schema.org markup -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Hackamaps",
+      "description": "Discover and plan coding vacations around hackathons worldwide",
+      "url": "https://hackamaps.com",
+      "applicationCategory": "TravelApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Hackamaps",
+      "url": "https://hackamaps.com",
+      "logo": "https://hackamaps.com/logo.png",
+      "sameAs": [
+        "https://twitter.com/hackamaps",
+        "https://www.linkedin.com/company/hackamaps"
+      ],
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "support@hackamaps.com",
+        "url": "https://hackamaps.com/contact"
+      }]
+    }
+    </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I list my hackathon?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Click 'List Your Hackathon', fill event details, and choose a listing tier (Free, Featured, Premium). Featured listings get map highlight and priority search placement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What cities and topics can I search?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Search hackathons by city (e.g., Berlin, San Francisco, Singapore), date, or topics like AI, climate tech, Web3, healthcare."
+          }
+        }
+      ]
+    }
+    </script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Hackamaps — Find Hackathons Worldwide & Plan Coding Travel">
+  <meta property="og:description"
+    content="Discover hackathons worldwide and plan your next coding adventure. Interactive map, filters, featured listings, and promotion for organizers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hackamaps.com/">
+  <meta property="og:image" content="https://hackamaps.com/og-image.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@hackathon_map">
+  <meta name="twitter:title" content="Hackamaps — Find Hackathons Worldwide & Plan Coding Travel">
+  <meta name="twitter:description"
+    content="Discover hackathons worldwide and plan your next coding adventure. Interactive map & event promotion for organizers.">
+  <meta name="twitter:image" content="https://hackamaps.com/twitter-image.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://hackamaps.com/">
 </head>
 
 <body>
