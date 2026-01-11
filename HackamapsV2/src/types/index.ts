@@ -12,6 +12,7 @@ export interface HackathonEvent {
     prize: string;
     tags: string[];
     type: 'web3' | 'ai' | 'cloud' | 'generic';
+    logoUrl?: string;
 }
 
 export interface UserCommand {

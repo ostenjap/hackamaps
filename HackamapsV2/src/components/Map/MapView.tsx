@@ -91,16 +91,39 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                 const categoryColor = CATEGORIES ? (CATEGORIES.find(c => c.id === ev.type)?.color || '#3b82f6') : '#3b82f6';
 
                 try {
-                    L.circleMarker([lat, lng], {
-                        radius: 6,
-                        color: categoryColor,
-                        fillColor: categoryColor,
-                        fillOpacity: 0.8
-                    })
+                    // Create Custom Icon (DivIcon)
+                    const iconHtml = ev.logoUrl
+                        ? `<div style="
+                                width: 100%; height: 100%;
+                                background-image: url('${ev.logoUrl}');
+                                background-size: cover;
+                                background-position: center;
+                                border-radius: 50%;
+                                border: 2px solid white;
+                                box-shadow: 0 0 15px ${categoryColor}80;
+                           "></div>`
+                        : `<div style="
+                                width: 100%; height: 100%;
+                                background-color: ${categoryColor};
+                                border-radius: 50%;
+                                border: 2px solid white;
+                                box-shadow: 0 0 10px ${categoryColor}, 0 0 20px ${categoryColor}40;
+                                transition: transform 0.2s;
+                           "></div>`;
+
+                    const customIcon = L.divIcon({
+                        className: 'custom-map-marker', // We can add hover effects in CSS if needed
+                        html: iconHtml,
+                        iconSize: [24, 24], // Standard size
+                        iconAnchor: [12, 12], // Centered
+                        popupAnchor: [0, -12]
+                    });
+
+                    L.marker([lat, lng], { icon: customIcon })
                         .bindPopup(`
-                        <div style="font-family: 'JetBrains Mono'; font-size: 12px;">
-                          <strong>${ev.title || 'Untitled'}</strong><br/>
-                          ${ev.location || 'Unknown Location'}
+                        <div style="font-family: 'JetBrains Mono'; font-size: 12px; min-width: 150px;">
+                          <strong style="font-size: 14px; display: block; margin-bottom: 4px;">${ev.title || 'Untitled'}</strong>
+                          <span style="color: #666;">${ev.location || 'Unknown Location'}</span>
                         </div>
                     `)
                         .addTo(markerLayerRef.current);
