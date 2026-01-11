@@ -57,11 +57,16 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         const L = (window as any).L;
         const map = L.map(mapContainer.current, {
             zoomControl: false,
-            attributionControl: false
+            attributionControl: false,
+            // Lock the view:
+            minZoom: 2,
+            maxBounds: [[-90, -180], [90, 180]], // Top-left, Bottom-right
+            maxBoundsViscosity: 1.0 // 1.0 = strict solid wall, 0.0 = bouncy
         }).setView([20, 0], 2);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19
+            maxZoom: 19,
+            noWrap: true // Prevents the map from repeating horizontally
         }).addTo(map);
 
         const markerLayer = L.layerGroup().addTo(map);
@@ -123,7 +128,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         .bindPopup(`
                         <div style="font-family: 'JetBrains Mono'; font-size: 12px; min-width: 150px;">
                           <strong style="font-size: 14px; display: block; margin-bottom: 4px;">${ev.title || 'Untitled'}</strong>
-                          <span style="color: #666;">${ev.location || 'Unknown Location'}</span>
+                          <span style="color: #A3A3A3;">${ev.location || 'Unknown Location'}</span>
                         </div>
                     `)
                         .addTo(markerLayerRef.current);
@@ -160,6 +165,17 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
 export const MapView = ({ events }: MapViewProps) => {
     return (
         <div className="w-full h-full flex flex-col animate-in fade-in duration-700">
+            <style>{`
+                .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+                    background-color: #0A0A0A !important;
+                    color: white !important;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    backdrop-filter: blur(8px);
+                }
+                .leaflet-container {
+                    background-color: #0A0A0A !important;
+                }
+            `}</style>
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold flex items-center gap-2">
                     <Globe className="w-5 h-5 text-blue-500" /> Global Intelligence
