@@ -223,12 +223,7 @@ export function FilterPanel({
 
                 </div>
 
-                {/* Footer */}
-                <div className="p-6 border-t border-white/10 bg-[#0A0A0A]">
-                    <Button onClick={onClose} className="w-full bg-white text-black hover:bg-neutral-200">
-                        View Results
-                    </Button>
-                </div>
+
 
             </div>
         </>
