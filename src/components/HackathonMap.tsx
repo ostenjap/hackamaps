@@ -41,13 +41,7 @@ const hackerHouses: HackerHouse[] = [
   {
     id: "berlin-hacker-house-1",
     name: "Berlin Hacker House",
-    description: `• Creation of power grid diagrams for Berlin, covering both high-voltage and medium-voltage networks.
-
-• Automation of data analysis processes for business reporting.
-
-• Use of SQL for data querying and Power BI for data analysis. Powershell used to automate troubleshooting tasks.
-
-• Led a team responsible for resolving issues related to data inconsistencies, which manifested as discrepancies between availability and performance metrics. (Team leadership/collaboration)`,
+    description: `https://lu.ma/3t7mgh2w`,
     latitude: 52.52,
     longitude: 13.405,
     city: "Berlin",
@@ -317,7 +311,7 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
       });
 
       const hackerHousePopupContent = `
-        <div style="min-width: 320px; color: #000000; font-family: system-ui;">
+        <div style="min-width: 280px; color: #000000; font-family: system-ui;">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <img src="${hackerHouseIcon}" alt="Hacker House" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;" />
             <h3 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">
@@ -333,9 +327,28 @@ export function HackathonMap({ hackathons }: HackathonMapProps) {
             <span style="color: #22c55e; font-weight: 600;">${house.city}</span>
           </div>
           
-          <div style="font-size: 14px; color: #1a1a1a; line-height: 1.6; white-space: pre-line;">
-            ${house.description}
-          </div>
+          <a 
+            href="${house.description}" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 16px;
+              background: #22c55e;
+              color: white;
+              border-radius: 8px;
+              text-decoration: none;
+              font-weight: 600;
+              font-size: 14px;
+            "
+          >
+            View Event on Luma
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
           
           <div style="margin-top: 16px; padding: 8px 12px; background: linear-gradient(135deg, #22c55e22, #16a34a22); border-radius: 8px; border: 1px solid #22c55e44;">
             <span style="font-size: 12px; font-weight: 600; color: #22c55e;">🏠 Hacker House</span>
