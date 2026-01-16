@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { LogOut, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
+import { LogOut, User as UserIcon, Settings, ChevronDown, Calendar } from 'lucide-react';
 
 interface UserMenuProps {
     onOpenAuth: () => void;
     onOpenProfile: () => void;
+    onOpenManageHackathons: () => void;
 }
 
-export function UserMenu({ onOpenAuth, onOpenProfile }: UserMenuProps) {
+export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: UserMenuProps) {
     const { user, profile, signOut, isLoading } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export function UserMenu({ onOpenAuth, onOpenProfile }: UserMenuProps) {
 
             {/* Dropdown */}
             {isOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden py-1 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden py-1 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
 
                     <div className="px-4 py-3 border-b border-white/5 md:hidden">
                         <p className="text-sm font-medium text-white truncate">{profile?.full_name || user.email}</p>
@@ -81,15 +82,21 @@ export function UserMenu({ onOpenAuth, onOpenProfile }: UserMenuProps) {
                             setIsOpen(false);
                             onOpenProfile();
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-4 py-2.5 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors"
                     >
                         <UserIcon className="w-4 h-4" />
                         Profile
                     </button>
 
-                    <button className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
-                        <Settings className="w-4 h-4" />
-                        Settings
+                    <button
+                        onClick={() => {
+                            setIsOpen(false);
+                            onOpenManageHackathons();
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors"
+                    >
+                        <Calendar className="w-4 h-4" />
+                        Manage Hackathons
                     </button>
 
                     <div className="h-px bg-white/5 my-1" />
@@ -99,7 +106,7 @@ export function UserMenu({ onOpenAuth, onOpenProfile }: UserMenuProps) {
                             signOut();
                             setIsOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 flex items-center gap-2 transition-colors"
                     >
                         <LogOut className="w-4 h-4" />
                         Sign Out

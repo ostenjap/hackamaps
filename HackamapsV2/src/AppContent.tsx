@@ -14,6 +14,7 @@ import { FilterPanel } from './components/FilterPanel';
 import { UserMenu } from './components/Auth/UserMenu';
 import { AuthModal } from './components/Auth/AuthModal';
 import { ProfileModal } from './components/Auth/ProfileModal';
+import { ManageHackathonsModal } from './components/Hackathon/ManageHackathonsModal';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
@@ -25,6 +26,7 @@ export default function AppContent() {
     // --- Auth State ---
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isManageHackathonsOpen, setIsManageHackathonsOpen] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -184,6 +186,11 @@ export default function AppContent() {
                 onClose={() => setIsProfileOpen(false)}
             />
 
+            <ManageHackathonsModal
+                isOpen={isManageHackathonsOpen}
+                onClose={() => setIsManageHackathonsOpen(false)}
+            />
+
             {/* FILTER PANEL */}
             <FilterPanel
                 isOpen={isFilterOpen}
@@ -243,6 +250,7 @@ export default function AppContent() {
                     <UserMenu
                         onOpenAuth={() => setIsAuthOpen(true)}
                         onOpenProfile={() => setIsProfileOpen(true)}
+                        onOpenManageHackathons={() => setIsManageHackathonsOpen(true)}
                     />
                 </div>
             </header>
