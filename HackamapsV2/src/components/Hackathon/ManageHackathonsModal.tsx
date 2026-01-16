@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { X, Plus, Trash2, Edit2, Save, Calendar, MapPin, Globe, DollarSign, Loader2, AlertCircle } from 'lucide-react';
 import { DateTimePicker } from '../ui/date-time-picker';
+import { AddressAutocomplete } from '../ui/address-autocomplete';
 import type { HackathonEvent } from '../../types';
 
 interface ManageHackathonsModalProps {
@@ -88,6 +89,19 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
         }
     };
 
+    // Helper: Add randomness to coordinates to reduce map clustering
+    const addCoordinateJitter = (lat: number, lng: number) => {
+        const jitterRange = { min: 0.0010, max: 0.0050 };
+        const randomJitter = () => {
+            const jitter = Math.random() * (jitterRange.max - jitterRange.min) + jitterRange.min;
+            return Math.random() < 0.5 ? jitter : -jitter;
+        };
+        return {
+            lat: lat + randomJitter(),
+            lng: lng + randomJitter()
+        };
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -99,11 +113,22 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                 throw new Error("Name and Start Date are required.");
             }
 
+            // Apply coordinate jitter for new inserts to reduce clustering
+            let finalLat = formData.latitude ? parseFloat(formData.latitude) : null;
+            let finalLng = formData.longitude ? parseFloat(formData.longitude) : null;
+
+            if (view === 'add' && finalLat !== null && finalLng !== null) {
+                const jittered = addCoordinateJitter(finalLat, finalLng);
+                finalLat = jittered.lat;
+                finalLng = jittered.lng;
+                console.log(`Applied coordinate jitter: Original (${formData.latitude}, ${formData.longitude}) -> Jittered (${finalLat}, ${finalLng})`);
+            }
+
             const payload = {
                 ...formData,
                 user_id: user?.id,
-                latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-                longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+                latitude: finalLat,
+                longitude: finalLng,
                 start_date: new Date(formData.start_date).toISOString(),
                 end_date: formData.end_date ? new Date(formData.end_date).toISOString() : null,
                 categories: ['generic'], // Default for now
@@ -302,23 +327,23 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                             {!formData.is_online && (
                                 <div className="space-y-4 p-4 bg-white/5 rounded-xl border border-white/5">
                                     <h3 className="text-xs font-bold text-neutral-300 uppercase tracking-wider">Location Details</h3>
-                                    <div className="space-y-1">
-                                        <label className="text-xs text-neutral-400">Address / Venue</label>
-                                        <input type="text" value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })}
-                                            className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="e.g. Moscone Center, San Francisco" />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-xs text-neutral-400">City</label>
-                                            <input type="text" value={formData.city} onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-xs text-neutral-400">Country</label>
-                                            <input type="text" value={formData.country} onChange={e => setFormData({ ...formData, country: e.target.value })}
-                                                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" />
-                                        </div>
-                                    </div>
+                                    <AddressAutocomplete
+                                        label="Address / Venue"
+                                        value={formData.location}
+                                        onChange={(value) => setFormData({ ...formData, location: value })}
+                                        onPlaceSelect={(address, lat, lng, city, country) => {
+                                            setFormData({
+                                                ...formData,
+                                                location: address,
+                                                latitude: lat.toString(),
+                                                longitude: lng.toString(),
+                                                city,
+                                                country
+                                            });
+                                        }}
+                                        placeholder="Search for a city or address..."
+                                    />
+
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-1">
                                             <label className="text-xs text-neutral-400">Latitude</label>
