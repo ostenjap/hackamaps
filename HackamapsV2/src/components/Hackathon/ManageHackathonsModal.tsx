@@ -94,6 +94,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
 
             // Basic validation
             if (!formData.name || !formData.start_date) {
+                console.error("Validation Failed: Name or Start Date missing", formData);
                 throw new Error("Name and Start Date are required.");
             }
 
@@ -107,23 +108,35 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                 categories: ['generic'], // Default for now
             };
 
+            console.log("Submitting Payload:", payload);
+
             if (view === 'edit' && editId) {
-                const { error } = await supabase
+                const { error: updateError } = await supabase
                     .from('hackathons')
                     .update(payload)
                     .eq('id', editId);
-                if (error) throw error;
+
+                if (updateError) {
+                    console.error("Update Error:", updateError);
+                    throw updateError;
+                }
             } else {
-                const { error } = await supabase
+                // Let Supabase generate the ID (defaults to gen_random_uuid())
+                const { error: insertError } = await supabase
                     .from('hackathons')
                     .insert([payload]);
-                if (error) throw error;
+
+                if (insertError) {
+                    console.error("Insert Error:", insertError);
+                    throw insertError;
+                }
             }
 
             setView('list');
             fetchUserHackathons();
         } catch (err: any) {
-            setError(err.message);
+            console.error("Submission Exception:", err);
+            setError(err.message || "An unexpected error occurred");
         } finally {
             setLoading(false);
         }
