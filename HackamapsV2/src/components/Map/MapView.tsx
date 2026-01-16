@@ -96,11 +96,25 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                 const categoryColor = CATEGORIES ? (CATEGORIES.find(c => c.id === ev.type)?.color || '#3b82f6') : '#3b82f6';
 
                 try {
+                    // Validate logoUrl
+                    let safeLogoUrl = '';
+                    if (ev.logoUrl) {
+                        try {
+                            const parsed = new URL(ev.logoUrl);
+                            if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                                // Escape single quotes to prevent breaking out of CSS string
+                                safeLogoUrl = parsed.href.replace(/'/g, "%27");
+                            }
+                        } catch {
+                            // Invalid URL, ignore
+                        }
+                    }
+
                     // Create Custom Icon (DivIcon)
-                    const iconHtml = ev.logoUrl
+                    const iconHtml = safeLogoUrl
                         ? `<div style="
                                 width: 100%; height: 100%;
-                                background-image: url('${ev.logoUrl}');
+                                background-image: url('${safeLogoUrl}');
                                 background-size: cover;
                                 background-position: center;
                                 border-radius: 50%;
@@ -124,13 +138,27 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         popupAnchor: [0, -12]
                     });
 
+                    // Create safe popup content using DOM elements
+                    const popupContent = document.createElement('div');
+                    popupContent.style.fontFamily = "'JetBrains Mono'";
+                    popupContent.style.fontSize = "12px";
+                    popupContent.style.minWidth = "150px";
+
+                    const titleEl = document.createElement('strong');
+                    titleEl.style.fontSize = "14px";
+                    titleEl.style.display = "block";
+                    titleEl.style.marginBottom = "4px";
+                    titleEl.textContent = ev.title || 'Untitled';
+
+                    const locEl = document.createElement('span');
+                    locEl.style.color = "#A3A3A3";
+                    locEl.textContent = ev.location || 'Unknown Location';
+
+                    popupContent.appendChild(titleEl);
+                    popupContent.appendChild(locEl);
+
                     L.marker([lat, lng], { icon: customIcon })
-                        .bindPopup(`
-                        <div style="font-family: 'JetBrains Mono'; font-size: 12px; min-width: 150px;">
-                          <strong style="font-size: 14px; display: block; margin-bottom: 4px;">${ev.title || 'Untitled'}</strong>
-                          <span style="color: #A3A3A3;">${ev.location || 'Unknown Location'}</span>
-                        </div>
-                    `)
+                        .bindPopup(popupContent)
                         .addTo(markerLayerRef.current);
                 } catch (e) {
                     console.error("Marker error", e);
