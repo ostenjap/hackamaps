@@ -4,9 +4,10 @@ import { LogOut, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
 
 interface UserMenuProps {
     onOpenAuth: () => void;
+    onOpenProfile: () => void;
 }
 
-export function UserMenu({ onOpenAuth }: UserMenuProps) {
+export function UserMenu({ onOpenAuth, onOpenProfile }: UserMenuProps) {
     const { user, profile, signOut, isLoading } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -49,8 +50,12 @@ export function UserMenu({ onOpenAuth }: UserMenuProps) {
                 className="flex items-center gap-3 pl-1 pr-3 py-1 bg-neutral-900/50 hover:bg-neutral-800 border border-white/10 rounded-full transition-all group"
             >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 p-[1px]">
-                    <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                        <span className="text-xs font-bold text-white">{initials}</span>
+                    <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                        {profile?.avatar_url ? (
+                            <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                            <span className="text-xs font-bold text-white">{initials}</span>
+                        )}
                     </div>
                 </div>
                 <div className="hidden md:block text-left">
@@ -71,7 +76,13 @@ export function UserMenu({ onOpenAuth }: UserMenuProps) {
                         <p className="text-xs text-neutral-500 truncate">{user.email}</p>
                     </div>
 
-                    <button className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors">
+                    <button
+                        onClick={() => {
+                            setIsOpen(false);
+                            onOpenProfile();
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-colors"
+                    >
                         <UserIcon className="w-4 h-4" />
                         Profile
                     </button>

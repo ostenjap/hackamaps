@@ -6,7 +6,7 @@ interface Profile {
     id: string;
     username: string | null;
     full_name: string | null;
-    website: string | null;
+    avatar_url: string | null;
 }
 
 interface AuthContextType {
@@ -16,6 +16,7 @@ interface AuthContextType {
     isLoading: boolean;
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
+    refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const { data, error } = await supabase
                 .from('profiles')
-                .select('*')
+                .select('id, username, full_name, avatar_url')
                 .eq('id', userId)
                 .single();
 
@@ -93,7 +94,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             profile,
             isLoading,
             signInWithGoogle,
-            signOut
+            signOut,
+            refreshProfile: () => user ? fetchProfile(user.id) : Promise.resolve()
         }}>
             {children}
         </AuthContext.Provider>

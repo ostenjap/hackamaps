@@ -13,6 +13,7 @@ import { MapView } from './components/Map/MapView';
 import { FilterPanel } from './components/FilterPanel';
 import { UserMenu } from './components/Auth/UserMenu';
 import { AuthModal } from './components/Auth/AuthModal';
+import { ProfileModal } from './components/Auth/ProfileModal';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
@@ -23,6 +24,7 @@ export default function AppContent() {
 
     // --- Auth State ---
     const [isAuthOpen, setIsAuthOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -177,6 +179,11 @@ export default function AppContent() {
                 onClose={() => setIsAuthOpen(false)}
             />
 
+            <ProfileModal
+                isOpen={isProfileOpen}
+                onClose={() => setIsProfileOpen(false)}
+            />
+
             {/* FILTER PANEL */}
             <FilterPanel
                 isOpen={isFilterOpen}
@@ -233,7 +240,10 @@ export default function AppContent() {
 
                 <div className="relative z-10 pointer-events-auto flex items-center gap-4">
                     <a href="#" className="text-xs font-mono text-neutral-500 hover:text-white transition-colors hidden md:block">GITHUB</a>
-                    <UserMenu onOpenAuth={() => setIsAuthOpen(true)} />
+                    <UserMenu
+                        onOpenAuth={() => setIsAuthOpen(true)}
+                        onOpenProfile={() => setIsProfileOpen(true)}
+                    />
                 </div>
             </header>
 
