@@ -133,7 +133,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                     const customIcon = L.divIcon({
                         className: 'custom-map-marker', // We can add hover effects in CSS if needed
                         html: iconHtml,
-                        iconSize: [24, 24], // Standard size
+                        iconSize: [18, 18], // Standard size
                         iconAnchor: [12, 12], // Centered
                         popupAnchor: [0, -12]
                     });
