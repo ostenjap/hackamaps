@@ -36,7 +36,9 @@ export function useEvents() {
                                 coords: [Number(event.latitude) || 0, Number(event.longitude) || 0],
                                 prize: event.prize_pool || 'N/A',
                                 tags: event.categories || [],
-                                type: determineType(event.categories)
+                                type: determineType(event.categories),
+                                website: event.website_url || '',
+                                description: event.description || ''
                             };
                         } catch (mapErr) {
                             console.error("Error mapping event:", event, mapErr);

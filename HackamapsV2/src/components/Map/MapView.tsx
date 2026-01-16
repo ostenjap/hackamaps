@@ -138,27 +138,55 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         popupAnchor: [0, -12]
                     });
 
-                    // Create safe popup content using DOM elements
-                    const popupContent = document.createElement('div');
-                    popupContent.style.fontFamily = "'JetBrains Mono'";
-                    popupContent.style.fontSize = "12px";
-                    popupContent.style.minWidth = "150px";
+                    // Create rich popup content
+                    const popupHtml = `
+                        <div class="font-sans min-w-[280px] p-1">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-lg font-bold text-gray-100 leading-tight pr-4">${ev.title || 'Untitled Event'}</h3>
+                            </div>
+                            
+                            <p class="text-sm text-gray-400 mb-4 line-clamp-2 leading-relaxed">
+                                ${ev.description || `Join this exciting hackathon in ${ev.location}.`}
+                            </p>
+                            
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center gap-2 text-sm text-gray-300">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    ${ev.location}
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-gray-300">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    ${ev.date}
+                                </div>
+                            </div>
 
-                    const titleEl = document.createElement('strong');
-                    titleEl.style.fontSize = "14px";
-                    titleEl.style.display = "block";
-                    titleEl.style.marginBottom = "4px";
-                    titleEl.textContent = ev.title || 'Untitled';
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${ev.tags.slice(0, 3).map(tag =>
+                        `<span class="px-2.5 py-0.5 rounded-full bg-[${categoryColor}]/10 text-[${categoryColor}] text-xs font-medium border border-[${categoryColor}]/20">
+                                        ${tag}
+                                    </span>`
+                    ).join('')}
+                                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium border border-blue-500/20">
+                                    Hackathon
+                                </span>
+                            </div>
 
-                    const locEl = document.createElement('span');
-                    locEl.style.color = "#A3A3A3";
-                    locEl.textContent = ev.location || 'Unknown Location';
-
-                    popupContent.appendChild(titleEl);
-                    popupContent.appendChild(locEl);
+                            ${ev.website ? `
+                                <a href="${ev.website}" target="_blank" rel="noopener noreferrer" style="color: white !important;"
+                                   class="block w-full text-center bg-[#8B5CF6] hover:bg-[#7c3aed] text-white font-medium py-2 px-4 rounded-lg transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] flex items-center justify-center gap-2 text-sm group">
+                                   Visit Website
+                                   <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </a>
+                            ` : `
+                                <div class="block w-full text-center bg-white/5 text-gray-500 font-medium py-2 px-4 rounded-lg cursor-not-allowed text-sm border border-white/5">
+                                    No Website Available
+                                </div>
+                            `}
+                        </div>
+                    `;
 
                     L.marker([lat, lng], { icon: customIcon })
-                        .bindPopup(popupContent)
+                        .bindPopup(popupHtml)
                         .addTo(markerLayerRef.current);
                 } catch (e) {
                     console.error("Marker error", e);
@@ -194,11 +222,35 @@ export const MapView = ({ events }: MapViewProps) => {
     return (
         <div className="w-full h-full flex flex-col animate-in fade-in duration-700">
             <style>{`
-                .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+                .leaflet-popup-content-wrapper {
                     background-color: #0A0A0A !important;
                     color: white !important;
                     border: 1px solid rgba(255,255,255,0.1);
-                    backdrop-filter: blur(8px);
+                    backdrop-filter: blur(12px);
+                    border-radius: 16px !important;
+                    padding: 0 !important;
+                    overflow: hidden;
+                    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+                }
+                .leaflet-popup-content {
+                    margin: 16px !important;
+                    width: auto !important;
+                    line-height: 1.5;
+                }
+                .leaflet-popup-tip {
+                    background-color: #0A0A0A !important;
+                    border: 1px solid rgba(255,255,255,0.1);
+                }
+                .leaflet-container a.leaflet-popup-close-button {
+                    color: #6B7280 !important;
+                    font-size: 18px !important;
+                    padding: 8px !important;
+                    right: 4px !important;
+                    top: 4px !important;
+                    transition: color 0.2s;
+                }
+                .leaflet-container a.leaflet-popup-close-button:hover {
+                    color: white !important;
                 }
                 .leaflet-container {
                     background-color: #0A0A0A !important;
