@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
 import { X, Plus, Trash2, Edit2, Save, Calendar, MapPin, Globe, DollarSign, Loader2, AlertCircle } from 'lucide-react';
+import { DateTimePicker } from '../ui/date-time-picker';
 import type { HackathonEvent } from '../../types';
 
 interface ManageHackathonsModalProps {
@@ -263,15 +264,19 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs text-neutral-400">Start Date *</label>
-                                    <input required type="datetime-local" value={formData.start_date} onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none color-scheme-dark" />
+                                <div>
+                                    <DateTimePicker
+                                        label="Start Date *"
+                                        date={formData.start_date ? new Date(formData.start_date) : undefined}
+                                        setDate={(date: Date | undefined) => setFormData({ ...formData, start_date: date ? date.toISOString() : '' })}
+                                    />
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs text-neutral-400">End Date</label>
-                                    <input type="datetime-local" value={formData.end_date} onChange={e => setFormData({ ...formData, end_date: e.target.value })}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none color-scheme-dark" />
+                                <div>
+                                    <DateTimePicker
+                                        label="End Date"
+                                        date={formData.end_date ? new Date(formData.end_date) : undefined}
+                                        setDate={(date: Date | undefined) => setFormData({ ...formData, end_date: date ? date.toISOString() : '' })}
+                                    />
                                 </div>
                             </div>
 
