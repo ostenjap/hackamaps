@@ -211,9 +211,12 @@ export default function AppContent() {
                 <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-32" />
 
                 <div className="relative z-10 pointer-events-auto cursor-pointer flex items-center gap-4">
-                    <div onClick={() => setView('home')} className="px-3 py-1 bg-white/5 border border-white/10 rounded backdrop-blur-md hover:bg-white/10 transition-colors">
-                        <span className="font-mono font-bold text-xs tracking-widest">HACKA_MAPS</span>
-                    </div>
+                    <img
+                        src="/hackamaps-weblogo.jpg"
+                        alt="HackaMaps Logo"
+                        onClick={() => setView('home')}
+                        className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity rounded-sm"
+                    />
 
                     <button
                         onClick={() => setIsFilterOpen(true)}
