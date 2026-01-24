@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
-import { X, Plus, Trash2, Edit2, Save, Calendar, MapPin, Globe, DollarSign, Loader2, AlertCircle } from 'lucide-react';
+import { X, Plus, Trash2, Edit2, Save, Calendar, MapPin, Globe, DollarSign, Loader2, AlertCircle, Image } from 'lucide-react';
 import { DateTimePicker } from '../ui/date-time-picker';
 import { AddressAutocomplete } from '../ui/address-autocomplete';
 import type { HackathonEvent } from '../../types';
@@ -323,12 +323,13 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs text-neutral-400">Event Icon (Pro Feature)</label>
+                                    <p className="text-[10px] text-neutral-500 italic">choose from gallery or add link</p>
                                     <div className="flex items-center gap-3">
                                         <div className="relative group w-10 h-10 rounded-lg bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center">
                                             {logoUrl ? (
                                                 <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                             ) : (
-                                                <Globe className="w-5 h-5 text-neutral-500" />
+                                                <Image className="w-5 h-5 text-neutral-500" />
                                             )}
                                             <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                                                 {uploading ? <Loader2 className="w-4 h-4 text-white animate-spin" /> : <Plus className="w-4 h-4 text-white" />}
