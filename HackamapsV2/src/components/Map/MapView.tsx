@@ -94,6 +94,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                 if (isNaN(lat) || isNaN(lng)) return;
 
                 const categoryColor = CATEGORIES ? (CATEGORIES.find(c => c.id === ev.type)?.color || '#3b82f6') : '#3b82f6';
+                const isPro = ev.isPro;
 
                 try {
                     // Validate logoUrl
@@ -102,15 +103,24 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         try {
                             const parsed = new URL(ev.logoUrl);
                             if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-                                // Escape single quotes to prevent breaking out of CSS string
                                 safeLogoUrl = parsed.href.replace(/'/g, "%27");
                             }
                         } catch {
-                            // Invalid URL, ignore
+                            // If not a URL, it might be a Supabase path? 
+                            // For simplicity, we assume it's a URL or empty
                         }
                     }
 
                     // Create Custom Icon (DivIcon)
+                    const proEffects = isPro ? `
+                        border: 2px solid #FFD700;
+                        box-shadow: 0 0 15px #FFD700, 0 0 5px #FFD700 inset;
+                        z-index: 1000;
+                    ` : `
+                        border: 2px solid white;
+                        box-shadow: 0 0 15px ${categoryColor}80;
+                    `;
+
                     const iconHtml = safeLogoUrl
                         ? `<div style="
                                 width: 100%; height: 100%;
@@ -118,23 +128,25 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                                 background-size: cover;
                                 background-position: center;
                                 border-radius: 50%;
-                                border: 2px solid white;
-                                box-shadow: 0 0 15px ${categoryColor}80;
-                           "></div>`
+                                ${proEffects}
+                           ">
+                                ${isPro ? '<div style="position: absolute; -top: 4px; -right: 4px; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; border: 1px solid black;"></div>' : ''}
+                           </div>`
                         : `<div style="
                                 width: 100%; height: 100%;
                                 background-color: ${categoryColor};
                                 border-radius: 50%;
-                                border: 2px solid white;
-                                box-shadow: 0 0 10px ${categoryColor}, 0 0 20px ${categoryColor}40;
+                                ${proEffects}
                                 transition: transform 0.2s;
-                           "></div>`;
+                           ">
+                                ${isPro ? '<div style="position: absolute; -top: 4px; -right: 4px; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; border: 1px solid black;"></div>' : ''}
+                           </div>`;
 
                     const customIcon = L.divIcon({
-                        className: 'custom-map-marker', // We can add hover effects in CSS if needed
+                        className: `custom-map-marker ${isPro ? 'pro-marker' : ''}`,
                         html: iconHtml,
-                        iconSize: [18, 18], // Standard size
-                        iconAnchor: [12, 12], // Centered
+                        iconSize: isPro ? [24, 24] : [18, 18],
+                        iconAnchor: isPro ? [12, 12] : [9, 9],
                         popupAnchor: [0, -12]
                     });
 
@@ -142,7 +154,10 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                     const popupHtml = `
                         <div class="font-sans min-w-[280px] p-1">
                             <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-lg font-bold text-gray-100 leading-tight pr-4">${ev.title || 'Untitled Event'}</h3>
+                                <h3 class="text-lg font-bold text-gray-100 leading-tight pr-4">
+                                    ${ev.title || 'Untitled Event'}
+                                    ${isPro ? '<span class="ml-2 text-[10px] bg-yellow-500/20 text-yellow-500 px-1.5 py-0.5 rounded border border-yellow-500/30 uppercase tracking-tighter">PRO</span>' : ''}
+                                </h3>
                             </div>
                             
                             <p class="text-sm text-gray-400 mb-4 line-clamp-2 leading-relaxed">

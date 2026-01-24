@@ -12,18 +12,21 @@ export function useEvents() {
             try {
                 const { data: events, error } = await supabase
                     .from('hackathons')
-                    .select('*');
+                    .select(`
+                        *,
+                        profiles:user_id (
+                            is_premium,
+                            tier
+                        )
+                    `);
 
                 if (error) {
                     console.error('Supabase Error fetching events:', error);
-                    console.error('Error Details:', error.message, error.details, error.hint);
                     return;
                 }
 
-                console.log("Raw Supabase Data:", events);
-
                 if (events) {
-                    const mappedEvents: HackathonEvent[] = events.map((event) => {
+                    const mappedEvents: HackathonEvent[] = events.map((event: any) => {
                         try {
                             return {
                                 id: event.id,
@@ -38,15 +41,15 @@ export function useEvents() {
                                 tags: event.categories || [],
                                 type: determineType(event.categories),
                                 website: event.website_url || '',
-                                description: event.description || ''
+                                description: event.description || '',
+                                logoUrl: event.logo_url || '',
+                                isPro: event.profiles?.is_premium || false
                             };
                         } catch (mapErr) {
                             console.error("Error mapping event:", event, mapErr);
                             return null;
                         }
-                    }).filter(Boolean) as HackathonEvent[]; // Type assertion to remove nulls
-
-                    console.log("Mapped Events:", mappedEvents);
+                    }).filter(Boolean) as HackathonEvent[];
                     setData(mappedEvents);
                 } else {
                     console.warn("No events found in Supabase (data is null or empty).");

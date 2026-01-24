@@ -15,6 +15,7 @@ export interface HackathonEvent {
     logoUrl?: string;
     website?: string;
     description?: string;
+    isPro?: boolean;
 }
 
 export interface UserCommand {

@@ -74,6 +74,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
             city: hackathon.city || '',
             country: hackathon.country || '',
         });
+        setLogoUrl(hackathon.logo_url || null);
         setEditId(hackathon.id);
         setView('edit');
     };
@@ -100,6 +101,43 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
             lat: lat + randomJitter(),
             lng: lng + randomJitter()
         };
+    };
+
+    const [uploading, setUploading] = useState(false);
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        try {
+            setUploading(true);
+            setError(null);
+
+            if (!event.target.files || event.target.files.length === 0) {
+                return;
+            }
+
+            const file = event.target.files[0];
+            const fileExt = file.name.split('.').pop();
+            const filePath = `hackathon-${user?.id}-${Math.random()}.${fileExt}`;
+
+            // Upload to hackathon-logos bucket
+            const { error: uploadError } = await supabase.storage
+                .from('hackathon-logos')
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            // Get Public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('hackathon-logos')
+                .getPublicUrl(filePath);
+
+            setLogoUrl(publicUrl);
+
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -132,6 +170,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                 start_date: new Date(formData.start_date).toISOString(),
                 end_date: formData.end_date ? new Date(formData.end_date).toISOString() : null,
                 categories: ['generic'], // Default for now
+                logo_url: logoUrl
             };
 
             console.log("Submitting Payload:", payload);
@@ -174,6 +213,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
             start_date: '', end_date: '', website_url: '', prize_pool: '',
             is_online: false, city: '', country: ''
         });
+        setLogoUrl(null);
         setEditId(null);
     };
 
@@ -282,9 +322,24 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                                         className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="e.g. HackMIT" />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs text-neutral-400">Website URL</label>
-                                    <input type="url" value={formData.website_url} onChange={e => setFormData({ ...formData, website_url: e.target.value })}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="https://..." />
+                                    <label className="text-xs text-neutral-400">Event Icon (Pro Feature)</label>
+                                    <div className="flex items-center gap-3">
+                                        <div className="relative group w-10 h-10 rounded-lg bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center">
+                                            {logoUrl ? (
+                                                <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <Globe className="w-5 h-5 text-neutral-500" />
+                                            )}
+                                            <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                                {uploading ? <Loader2 className="w-4 h-4 text-white animate-spin" /> : <Plus className="w-4 h-4 text-white" />}
+                                                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                                            </label>
+                                        </div>
+                                        <div className="flex-1">
+                                            <input type="url" value={formData.website_url} onChange={e => setFormData({ ...formData, website_url: e.target.value })}
+                                                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="https://..." />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
