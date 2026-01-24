@@ -44,13 +44,22 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
         ? profile.full_name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
         : user.email?.substring(0, 2).toUpperCase() || '??';
 
+    const isElite = profile?.tier === 'elite';
+    const isPro = profile?.tier === 'pro' || profile?.is_premium;
+
     return (
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center gap-3 pl-1 pr-3 py-1 bg-neutral-900/50 hover:bg-neutral-800 border ${profile?.is_premium ? 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'border-white/10'} rounded-full transition-all group`}
+                className={`flex items-center gap-3 pl-1 pr-3 py-1 bg-neutral-900/50 hover:bg-neutral-800 border ${isElite ? 'border-yellow-500/40 shadow-[0_0_20px_rgba(234,179,8,0.15)]' :
+                        isPro ? 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.15)]' :
+                            'border-white/10'
+                    } rounded-full transition-all group`}
             >
-                <div className={`w-8 h-8 rounded-full bg-gradient-to-tr ${profile?.is_premium ? 'from-blue-400 to-blue-600 shadow-[0_0_15px_rgba(0,123,255,0.6)]' : 'from-blue-500 to-purple-500'} p-[1px] transition-all duration-300`}>
+                <div className={`w-8 h-8 rounded-full bg-gradient-to-tr ${isElite ? 'from-yellow-400 to-yellow-600 shadow-[0_0_15px_rgba(234,179,8,0.6)]' :
+                        isPro ? 'from-blue-400 to-blue-600 shadow-[0_0_15px_rgba(0,123,255,0.6)]' :
+                            'from-blue-500 to-purple-500'
+                    } p-[1px] transition-all duration-300`}>
                     <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
                         {profile?.avatar_url ? (
                             <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
@@ -60,9 +69,14 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
                     </div>
                 </div>
                 <div className="hidden md:block text-left">
-                    <p className={`text-[10px] ${profile?.is_premium ? 'text-blue-400 font-bold' : 'text-neutral-400'} font-mono leading-none mb-0.5 flex items-center gap-1`}>
-                        {profile?.is_premium && <span className="w-1 h-1 rounded-full bg-blue-400 animate-pulse" />}
-                        {profile?.is_premium ? 'PRO OPERATOR' : 'OPERATOR'}
+                    <p className={`text-[10px] ${isElite ? 'text-yellow-400 font-bold' :
+                            isPro ? 'text-blue-400 font-bold' :
+                                'text-neutral-400'
+                        } font-mono leading-none mb-0.5 flex items-center gap-1`}>
+                        {(isElite || isPro) && (
+                            <span className={`w-1 h-1 rounded-full ${isElite ? 'bg-yellow-400' : 'bg-blue-400'} animate-pulse`} />
+                        )}
+                        {isElite ? 'ELITE' : isPro ? 'PRO OPERATOR' : 'OPERATOR'}
                     </p>
                     <p className="text-xs font-medium text-white leading-none max-w-[80px] truncate">
                         {profile?.username || user.email?.split('@')[0]}
