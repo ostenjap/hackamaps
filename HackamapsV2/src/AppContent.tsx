@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from './contexts/AuthContext';
 import {
     Terminal,
     Mic,
@@ -15,6 +16,9 @@ import { UserMenu } from './components/Auth/UserMenu';
 import { AuthModal } from './components/Auth/AuthModal';
 import { ProfileModal } from './components/Auth/ProfileModal';
 import { ManageHackathonsModal } from './components/Hackathon/ManageHackathonsModal';
+import { FaceMapView } from './components/Map/FaceMapView';
+import { useFacePins } from './hooks/useFacePins';
+import { PinManagerModal } from './components/Map/PinManagerModal';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
@@ -27,6 +31,9 @@ export default function AppContent() {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isManageHackathonsOpen, setIsManageHackathonsOpen] = useState(false);
+    const [isPinManagerOpen, setIsPinManagerOpen] = useState(false);
+    const { pins, refetch: refetchPins } = useFacePins();
+    const { user } = useAuth(); // Need user for finding current pin
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -109,6 +116,9 @@ export default function AppContent() {
                 case 'f':
                     setIsFilterOpen(prev => !prev);
                     break;
+                case 'u':
+                    setView('face_map');
+                    break;
             }
         };
 
@@ -133,6 +143,9 @@ export default function AppContent() {
         } else if (lower.includes('filter')) {
             response = "Opening filter panel.";
             setIsFilterOpen(true);
+        } else if (lower.includes('face map') || lower.includes('network')) {
+            response = "Opening hacker face map.";
+            setView('face_map');
         } else if (lower.includes('login') || lower.includes('sign in')) {
             response = "Opening authentication portal.";
             setIsAuthOpen(true);
@@ -191,6 +204,13 @@ export default function AppContent() {
                 onClose={() => setIsManageHackathonsOpen(false)}
             />
 
+            <PinManagerModal
+                isOpen={isPinManagerOpen}
+                onClose={() => setIsPinManagerOpen(false)}
+                currentPin={pins.find(p => p.user_id === user?.id)}
+                onSuccess={refetchPins}
+            />
+
             {/* FILTER PANEL */}
             <FilterPanel
                 isOpen={isFilterOpen}
@@ -246,6 +266,12 @@ export default function AppContent() {
                     >
                         Map
                     </button>
+                    <button
+                        onClick={() => setView('face_map')}
+                        className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${view === 'face_map' ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-400 hover:text-white'}`}
+                    >
+                        Face Map
+                    </button>
                 </nav>
 
                 <div className="relative z-10 pointer-events-auto flex items-center gap-4">
@@ -265,6 +291,7 @@ export default function AppContent() {
                     {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
                     {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
                     {view === 'map' && <MapView events={filteredEvents} />}
+                    {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
                     {view === 'organizers' && (
                         <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">
                             <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>

@@ -9,14 +9,14 @@ export const Card = ({ children, className = "", onClick }: { children: React.Re
     </div>
 );
 
-export const Badge = ({ children, variant = 'default', style }: { children: React.ReactNode, variant?: 'default' | 'outline' | 'secondary', style?: React.CSSProperties }) => {
+export const Badge = ({ children, variant = 'default', style, className = "" }: { children: React.ReactNode, variant?: 'default' | 'outline' | 'secondary', style?: React.CSSProperties, className?: string }) => {
     const styles = {
         default: "bg-blue-900/30 text-blue-400 border-blue-800/50",
         outline: "border-white/20 text-neutral-400",
         secondary: "bg-purple-900/30 text-purple-400 border-purple-800/50"
     };
     return (
-        <span style={style} className={`px-2.5 py-0.5 rounded text-[10px] font-mono border ${styles[variant]} uppercase tracking-wider`}>
+        <span style={style} className={`px-2.5 py-0.5 rounded text-[10px] font-mono border ${styles[variant]} uppercase tracking-wider ${className}`}>
             {children}
         </span>
     );

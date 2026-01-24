@@ -1,4 +1,4 @@
-export type ViewState = 'home' | 'discover' | 'map' | 'organizers';
+export type ViewState = 'home' | 'discover' | 'map' | 'organizers' | 'face_map';
 
 export interface HackathonEvent {
     id: string;
@@ -16,6 +16,19 @@ export interface HackathonEvent {
     website?: string;
     description?: string;
     isPro?: boolean;
+}
+
+export interface FacePin {
+    id: string;
+    user_id: string;
+    description: string;
+    linkedin_url?: string;
+    x_url?: string;
+    latitude: number;
+    longitude: number;
+    custom_image_url?: string;
+    username?: string; // Joined from profile
+    avatar_url?: string; // Joined from profile
 }
 
 export interface UserCommand {
