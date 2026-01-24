@@ -130,7 +130,6 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                                 border-radius: 50%;
                                 ${proEffects}
                            ">
-                                ${isPro ? '<div style="position: absolute; -top: 4px; -right: 4px; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; border: 1px solid black;"></div>' : ''}
                            </div>`
                         : `<div style="
                                 width: 100%; height: 100%;
@@ -139,7 +138,6 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                                 ${proEffects}
                                 transition: transform 0.2s;
                            ">
-                                ${isPro ? '<div style="position: absolute; -top: 4px; -right: 4px; width: 8px; height: 8px; background: #FFD700; border-radius: 50%; border: 1px solid black;"></div>' : ''}
                            </div>`;
 
                     const customIcon = L.divIcon({
