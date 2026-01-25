@@ -17,7 +17,7 @@ export const Home = ({ eventCount, setView }: HomeProps) => {
 
     return (
         <div className="flex-1 w-full overflow-y-auto overflow-x-hidden custom-scrollbar">
-            <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 animate-in fade-in zoom-in duration-500">
+            <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 -translate-y-12 animate-in fade-in zoom-in duration-500">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-900 bg-green-900/10 text-green-400 text-[10px] font-mono mb-8">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
