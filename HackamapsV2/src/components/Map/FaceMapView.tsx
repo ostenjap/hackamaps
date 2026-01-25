@@ -101,7 +101,7 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
             });
 
             const popupHtml = `
-                <div class="font-sans min-w-[240px] p-2 bg-neutral-900">
+                <div class="font-sans min-w-[240px] p-1">
                     <div class="flex items-center gap-3 mb-3">
                         <img src="${imageUrl}" class="w-12 h-12 rounded-full border border-white/20 object-cover" />
                         <div>
@@ -141,17 +141,15 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
             updateMarkers();
         }
     }, [pins]);
-
+    // remember this part
     return (
-        <div className="w-full h-[60vh] min-h-[400px] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl bg-neutral-900 group">
+        <div className="w-full h-[60vh] min-h-[400px] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl bg-neutral-900">
             <div ref={mapContainer} className="w-full h-full z-10" />
-            <div className="absolute top-4 right-4 z-[400] flex flex-col gap-2">
-                <div className="bg-black/80 backdrop-blur border border-white/10 p-3 rounded-lg pointer-events-none">
-                    <div className="text-[10px] text-gray-400 font-mono mb-1">NETWORK ACTIVE</div>
-                    <div className="text-xs text-blue-400 font-mono flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                        {pins.length} HACKERS ONLINE
-                    </div>
+            <div className="absolute bottom-4 left-4 z-[400] bg-black/80 backdrop-blur border border-white/10 p-3 rounded-lg">
+                <div className="text-[10px] text-gray-400 font-mono mb-1">NETWORK ACTIVE</div>
+                <div className="text-xs text-blue-400 font-mono flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                    {pins.length} HACKERS ONLINE
                 </div>
             </div>
         </div>
@@ -172,7 +170,7 @@ export const FaceMapView = ({ pins, onAddPin }: FaceMapViewProps) => {
                 .leaflet-popup-content-wrapper {
                     background-color: #0A0A0A !important;
                     color: white !important;
-                    border: 1px solid rgba(255,b255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.1);
                     backdrop-filter: blur(12px);
                     border-radius: 16px !important;
                     padding: 0 !important;
@@ -186,6 +184,20 @@ export const FaceMapView = ({ pins, onAddPin }: FaceMapViewProps) => {
                 .leaflet-popup-tip {
                     background-color: #0A0A0A !important;
                     border: 1px solid rgba(255,255,255,0.1);
+                }
+                .leaflet-container {
+                    background-color: #0A0A0A !important;
+                }
+                .leaflet-container a.leaflet-popup-close-button {
+                    color: #6B7280 !important;
+                    font-size: 18px !important;
+                    padding: 8px !important;
+                    right: 4px !important;
+                    top: 4px !important;
+                    transition: color 0.2s;
+                }
+                .leaflet-container a.leaflet-popup-close-button:hover {
+                    color: white !important;
                 }
             `}</style>
 
