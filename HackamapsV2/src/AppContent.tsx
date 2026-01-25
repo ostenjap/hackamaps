@@ -223,7 +223,7 @@ export default function AppContent() {
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] rounded-full bg-blue-600/10 blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-20%] w-[60vw] h-[60vw] rounded-full bg-purple-600/10 blur-[100px]" />
-                <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg')] opacity-[0.03] bg-cover bg-center" />
+
             </div>
 
             {/* HEADER / NAV */}

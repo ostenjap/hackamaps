@@ -64,10 +64,20 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
             maxBoundsViscosity: 1.0 // 1.0 = strict solid wall, 0.0 = bouncy
         }).setView([20, 0], 2);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
-            noWrap: true // Prevents the map from repeating horizontally
+            noWrap: true, // Prevents the map from repeating horizontally
+            bounds: [[-85.0511, -180], [85.0511, 180]] // Standard world bounds to prevent 400 errors for non-existent tiles
         }).addTo(map);
+
+        // Debug: Track tile loading errors
+        tileLayer.on('tileerror', (error: any) => {
+            console.warn('Map Tile Error captured:', {
+                url: error.tile.src,
+                coords: error.coords,
+                zoom: error.coords.z
+            });
+        });
 
         const markerLayer = L.layerGroup().addTo(map);
         markerLayerRef.current = markerLayer;

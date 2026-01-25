@@ -60,10 +60,20 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
             maxBoundsViscosity: 1.0
         }).setView([20, 0], 2);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
-            noWrap: true
+            noWrap: true,
+            bounds: [[-85.0511, -180], [85.0511, 180]] // Clamp requests to valid world coordinates
         }).addTo(map);
+
+        // Debug: Log if tiles fail to load (e.g. network issue or invalid coords)
+        tileLayer.on('tileerror', (error: any) => {
+            console.warn('Face Map Tile Error captured:', {
+                url: error.tile.src,
+                coords: error.coords,
+                zoom: error.coords.z
+            });
+        });
 
         const markerLayer = L.layerGroup().addTo(map);
         markerLayerRef.current = markerLayer;
