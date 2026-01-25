@@ -1,0 +1,224 @@
+import React from 'react';
+import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare } from 'lucide-react';
+import { Button, Card, Badge } from '../ui';
+
+export const PricingTable = () => {
+    return (
+        <section id="pricing" className="w-full py-24 bg-black/50 border-t border-white/5 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Header */}
+                <div className="text-center mb-16">
+                    <Badge variant="secondary" className="mb-4 bg-yellow-900/30 text-yellow-500 border-yellow-500/30 animate-pulse">
+                        LIMITED TIME: 50% OFF
+                    </Badge>
+                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
+                        Upgrade Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Hacker Journey</span>
+                    </h2>
+                    <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+                        Join Elite builders and get exclusive access to investors, advanced tools, and a global community.
+                    </p>
+                </div>
+
+                {/* Pricing Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+                    {/* Free Tier */}
+                    <Card className="p-8 flex flex-col h-full bg-neutral-900/40 border-white/5">
+                        <div className="mb-8">
+                            <h3 className="text-xl font-bold text-white mb-2">Free</h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-white">€0</span>
+                                <span className="text-neutral-500 text-sm">/forever</span>
+                            </div>
+                        </div>
+                        <ul className="space-y-4 mb-8 flex-1">
+                            {['Live hackathon directory', 'Basic map view'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-400 text-sm">
+                                    <Check className="w-4 h-4 text-green-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                            {['Advanced filters', 'Early notifications', 'Priority support'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
+                                    <X className="w-4 h-4" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
+                        <Button variant="outline" className="w-full">Current Plan</Button>
+                    </Card>
+
+                    {/* Premium Tier */}
+                    <Card className="p-8 flex flex-col h-full bg-neutral-900/40 border-white/10 relative group">
+                        <div className="mb-8">
+                            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                Premium <Star className="w-4 h-4 text-blue-400 fill-blue-400" />
+                            </h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-white">€120</span>
+                                <span className="text-neutral-500 text-sm">/year</span>
+                            </div>
+                            <p className="mt-2 text-xs text-blue-400 font-medium">Standard choice for active hackers</p>
+                        </div>
+                        <ul className="space-y-4 mb-8 flex-1">
+                            {['Advanced map filters', '24h Early notifications', 'Calendar sync', 'Premium map badge'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-300 text-sm">
+                                    <Check className="w-4 h-4 text-green-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
+                        <Button className="w-full">Upgrade Now</Button>
+                    </Card>
+
+                    {/* Elite Tier */}
+                    <Card className="p-8 flex flex-col h-full border-yellow-500/50 bg-gradient-to-b from-neutral-900 to-neutral-900 shadow-[0_0_40px_rgba(234,179,8,0.1)] relative scale-105 z-10">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                            <Badge className="bg-yellow-500 text-black border-none font-bold px-4 py-1">
+                                BEST VALUE
+                            </Badge>
+                        </div>
+
+                        <div className="mb-8">
+                            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                                Elite <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                            </h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-white uppercase">€25</span>
+                                <span className="text-neutral-500 text-sm">once</span>
+                                <span className="ml-2 text-neutral-500 line-through text-sm">€50</span>
+                            </div>
+                            <p className="mt-2 text-xs text-yellow-500 font-bold uppercase tracking-widest">
+                                pay once, access forever
+                            </p>
+                        </div>
+
+                        <div className="mb-6 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                            <p className="text-[10px] text-yellow-500 font-bold uppercase mb-2">Value Breakdown</p>
+                            <div className="space-y-1 text-xs text-neutral-400">
+                                <div className="flex justify-between"><span>Investor Database</span> <span>€299/y</span></div>
+                                <div className="flex justify-between"><span>Discord Elite</span> <span>€99/y</span></div>
+                                <div className="flex justify-between"><span>Office Hours</span> <span>€240/y</span></div>
+                                <div className="flex justify-between"><span>Starter Kits</span> <span>€79</span></div>
+                                <div className="flex justify-between border-t border-white/5 pt-1 mt-1 text-white font-bold">
+                                    <span>Total Value</span> <span>€717</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul className="space-y-3 mb-8 flex-1">
+                            {[
+                                '48h Early notifications',
+                                'Investor database access',
+                                'Monthly office hours',
+                                'Elite Summit invite',
+                                'Featured map profile',
+                                'Priority 24h support'
+                            ].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-white text-sm">
+                                    <Check className="w-4 h-4 text-yellow-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="space-y-4">
+                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
+                                Become Elite Member
+                            </Button>
+
+                            <div className="text-center">
+                                <div className="flex items-center justify-center gap-1 mb-1">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" />
+                                    <span className="text-[10px] text-yellow-500 font-bold uppercase">
+                                        497/500 Elite spots remaining
+                                    </span>
+                                </div>
+                                <p className="text-[10px] text-neutral-500 italic">
+                                    "Best €25 investment in my dev career" - @theleanbuild
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Social Proof */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 border-y border-white/5 py-12">
+                    <div className="flex flex-col items-center text-center">
+                        <Users className="w-8 h-8 text-neutral-500 mb-4" />
+                        <p className="text-2xl font-bold text-white">347+</p>
+                        <p className="text-neutral-500 text-sm">Elite Builders Joined</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                        <Trophy className="w-8 h-8 text-neutral-500 mb-4" />
+                        <p className="text-2xl font-bold text-white">120+</p>
+                        <p className="text-neutral-500 text-sm">Hackathons Won by Members</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                        <MessageSquare className="w-8 h-8 text-neutral-500 mb-4" />
+                        <p className="text-2xl font-bold text-white">24/7</p>
+                        <p className="text-neutral-500 text-sm">Support & Community</p>
+                    </div>
+                </div>
+
+                {/* Comparison Table */}
+                <div className="mt-24">
+                    <h3 className="text-2xl font-bold text-white text-center mb-12">Detailed Comparison</h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="border-b border-white/10 text-neutral-500 text-sm font-mono tracking-widest text-left">
+                                    <th className="py-4 px-6 font-medium">FEATURE</th>
+                                    <th className="py-4 px-6 font-medium">FREE</th>
+                                    <th className="py-4 px-6 font-medium">PREMIUM</th>
+                                    <th className="py-4 px-6 font-medium text-yellow-500">ELITE</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                {[
+                                    ['Live hackathon directory', '✓', '✓', '✓'],
+                                    ['Basic map view', '✓', '✓', '✓'],
+                                    ['Advanced filters', '✗', '✓', '✓'],
+                                    ['Early notifications', '✗', '24h Early', '48h Early'],
+                                    ['Calendar sync', '✗', '✓', '✓'],
+                                    ['Map badge', '✗', '🌟 Premium', '👑 Elite'],
+                                    ['Discord access', '✗', 'General', 'General + Elite'],
+                                    ['Map profile', '✗', '✗', '✓ Featured'],
+                                    ['Investor database', '✗', '✗', '✓ Full Access'],
+                                    ['Investor office hours', '✗', '✗', '✓ Monthly'],
+                                    ['Starter kit & templates', '✗', '✗', '✓'],
+                                    ['Priority support', '✗', '✗', '✓ 24h response'],
+                                    ['Beta feature access', '✗', '✗', '✓'],
+                                    ['Elite Summit invite', '✗', '✗', '✓ Annual'],
+                                ].map(([feature, free, premium, elite], i) => (
+                                    <tr key={feature} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
+                                        <td className="py-4 px-6 text-neutral-400 font-medium">{feature}</td>
+                                        <td className="py-4 px-6 text-neutral-500">{free === '✓' ? <Check className="w-4 h-4 text-green-500/50" /> : free === '✗' ? <X className="w-4 h-4 text-red-500/30" /> : free}</td>
+                                        <td className="py-4 px-6 text-neutral-300">{premium === '✓' ? <Check className="w-4 h-4 text-blue-500/70" /> : premium === '✗' ? <X className="w-4 h-4 text-red-500/30" /> : premium}</td>
+                                        <td className="py-4 px-6 text-white font-bold">{elite === '✓' ? <Check className="w-4 h-4 text-yellow-500" /> : elite}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Final Value Stack CTA */}
+                <div className="mt-24 text-center p-12 rounded-3xl bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/20 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                        <Crown className="w-48 h-48 text-yellow-500" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-white mb-4">Elite costs €25 once → Premium costs €120/year</h3>
+                    <p className="text-neutral-400 mb-8 max-w-xl mx-auto">
+                        In just 3 months, Elite pays for itself compared to Premium. After that, you're building with total advantage for free, forever.
+                    </p>
+                    <Button className="h-14 px-12 text-lg bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
+                        Get Lifetime Access for €25
+                    </Button>
+                </div>
+            </div>
+        </section>
+    );
+};
