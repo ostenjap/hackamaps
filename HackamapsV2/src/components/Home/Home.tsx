@@ -47,9 +47,9 @@ export const Home = ({ eventCount, setView }: HomeProps) => {
 
                     <button
                         onClick={scrollToPricing}
-                        className="group flex items-center gap-2 text-neutral-500 hover:text-white transition-colors text-sm font-medium"
+                        className="group relative flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-500/30 bg-yellow-500/5 text-yellow-500/80 hover:text-yellow-400 transition-all duration-300 text-sm font-medium animate-pulse-gold hover:scale-105 hover:border-yellow-500/50 hover:bg-yellow-500/10"
                     >
-                        <Sparkles className="w-4 h-4 text-yellow-500 group-hover:animate-pulse" />
+                        <Sparkles className="w-4 h-4 text-yellow-500 group-hover:rotate-12 transition-transform" />
                         Check out our upgrade
                     </button>
                 </div>

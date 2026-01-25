@@ -4,14 +4,24 @@
 
 @layer utilities {
   @keyframes pulse-gold {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4);
+    0% {
+      box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7);
     }
-    50% {
+
+    70% {
       box-shadow: 0 0 0 10px rgba(234, 179, 8, 0);
     }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(234, 179, 8, 0);
+    }
   }
+
   .animate-pulse-gold {
-    animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse-gold 2s infinite;
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
   }
 }
