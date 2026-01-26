@@ -34,7 +34,21 @@ export const PricingTable = () => {
                                 <span className="text-neutral-500 text-sm">/forever</span>
                             </div>
                         </div>
-                        <div className="flex-1" />
+
+                        <ul className="space-y-4 mb-8 mt-6 flex-1">
+                            {['Live hackathon directory', 'Basic map view', 'Face Map view'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-400 text-sm">
+                                    <Check className="w-4 h-4 text-green-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                            {['Hackamaps Discord', 'Face Map Pin', 'Early Stage Investor List', 'Premium Map Pin'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
+                                    <X className="w-4 h-4" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
                         <Button variant="outline" className="w-full">Current Plan</Button>
                     </Card>
 
@@ -50,7 +64,28 @@ export const PricingTable = () => {
                             </div>
                             <p className="mt-2 text-xs text-blue-400 font-medium">Standard choice for active hackers</p>
                         </div>
-                        <div className="flex-1" />
+
+                        <ul className="space-y-4 mb-8 flex-1">
+                            {[
+                                'Live hackathon directory',
+                                'Basic map view',
+                                'Face Map view',
+                                'Hackamaps Discord',
+                                'Face Map Pin',
+                                'Premium Map Pin'
+                            ].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-300 text-sm">
+                                    <Check className="w-4 h-4 text-green-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                            {['Early Stage Investor List'].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
+                                    <X className="w-4 h-4" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
                         <Button className="w-full">Upgrade Now</Button>
                     </Card>
 
@@ -89,7 +124,22 @@ export const PricingTable = () => {
                             </div>
                         </div> */}
 
-                        <div className="flex-1" />
+                        <ul className="space-y-4 mb-8 flex-1">
+                            {[
+                                'Live hackathon directory',
+                                'Basic map view',
+                                'Face Map view',
+                                'Hackamaps Discord',
+                                'Face Map Pin',
+                                'Premium Map Pin',
+                                'Early Stage Investor List'
+                            ].map((feature) => (
+                                <li key={feature} className="flex items-center gap-3 text-white text-sm">
+                                    <Check className="w-4 h-4 text-yellow-500" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
 
                         <div className="space-y-4">
 
