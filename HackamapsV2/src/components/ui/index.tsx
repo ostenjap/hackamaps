@@ -1,13 +1,16 @@
 import React from 'react';
 
-export const Card = ({ children, className = "", onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) => (
-    <div
-        onClick={onClick}
-        className={`bg-neutral-900/60 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden transition-all duration-300 hover:border-blue-500/50 hover:bg-neutral-800/80 hover:-translate-y-1 ${className}`}
-    >
-        {children}
-    </div>
-);
+export const Card = ({ children, className = "", onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) => {
+    const hasOverflowClass = className.includes('overflow-');
+    return (
+        <div
+            onClick={onClick}
+            className={`bg-neutral-900/60 backdrop-blur-md border border-white/10 rounded-xl transition-all duration-300 hover:border-blue-500/50 hover:bg-neutral-800/80 hover:-translate-y-1 ${!hasOverflowClass ? 'overflow-hidden' : ''} ${className}`}
+        >
+            {children}
+        </div>
+    );
+};
 
 export const Badge = ({ children, variant = 'default', style, className = "" }: { children: React.ReactNode, variant?: 'default' | 'outline' | 'secondary', style?: React.CSSProperties, className?: string }) => {
     const styles = {
