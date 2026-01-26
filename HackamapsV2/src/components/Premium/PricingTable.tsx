@@ -4,47 +4,47 @@ import { Button, Card, Badge } from '../ui';
 
 export const PricingTable = () => {
     return (
-        <section id="pricing" className="w-full py-16 bg-black/50 border-t border-white/5 relative overflow-hidden">
+        <section id="pricing" className="w-full py-6 bg-black/50 border-t border-white/5 relative overflow-hidden">
             {/* Background elements */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center mb-12">
-                    <Badge variant="secondary" className="mb-3 bg-yellow-900/30 text-yellow-500 border-yellow-500/30 animate-pulse">
+                <div className="text-center mb-4">
+                    <Badge variant="secondary" className="mb-2 bg-yellow-900/30 text-yellow-500 border-yellow-500/30 animate-pulse text-[9px]">
                         LIMITED TIME: 50% OFF
                     </Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-4">
+                    <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">
                         Upgrade Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Hacker Journey</span>
                     </h2>
-                    <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+                    <p className="text-neutral-400 text-sm max-w-2xl mx-auto">
                         Join Elite builders and get exclusive access to investors, advanced tools, and a global community.
                     </p>
                 </div>
 
                 {/* Pricing Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 mt-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 mt-4">
 
                     {/* Free Tier */}
-                    <Card className="p-6 flex flex-col h-full bg-neutral-900/40 border-white/5">
-                        <div className="mb-8">
-                            <h3 className="text-lg font-bold text-white mb-2">Free</h3>
+                    <Card className="p-3 flex flex-col h-full bg-neutral-900/40 border-white/5">
+                        <div className="mb-2">
+                            <h3 className="text-base font-bold text-white mb-1">Free</h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-3xl font-bold text-white">€0</span>
+                                <span className="text-2xl font-bold text-white">€0</span>
                                 <span className="text-neutral-500 text-sm">/forever</span>
                             </div>
                         </div>
 
-                        <ul className="space-y-4 mb-8 mt-6 flex-1">
+                        <ul className="space-y-1 mb-3 mt-1 flex-1">
                             {['Live hackathon directory', 'Basic map view', 'Face Map view'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-400 text-sm">
-                                    <Check className="w-4 h-4 text-green-500" />
+                                <li key={feature} className="flex items-center gap-2 text-neutral-400 text-xs">
+                                    <Check className="w-3 h-3 text-green-500" />
                                     {feature}
                                 </li>
                             ))}
                             {['Hackamaps Discord', 'Face Map Pin', 'Early Stage Investor List', 'Premium Map Pin'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
-                                    <X className="w-4 h-4" />
+                                <li key={feature} className="flex items-center gap-2 text-neutral-600 text-xs">
+                                    <X className="w-3 h-3" />
                                     {feature}
                                 </li>
                             ))}
@@ -53,19 +53,19 @@ export const PricingTable = () => {
                     </Card>
 
                     {/* Premium Tier */}
-                    <Card className="p-6 flex flex-col h-full bg-neutral-900/40 border-white/10 relative group">
-                        <div className="mb-8">
-                            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                    <Card className="p-3 flex flex-col h-full bg-neutral-900/40 border-white/10 relative group">
+                        <div className="mb-2">
+                            <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
                                 Premium <Star className="w-4 h-4 text-blue-400 fill-blue-400" />
                             </h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-3xl font-bold text-white">€120</span>
+                                <span className="text-2xl font-bold text-white">€120</span>
                                 <span className="text-neutral-500 text-sm">/year</span>
                             </div>
-                            <p className="mt-2 text-xs text-blue-400 font-medium">Standard choice for active hackers</p>
+                            <p className="mt-1 text-[10px] text-blue-400 font-medium">Standard choice for active hackers</p>
                         </div>
 
-                        <ul className="space-y-4 mb-8 flex-1">
+                        <ul className="space-y-1 mb-3 flex-1">
                             {[
                                 'Live hackathon directory',
                                 'Basic map view',
@@ -74,14 +74,14 @@ export const PricingTable = () => {
                                 'Face Map Pin',
                                 'Premium Map Pin'
                             ].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-300 text-sm">
-                                    <Check className="w-4 h-4 text-green-500" />
+                                <li key={feature} className="flex items-center gap-2 text-neutral-300 text-xs">
+                                    <Check className="w-3 h-3 text-green-500" />
                                     {feature}
                                 </li>
                             ))}
                             {['Early Stage Investor List'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
-                                    <X className="w-4 h-4" />
+                                <li key={feature} className="flex items-center gap-2 text-neutral-600 text-xs">
+                                    <X className="w-3 h-3" />
                                     {feature}
                                 </li>
                             ))}
@@ -90,23 +90,23 @@ export const PricingTable = () => {
                     </Card>
 
                     {/* Elite Tier */}
-                    <Card className="p-6 flex flex-col h-full border-yellow-500/50 bg-gradient-to-b from-neutral-900 to-neutral-900 shadow-[0_0_40px_rgba(234,179,8,0.1)] relative scale-[1.02] z-10 overflow-visible">
+                    <Card className="p-3 flex flex-col h-full border-yellow-500/50 bg-gradient-to-b from-neutral-900 to-neutral-900 shadow-[0_0_40px_rgba(234,179,8,0.1)] relative scale-[1.02] z-10 overflow-visible">
                         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                             <Badge className="bg-yellow-500 text-black border-none font-bold px-4 py-1">
                                 BEST VALUE
                             </Badge>
                         </div>
 
-                        <div className="mb-8">
-                            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                        <div className="mb-2">
+                            <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
                                 Elite <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                             </h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-3xl font-bold text-white uppercase">€25</span>
+                                <span className="text-2xl font-bold text-white uppercase">€25</span>
                                 <span className="text-neutral-500 text-sm">once</span>
                                 <span className="ml-2 text-neutral-500 line-through text-sm">€50</span>
                             </div>
-                            <p className="mt-2 text-xs text-yellow-500 font-bold uppercase tracking-widest">
+                            <p className="mt-1 text-[10px] text-yellow-500 font-bold uppercase tracking-widest">
                                 pay once, access forever
                             </p>
                         </div>
@@ -124,7 +124,7 @@ export const PricingTable = () => {
                             </div>
                         </div> */}
 
-                        <ul className="space-y-4 mb-8 flex-1">
+                        <ul className="space-y-1 mb-3 flex-1">
                             {[
                                 'Live hackathon directory',
                                 'Basic map view',
@@ -134,8 +134,8 @@ export const PricingTable = () => {
                                 'Premium Map Pin',
                                 'Early Stage Investor List'
                             ].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-white text-sm">
-                                    <Check className="w-4 h-4 text-yellow-500" />
+                                <li key={feature} className="flex items-center gap-2 text-white text-xs">
+                                    <Check className="w-3 h-3 text-yellow-500" />
                                     {feature}
                                 </li>
                             ))}
