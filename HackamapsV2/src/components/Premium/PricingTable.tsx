@@ -181,7 +181,7 @@ export const PricingTable = () => {
                     </div>
                 </div>
 
-                {/* Comparison Table */}
+                {/* Comparison Table for now we will not use it but good to have in mind 
                 <div className="mt-16">
                     <h3 className="text-xl font-bold text-white text-center mb-8">Detailed Comparison</h3>
                     <div className="overflow-x-auto">
@@ -221,7 +221,7 @@ export const PricingTable = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Final Value Stack CTA */}
                 <div className="mt-16 text-center p-8 rounded-3xl bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/20 relative overflow-hidden">
