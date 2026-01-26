@@ -24,6 +24,7 @@ export const PricingTable = () => {
 
                 {/* Pricing Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 mt-8">
+
                     {/* Free Tier */}
                     <Card className="p-6 flex flex-col h-full bg-neutral-900/40 border-white/5">
                         <div className="mb-8">
@@ -33,20 +34,7 @@ export const PricingTable = () => {
                                 <span className="text-neutral-500 text-sm">/forever</span>
                             </div>
                         </div>
-                        <ul className="space-y-3 mb-6 flex-1">
-                            {['Live hackathon directory', 'Basic map view'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-400 text-sm">
-                                    <Check className="w-4 h-4 text-green-500" />
-                                    {feature}
-                                </li>
-                            ))}
-                            {['Advanced filters', 'Early notifications', 'Priority support'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-600 text-sm">
-                                    <X className="w-4 h-4" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="flex-1" />
                         <Button variant="outline" className="w-full">Current Plan</Button>
                     </Card>
 
@@ -62,14 +50,7 @@ export const PricingTable = () => {
                             </div>
                             <p className="mt-2 text-xs text-blue-400 font-medium">Standard choice for active hackers</p>
                         </div>
-                        <ul className="space-y-3 mb-6 flex-1">
-                            {['Advanced map filters', '24h Early notifications', 'Calendar sync', 'Premium map badge'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-neutral-300 text-sm">
-                                    <Check className="w-4 h-4 text-green-500" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="flex-1" />
                         <Button className="w-full">Upgrade Now</Button>
                     </Card>
 
@@ -108,26 +89,10 @@ export const PricingTable = () => {
                             </div>
                         </div> */}
 
-                        <ul className="space-y-3 mb-8 flex-1">
-                            {[
-                                '48h Early notifications',
-                                'Investor database access',
-                                'Monthly office hours',
-                                'Elite Summit invite',
-                                'Featured map profile',
-                                'Priority 24h support'
-                            ].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-white text-sm">
-                                    <Check className="w-4 h-4 text-yellow-500" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="flex-1" />
 
                         <div className="space-y-4">
-                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
-                                Become Elite Member
-                            </Button>
+
 
                             <div className="text-center">
                                 <div className="flex items-center justify-center gap-1 mb-1">
@@ -140,6 +105,9 @@ export const PricingTable = () => {
                                     "Best €25 investment in my dev career" - @theleanbuild
                                 </p>
                             </div>
+                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
+                                Become Elite Member
+                            </Button>
                         </div>
                     </Card>
                 </div>
