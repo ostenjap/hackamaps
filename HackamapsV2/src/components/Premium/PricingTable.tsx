@@ -146,17 +146,26 @@ export const PricingTable = () => {
 
 
                             <div className="text-center">
-                                <div className="flex items-center justify-center gap-1 mb-1">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" />
-                                    <span className="text-[10px] text-yellow-500 font-bold uppercase">
-                                        497/500 Elite spots remaining
-                                    </span>
+                                <div className="flex flex-col items-center gap-2 mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <Zap className="w-3 h-3 text-yellow-500 animate-pulse" />
+                                        <span className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">
+                                            497/500 Elite spots remaining
+                                        </span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden border border-white/5">
+                                        <div className="h-full bg-yellow-500 w-[99.4%] shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+                                    </div>
+                                    <div className="flex justify-between w-full text-[9px] font-medium">
+                                        <span className="text-yellow-500/80">Price increases to €50 after 500 members</span>
+                                        <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
+                                    </div>
                                 </div>
-                                <p className="text-[10px] text-neutral-500 italic">
+                                <p className="text-[10px] text-neutral-500 italic mb-4">
                                     "Best €25 investment in my dev career" - @theleanbuild
                                 </p>
                             </div>
-                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
+                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none h-12 text-base">
                                 Become Elite Member
                             </Button>
                         </div>
@@ -231,6 +240,104 @@ export const PricingTable = () => {
                     </div>
                 </div>
 
+                {/* Do The Math Section */}
+                <div className="mb-24 mt-8">
+                    <div className="text-center mb-12">
+                        <h3 className="text-3xl font-bold text-white mb-2">Do The Math:</h3>
+                        <p className="text-neutral-500">Visual proof that Elite is the only rational choice for builders.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                        <Card className="p-8 bg-neutral-900/10 border-white/5 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-5">
+                                <Check className="w-24 h-24 text-white" />
+                            </div>
+                            <h4 className="text-lg font-bold text-neutral-400 mb-4">PREMIUM SUBSCRIPTION</h4>
+                            <div className="space-y-2 text-2xl font-mono">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-neutral-500 text-sm">Monthly Cost</span>
+                                    <span>€10</span>
+                                </div>
+                                <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                                    <span className="text-neutral-500 text-sm">Yearly Total</span>
+                                    <span className="text-white">€120/year</span>
+                                </div>
+                            </div>
+                            <p className="mt-6 text-sm text-neutral-500">Pay every single year to keep your access. Forever.</p>
+                        </Card>
+
+                        <Card className="p-8 bg-yellow-500/5 border-yellow-500/20 relative overflow-hidden ring-1 ring-yellow-500/30">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <Crown className="w-24 h-24 text-yellow-500" />
+                            </div>
+                            <h4 className="text-lg font-bold text-yellow-500 mb-4 uppercase">Elite Lifetime</h4>
+                            <div className="space-y-2 text-2xl font-mono">
+                                <div className="flex justify-between items-center text-yellow-500">
+                                    <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">One-Time Payment</span>
+                                    <span className="font-bold">€25</span>
+                                </div>
+                                <div className="flex justify-between items-center pt-2 border-t border-yellow-500/10 text-yellow-500">
+                                    <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">Years 2, 3, 5, 10...</span>
+                                    <span className="font-bold">€0</span>
+                                </div>
+                            </div>
+                            <p className="mt-6 text-sm text-yellow-500/80 font-medium">Pay once. Build forever. No renewals, no hidden fees.</p>
+                        </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {[
+                            { time: "After 3 Months", saving: "Saved Money", detail: "Elite already paid for itself", color: "text-blue-400" },
+                            { time: "After 1 Year", saving: "€95 Saved", detail: "Versus Paying Premium", color: "text-green-400" },
+                            { time: "After 3 Years", saving: "€335 Saved", detail: "Total building advantage", color: "text-yellow-500" }
+                        ].map((item, i) => (
+                            <div key={i} className="bg-white/5 rounded-2xl p-6 border border-white/5 text-center">
+                                <p className="text-neutral-500 text-xs uppercase tracking-widest mb-2">{item.time}</p>
+                                <p className={`text-2xl font-bold mb-1 ${item.color}`}>{item.saving}</p>
+                                <p className="text-[10px] text-neutral-500">{item.detail}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* FAQ Section */}
+                <div className="mb-24 max-w-3xl mx-auto">
+                    <div className="text-center mb-12">
+                        <span className="text-blue-500 font-mono text-xs uppercase tracking-[0.3em] mb-4 block">Questions?</span>
+                        <h3 className="text-3xl font-bold text-white">Frequently Asked Questions</h3>
+                    </div>
+
+                    <div className="space-y-4">
+                        {[
+                            {
+                                q: "What if I'm not satisfied?",
+                                a: "30-day money-back guarantee. No questions asked. We're builders too, and we only want your money if we're helping you win."
+                            },
+                            {
+                                q: "Can I upgrade later?",
+                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for Elite access increases to €50."
+                            },
+                            {
+                                q: "What's in the investor database?",
+                                a: "We maintain a curated list of 200+ VCs, angels, and accelerators specifically looking for hackathon-stage projects. Includes contact info, investment thesis, and previous portfolio companies."
+                            },
+                            {
+                                q: "Is this really lifetime?",
+                                a: "Yes. Absolutely. Pay once, access forever. You will never see a renewal charge or be asked to pay for a subscription again."
+                            }
+                        ].map((faq, i) => (
+                            <div key={i} className="p-6 rounded-2xl bg-neutral-900/40 border border-white/5 hover:border-white/10 transition-colors">
+                                <h4 className="text-white font-bold mb-2 flex items-center gap-3">
+                                    <span className="text-neutral-600 text-lg">❓</span> {faq.q}
+                                </h4>
+                                <p className="text-neutral-400 text-sm leading-relaxed pl-9">
+                                    {faq.a}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Comparison Table for now we will not use it but good to have in mind 
                 <div className="mt-16">
                     <h3 className="text-xl font-bold text-white text-center mb-8">Detailed Comparison</h3>
@@ -276,17 +383,27 @@ export const PricingTable = () => {
 
 
                 {/* Final Value Stack CTA */}
-                <div className="mt-16 text-center p-8 rounded-3xl bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-10">
-                        <Crown className="w-48 h-48 text-yellow-500" />
+                <div className="mt-16 text-center p-12 rounded-[2.5rem] bg-gradient-to-br from-yellow-500/10 via-yellow-500/5 to-transparent border border-yellow-500/20 relative overflow-hidden shadow-[0_0_50px_rgba(234,179,8,0.05)]">
+                    <div className="absolute top-0 right-0 p-8 opacity-5">
+                        <Crown className="w-64 h-64 text-yellow-500" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">Elite costs €25 once → Premium costs €120/year</h3>
-                    <p className="text-neutral-400 mb-8 max-w-xl mx-auto">
-                        In just 3 months, Elite pays for itself compared to Premium. After that, you're building with total advantage for free, forever.
-                    </p>
-                    <Button className="h-12 px-10 text-base bg-yellow-500 hover:bg-yellow-600 text-black font-bold animate-pulse-gold border-none">
-                        Get Lifetime Access for €25
-                    </Button>
+                    <div className="relative z-10">
+                        <Badge className="bg-yellow-500 text-black border-none font-bold px-4 py-1 mb-6 animate-bounce">
+                            FINAL OPPORTUNITY
+                        </Badge>
+                        <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Build Forever for €25.</h3>
+                        <p className="text-neutral-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
+                            Stop the recurring drain on your bank account. Join <span className="text-white font-bold">347 members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
+                        </p>
+                        <div className="flex flex-col items-center gap-4">
+                            <Button className="h-16 px-12 text-lg bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none rounded-2xl shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:scale-105 transition-all">
+                                Get Lifetime Access for €25
+                            </Button>
+                            <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
+                                Limited to first 500 members • Secure Checkout
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
