@@ -1,8 +1,40 @@
-import React from 'react';
-import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare, Loader2 } from 'lucide-react';
 import { Button, Card, Badge } from '../ui';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 
 export const PricingTable = () => {
+    const { user, signInWithGoogle } = useAuth();
+    const [loading, setLoading] = useState<string | null>(null);
+
+    const handleUpgrade = async (tier: 'premium' | 'elite') => {
+        if (!user) {
+            signInWithGoogle();
+            return;
+        }
+
+        try {
+            setLoading(tier);
+            const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+                body: {
+                    tier,
+                    success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}',
+                    cancel_url: window.location.origin + '/pricing'
+                },
+            });
+
+            if (error) throw error;
+            if (data?.url) {
+                window.location.href = data.url;
+            }
+        } catch (error) {
+            console.error('Error initiating upgrade:', error);
+            alert('Something went wrong. Please try again.');
+        } finally {
+            setLoading(null);
+        }
+    };
     return (
         <section id="pricing" className="w-full py-12 bg-black/50 border-t border-white/5 relative overflow-hidden scroll-mt-32">
             {/* Background elements */}
@@ -87,7 +119,13 @@ export const PricingTable = () => {
                                 </li>
                             ))}
                         </ul>
-                        <Button className="w-full">Upgrade Now</Button>
+                        <Button
+                            className="w-full"
+                            onClick={() => handleUpgrade('premium')}
+                            disabled={loading !== null}
+                        >
+                            {loading === 'premium' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Upgrade Now'}
+                        </Button>
                     </Card>
 
                     {/* Elite Tier */}
@@ -165,8 +203,12 @@ export const PricingTable = () => {
                                     "Best €25 investment in my dev career" - @theleanbuild
                                 </p>
                             </div>
-                            <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none h-12 text-base">
-                                Become Elite Member
+                            <Button
+                                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none h-12 text-base"
+                                onClick={() => handleUpgrade('elite')}
+                                disabled={loading !== null}
+                            >
+                                {loading === 'elite' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Become Elite Member'}
                             </Button>
                         </div>
                     </Card>
@@ -396,7 +438,12 @@ export const PricingTable = () => {
                             Stop the recurring drain on your bank account. Join <span className="text-white font-bold">347 members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
                         </p>
                         <div className="flex flex-col items-center gap-4">
-                            <Button className="h-16 px-12 text-lg bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none rounded-2xl shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:scale-105 transition-all">
+                            <Button
+                                className="h-16 px-12 text-lg bg-yellow-500 hover:bg-yellow-600 text-black font-extrabold animate-pulse-gold border-none rounded-2xl shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:scale-105 transition-all"
+                                onClick={() => handleUpgrade('elite')}
+                                disabled={loading !== null}
+                            >
+                                {loading === 'elite' ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
                                 Get Lifetime Access for €25
                             </Button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
