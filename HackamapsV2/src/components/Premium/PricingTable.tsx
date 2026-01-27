@@ -15,7 +15,7 @@ export const PricingTable = () => {
                         LIMITED TIME: 50% OFF
                     </Badge>
                     <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">
-                        Upgrade Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Hacker Journey</span>
+                        Stop Paying Monthly. <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Start Building Forever.</span>
                     </h2>
                     <p className="text-neutral-400 text-sm max-w-2xl mx-auto">
                         Join Elite builders and get exclusive access to investors, advanced tools, and a global community.
@@ -33,9 +33,10 @@ export const PricingTable = () => {
                                 <span className="text-2xl font-bold text-white">€0</span>
                                 <span className="text-neutral-500 text-sm">/forever</span>
                             </div>
+                            <p className="mt-1 text-[10px] text-neutral-400 font-medium">Essential features for every builder</p>
                         </div>
 
-                        <ul className="space-y-1 mb-3 mt-1 flex-1">
+                        <ul className="space-y-1 mb-3 flex-1">
                             {['Live hackathon directory', 'Basic map view', 'Face Map view'].map((feature) => (
                                 <li key={feature} className="flex items-center gap-2 text-neutral-400 text-xs">
                                     <Check className="w-3 h-3 text-green-500" />
@@ -107,7 +108,7 @@ export const PricingTable = () => {
                                 <span className="ml-2 text-neutral-500 line-through text-sm">€50</span>
                             </div>
                             <p className="mt-1 text-[10px] text-yellow-500 font-bold uppercase tracking-widest">
-                                pay once, access forever
+                                pay once, access forever, never pay again
                             </p>
                         </div>
 
@@ -181,6 +182,55 @@ export const PricingTable = () => {
                     </div>
                 </div>
 
+                {/* Testimonials */}
+                <div className="mb-16">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                        <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em]">Verified Success Stories</span>
+                        <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            {
+                                quote: "Elite database got me into Y Combinator's radar",
+                                handle: "@startup_founder",
+                                context: "Series A Builder"
+                            },
+                            {
+                                quote: "Found my co-founder in the Elite Discord",
+                                handle: "@build_with_me",
+                                context: "Technical Lead"
+                            },
+                            {
+                                quote: "Won 3 hackathons using their starter kit",
+                                handle: "@hackathon_king",
+                                context: "Venture Hackathon Fellow"
+                            }
+                        ].map((t, i) => (
+                            <Card key={i} className="p-6 bg-neutral-900/20 border-white/5 hover:border-yellow-500/20 transition-all group">
+                                <div className="flex flex-col h-full">
+                                    <div className="flex gap-1 mb-4">
+                                        {[1, 2, 3, 4, 5].map(star => (
+                                            <Star key={star} className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                                        ))}
+                                    </div>
+                                    <p className="text-neutral-300 text-sm leading-relaxed mb-6 italic">
+                                        "{t.quote}"
+                                    </p>
+                                    <div className="mt-auto flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neutral-700 to-neutral-800 border border-white/10 flex-shrink-0" />
+                                        <div>
+                                            <p className="text-white text-xs font-bold">{t.handle}</p>
+                                            <p className="text-neutral-500 text-[10px]">{t.context}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Comparison Table for now we will not use it but good to have in mind 
                 <div className="mt-16">
                     <h3 className="text-xl font-bold text-white text-center mb-8">Detailed Comparison</h3>
@@ -222,6 +272,8 @@ export const PricingTable = () => {
                         </table>
                     </div>
                 </div> */}
+
+
 
                 {/* Final Value Stack CTA */}
                 <div className="mt-16 text-center p-8 rounded-3xl bg-gradient-to-br from-yellow-500/10 to-transparent border border-yellow-500/20 relative overflow-hidden">
