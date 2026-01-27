@@ -167,18 +167,18 @@ export const PricingTable = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 border-y border-white/5 py-8">
                     <div className="flex flex-col items-center text-center">
                         <Users className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">347+</p>
-                        <p className="text-neutral-500 text-sm">Elite Builders Joined</p>
+                        <p className="text-2xl font-bold text-white">347/500</p>
+                        <p className="text-neutral-500 text-sm">Elite Members</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
                         <Trophy className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">120+</p>
-                        <p className="text-neutral-500 text-sm">Hackathons Won by Members</p>
+                        <p className="text-2xl font-bold text-white">€2.4M+</p>
+                        <p className="text-neutral-500 text-sm">Prize Money Won</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
-                        <MessageSquare className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">24/7</p>
-                        <p className="text-neutral-500 text-sm">Support & Community</p>
+                        <Zap className="w-5 h-5 text-neutral-500 mb-4" />
+                        <p className="text-2xl font-bold text-white">200+</p>
+                        <p className="text-neutral-500 text-sm">VC Connections Made</p>
                     </div>
                 </div>
 
