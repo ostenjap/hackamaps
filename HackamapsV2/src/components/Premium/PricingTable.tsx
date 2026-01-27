@@ -4,7 +4,7 @@ import { Button, Card, Badge } from '../ui';
 
 export const PricingTable = () => {
     return (
-        <section id="pricing" className="w-full py-6 bg-black/50 border-t border-white/5 relative overflow-hidden">
+        <section id="pricing" className="w-full py-12 bg-black/50 border-t border-white/5 relative overflow-hidden scroll-mt-32">
             {/* Background elements */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
 
@@ -165,17 +165,17 @@ export const PricingTable = () => {
                 {/* Social Proof */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 border-y border-white/5 py-8">
                     <div className="flex flex-col items-center text-center">
-                        <Users className="w-8 h-8 text-neutral-500 mb-4" />
+                        <Users className="w-5 h-5 text-neutral-500 mb-4" />
                         <p className="text-2xl font-bold text-white">347+</p>
                         <p className="text-neutral-500 text-sm">Elite Builders Joined</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
-                        <Trophy className="w-8 h-8 text-neutral-500 mb-4" />
+                        <Trophy className="w-5 h-5 text-neutral-500 mb-4" />
                         <p className="text-2xl font-bold text-white">120+</p>
                         <p className="text-neutral-500 text-sm">Hackathons Won by Members</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
-                        <MessageSquare className="w-8 h-8 text-neutral-500 mb-4" />
+                        <MessageSquare className="w-5 h-5 text-neutral-500 mb-4" />
                         <p className="text-2xl font-bold text-white">24/7</p>
                         <p className="text-neutral-500 text-sm">Support & Community</p>
                     </div>

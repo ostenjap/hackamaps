@@ -16,7 +16,7 @@ export const Home = ({ eventCount, setView }: HomeProps) => {
     };
 
     return (
-        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+        <div className="flex-1 w-full">
             <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 -translate-y-12 animate-in fade-in zoom-in duration-500">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-900 bg-green-900/10 text-green-400 text-[10px] font-mono mb-4">
                     <span className="relative flex h-2 w-2">
@@ -32,8 +32,7 @@ export const Home = ({ eventCount, setView }: HomeProps) => {
                 </h1>
 
                 <p className="text-neutral-400 max-w-lg mx-auto text-lg leading-relaxed mb-6">
-                    The real-time global directory for hackers. Discover hackathons, find teammates, and ship code.
-                </p>
+                    Discover live hackathons. Find your <strong>CO-FOUNDER</strong> .<br /> Meet <strong>INVESTORS</strong>. Ship code that matters.                </p>
 
                 <div className="flex flex-col items-center gap-4">
                     <div className="flex flex-wrap items-center justify-center gap-4">
