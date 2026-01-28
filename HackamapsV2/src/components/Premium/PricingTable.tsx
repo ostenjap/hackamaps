@@ -91,11 +91,18 @@ export const PricingTable = () => {
                             <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
                                 Premium <Star className="w-4 h-4 text-blue-400 fill-blue-400" />
                             </h3>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white">€120</span>
-                                <span className="text-neutral-500 text-sm">/year</span>
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-2xl font-bold text-white">€10</span>
+                                    <span className="text-neutral-500 text-sm">/mo</span>
+                                </div>
+                                <div className="w-px h-4 bg-white/10" />
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-lg font-bold text-blue-400">€100</span>
+                                    <span className="text-neutral-500 text-[10px]">/year</span>
+                                </div>
                             </div>
-                            <p className="mt-1 text-[10px] text-blue-400 font-medium">Standard choice for active hackers</p>
+                            <p className="mt-1 text-[10px] text-blue-400 font-medium">Full access • Best for active hackers</p>
                         </div>
 
                         <ul className="space-y-1 mb-3 flex-1">
@@ -302,7 +309,7 @@ export const PricingTable = () => {
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-white/5">
                                     <span className="text-neutral-500 text-sm">Yearly Total</span>
-                                    <span className="text-white">€120/year</span>
+                                    <span className="text-white">€100/year</span>
                                 </div>
                             </div>
                             <p className="mt-6 text-sm text-neutral-500">Pay every single year to keep your access. Forever.</p>
@@ -330,8 +337,8 @@ export const PricingTable = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[
                             { time: "After 3 Months", saving: "Saved Money", detail: "Elite already paid for itself", color: "text-blue-400" },
-                            { time: "After 1 Year", saving: "€95 Saved", detail: "Versus Paying Premium", color: "text-green-400" },
-                            { time: "After 3 Years", saving: "€335 Saved", detail: "Total building advantage", color: "text-yellow-500" }
+                            { time: "After 1 Year", saving: "€75 Saved", detail: "Versus Paying Premium", color: "text-green-400" },
+                            { time: "After 3 Years", saving: "€275 Saved", detail: "Total building advantage", color: "text-yellow-500" }
                         ].map((item, i) => (
                             <div key={i} className="bg-white/5 rounded-2xl p-6 border border-white/5 text-center">
                                 <p className="text-neutral-500 text-xs uppercase tracking-widest mb-2">{item.time}</p>
