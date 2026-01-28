@@ -50,7 +50,7 @@ export const PricingTable = () => {
                         Stop Paying Monthly. <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Start Building Forever.</span>
                     </h2>
                     <p className="text-neutral-400 text-sm max-w-2xl mx-auto">
-                        Join Elite builders and get exclusive access to investors, advanced tools, and a global community.
+                        Join ZERO TO ONE builders and get exclusive access to investors, advanced tools, and a global community.
                     </p>
                 </div>
 
@@ -135,7 +135,7 @@ export const PricingTable = () => {
                         </Button>
                     </Card>
 
-                    {/* Elite Tier */}
+                    {/* ZERO TO ONE Tier */}
                     <Card className="p-3 flex flex-col h-full border-yellow-500/50 bg-gradient-to-b from-neutral-900 to-neutral-900 shadow-[0_0_40px_rgba(234,179,8,0.1)] relative scale-[1.02] z-10 overflow-visible">
                         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                             <Badge className="bg-yellow-500 text-black border-none font-bold px-4 py-1">
@@ -145,7 +145,7 @@ export const PricingTable = () => {
 
                         <div className="mb-2">
                             <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
-                                Elite <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                                ZERO TO ONE <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                             </h3>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-2xl font-bold text-white uppercase">€25</span>
@@ -195,7 +195,7 @@ export const PricingTable = () => {
                                     <div className="flex items-center gap-2">
                                         <Zap className="w-3 h-3 text-yellow-500 animate-pulse" />
                                         <span className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">
-                                            497/500 Elite spots remaining
+                                            497/500 ZERO TO ONE spots remaining
                                         </span>
                                     </div>
                                     <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden border border-white/5">
@@ -215,7 +215,7 @@ export const PricingTable = () => {
                                 onClick={() => handleUpgrade('elite')}
                                 disabled={loading !== null}
                             >
-                                {loading === 'elite' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Become Elite Member'}
+                                {loading === 'elite' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Become ZERO TO ONE Member'}
                             </Button>
                         </div>
                     </Card>
@@ -226,7 +226,7 @@ export const PricingTable = () => {
                     <div className="flex flex-col items-center text-center">
                         <Users className="w-5 h-5 text-neutral-500 mb-4" />
                         <p className="text-2xl font-bold text-white">347/500</p>
-                        <p className="text-neutral-500 text-sm">Elite Members</p>
+                        <p className="text-neutral-500 text-sm">ZERO TO ONE Members</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
                         <Trophy className="w-5 h-5 text-neutral-500 mb-4" />
@@ -293,7 +293,7 @@ export const PricingTable = () => {
                 <div className="mb-24 mt-8">
                     <div className="text-center mb-12">
                         <h3 className="text-3xl font-bold text-white mb-2">Do The Math:</h3>
-                        <p className="text-neutral-500">Visual proof that Elite is the only rational choice for builders.</p>
+                        <p className="text-neutral-500">Visual proof that ZERO TO ONE is the only rational choice for builders.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -319,7 +319,7 @@ export const PricingTable = () => {
                             <div className="absolute top-0 right-0 p-4 opacity-10">
                                 <Crown className="w-24 h-24 text-yellow-500" />
                             </div>
-                            <h4 className="text-lg font-bold text-yellow-500 mb-4 uppercase">Elite Lifetime</h4>
+                            <h4 className="text-lg font-bold text-yellow-500 mb-4 uppercase">ZERO TO ONE Lifetime</h4>
                             <div className="space-y-2 text-2xl font-mono">
                                 <div className="flex justify-between items-center text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">One-Time Payment</span>
@@ -364,7 +364,7 @@ export const PricingTable = () => {
                             },
                             {
                                 q: "Can I upgrade later?",
-                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for Elite access increases to €50."
+                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for ZERO TO ONE access increases to €50."
                             },
                             {
                                 q: "What's in the investor database?",
@@ -397,7 +397,7 @@ export const PricingTable = () => {
                                     <th className="py-3 px-5 font-medium">FEATURE</th>
                                     <th className="py-3 px-5 font-medium">FREE</th>
                                     <th className="py-3 px-5 font-medium">PREMIUM</th>
-                                    <th className="py-3 px-5 font-medium text-yellow-500">ELITE</th>
+                                    <th className="py-3 px-5 font-medium text-yellow-500">ZERO TO ONE</th>
                                 </tr>
                             </thead>
                             <tbody className="text-sm">
@@ -407,15 +407,15 @@ export const PricingTable = () => {
                                     ['Advanced filters', '✗', '✓', '✓'],
                                     ['Early notifications', '✗', '24h Early', '48h Early'],
                                     ['Calendar sync', '✗', '✓', '✓'],
-                                    ['Map badge', '✗', '🌟 Premium', '👑 Elite'],
-                                    ['Discord access', '✗', 'General', 'General + Elite'],
+                                    ['Map badge', '✗', '🌟 Premium', '👑 ZERO TO ONE'],
+                                    ['Discord access', '✗', 'General', 'General + ZERO TO ONE'],
                                     ['Map profile', '✗', '✗', '✓ Featured'],
                                     ['Investor database', '✗', '✗', '✓ Full Access'],
                                     ['Investor office hours', '✗', '✗', '✓ Monthly'],
                                     ['Starter kit & templates', '✗', '✗', '✓'],
                                     ['Priority support', '✗', '✗', '✓ 24h response'],
                                     ['Beta feature access', '✗', '✗', '✓'],
-                                    ['Elite Summit invite', '✗', '✗', '✓ Annual'],
+                                    ['ZERO TO ONE Summit invite', '✗', '✗', '✓ Annual'],
                                 ].map(([feature, free, premium, elite], i) => (
                                     <tr key={feature} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
                                         <td className="py-3 px-5 text-neutral-400 font-medium">{feature}</td>
@@ -440,7 +440,7 @@ export const PricingTable = () => {
                         <Badge className="bg-yellow-500 text-black border-none font-bold px-4 py-1 mb-6 animate-bounce">
                             FINAL OPPORTUNITY
                         </Badge>
-                        <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Build Forever for €25.</h3>
+                        <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Build Forever with ZERO TO ONE.</h3>
                         <p className="text-neutral-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
                             Stop the recurring drain on your bank account. Join <span className="text-white font-bold">347 members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
                         </p>
@@ -451,7 +451,7 @@ export const PricingTable = () => {
                                 disabled={loading !== null}
                             >
                                 {loading === 'elite' ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                                Get Lifetime Access for €25
+                                Get ZERO TO ONE Access for €25
                             </Button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
                                 Limited to first 500 members • Secure Checkout
