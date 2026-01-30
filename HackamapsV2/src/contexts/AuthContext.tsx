@@ -19,6 +19,8 @@ interface AuthContextType {
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
     refreshProfile: () => Promise<void>;
+    isAuthModalOpen: boolean;
+    setIsAuthModalOpen: (open: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     useEffect(() => {
         // Get initial session
@@ -97,7 +100,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isLoading,
             signInWithGoogle,
             signOut,
-            refreshProfile: () => user ? fetchProfile(user.id) : Promise.resolve()
+            refreshProfile: () => user ? fetchProfile(user.id) : Promise.resolve(),
+            isAuthModalOpen,
+            setIsAuthModalOpen
         }}>
             {children}
         </AuthContext.Provider>

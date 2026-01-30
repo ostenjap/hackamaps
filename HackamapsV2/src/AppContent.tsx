@@ -27,13 +27,11 @@ export default function AppContent() {
     const [captions, setCaptions] = useState<UserCommand[]>([]);
     const { data: events, isLoading } = useEvents();
 
-    // --- Auth State ---
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
+    const { user, isAuthModalOpen, setIsAuthModalOpen } = useAuth(); // Need user for finding current pin
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isManageHackathonsOpen, setIsManageHackathonsOpen] = useState(false);
     const [isPinManagerOpen, setIsPinManagerOpen] = useState(false);
     const { pins, refetch: refetchPins } = useFacePins();
-    const { user } = useAuth(); // Need user for finding current pin
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -148,7 +146,7 @@ export default function AppContent() {
             setView('face_map');
         } else if (lower.includes('login') || lower.includes('sign in')) {
             response = "Opening authentication portal.";
-            setIsAuthOpen(true);
+            setIsAuthModalOpen(true);
         } else {
             response = "Command not recognized. Try 'Show Map' or 'List Events'.";
         }
@@ -190,8 +188,8 @@ export default function AppContent() {
         <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
 
             <AuthModal
-                isOpen={isAuthOpen}
-                onClose={() => setIsAuthOpen(false)}
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
             />
 
             <ProfileModal
@@ -277,7 +275,7 @@ export default function AppContent() {
                 <div className="relative z-10 pointer-events-auto flex items-center gap-4">
                     <a href="#" className="text-xs font-mono text-neutral-500 hover:text-white transition-colors hidden md:block">GITHUB</a>
                     <UserMenu
-                        onOpenAuth={() => setIsAuthOpen(true)}
+                        onOpenAuth={() => setIsAuthModalOpen(true)}
                         onOpenProfile={() => setIsProfileOpen(true)}
                         onOpenManageHackathons={() => setIsManageHackathonsOpen(true)}
                     />

@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare, Loader2 } from 'lucide-react';
 import { Button, Card, Badge } from '../ui';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 
 export const PricingTable = () => {
-    const { user, signInWithGoogle } = useAuth();
+    const { user, setIsAuthModalOpen } = useAuth();
     const [loading, setLoading] = useState<string | null>(null);
+
+    // Auto-resume checkout after login
+    useEffect(() => {
+        if (user) {
+            const pendingTier = sessionStorage.getItem('pending_checkout_tier');
+            if (pendingTier === 'premium' || pendingTier === 'elite') {
+                sessionStorage.removeItem('pending_checkout_tier');
+                handleUpgrade(pendingTier);
+            }
+        }
+    }, [user]);
 
     const handleUpgrade = async (tier: 'premium' | 'elite') => {
         if (!user) {
-            signInWithGoogle();
+            sessionStorage.setItem('pending_checkout_tier', tier);
+            setIsAuthModalOpen(true);
             return;
         }
 
@@ -30,7 +42,7 @@ export const PricingTable = () => {
             }
         } catch (error) {
             console.error('Error initiating upgrade:', error);
-            alert('Something went wrong. Please try again.');
+            // alert('Something went wrong. Please try again.');
         } finally {
             setLoading(null);
         }
