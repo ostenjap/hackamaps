@@ -16,11 +16,19 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-    // Form State
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
+
+    const passwordRequirements = {
+        length: password.length >= 8,
+        number: /\d/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+
+    const isPasswordValid = Object.values(passwordRequirements).every(Boolean);
 
     if (!isOpen) return null;
 
@@ -28,6 +36,18 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
         e.preventDefault();
         setError(null);
         setSuccessMsg(null);
+
+        if (view === 'signup') {
+            if (!isPasswordValid) {
+                setError("Please meet all password requirements.");
+                return;
+            }
+            if (password !== confirmPassword) {
+                setError("Passwords do not match.");
+                return;
+            }
+        }
+
         setLoading(true);
 
         try {
@@ -163,31 +183,68 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                     </div>
 
                     {view !== 'forgot_password' && (
-                        <div className="space-y-1">
-                            <div className="flex justify-between items-center ml-1">
-                                <label className="text-xs text-neutral-400 font-medium">Password</label>
-                                {view === 'signin' && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setView('forgot_password')}
-                                        className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
-                                    >
-                                        Forgot Password?
-                                    </button>
-                                )}
+                        <>
+                            <div className="space-y-1">
+                                <div className="flex justify-between items-center ml-1">
+                                    <label className="text-xs text-neutral-400 font-medium">Password</label>
+                                    {view === 'signin' && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setView('forgot_password')}
+                                            className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
+                                        >
+                                            Forgot Password?
+                                        </button>
+                                    )}
+                                </div>
+                                <div className="relative group">
+                                    <Lock className="absolute left-3 top-2.5 w-4 h-4 text-neutral-500 group-focus-within:text-blue-400 transition-colors" />
+                                    <input
+                                        type="password"
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
+                                        placeholder="••••••••"
+                                    />
+                                </div>
                             </div>
-                            <div className="relative group">
-                                <Lock className="absolute left-3 top-2.5 w-4 h-4 text-neutral-500 group-focus-within:text-blue-400 transition-colors" />
-                                <input
-                                    type="password"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                    placeholder="••••••••"
-                                />
-                            </div>
-                        </div>
+
+                            {view === 'signup' && (
+                                <>
+                                    <div className="space-y-1">
+                                        <label className="text-xs text-neutral-400 font-medium ml-1">Confirm Password</label>
+                                        <div className="relative group">
+                                            <CheckCircle2 className={`absolute left-3 top-2.5 w-4 h-4 transition-colors ${password && confirmPassword ? (password === confirmPassword ? 'text-green-500' : 'text-red-500') : 'text-neutral-500'}`} />
+                                            <input
+                                                type="password"
+                                                required
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
+                                                placeholder="••••••••"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-2 space-y-1.5 p-3 bg-white/[0.02] border border-white/5 rounded-xl">
+                                        <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-1">Security Requirements</div>
+                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.length ? 'text-green-400' : 'text-neutral-500'}`}>
+                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.length ? 'text-green-500' : 'text-neutral-600'}`} />
+                                            Min 8 characters
+                                        </div>
+                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.number ? 'text-green-400' : 'text-neutral-500'}`}>
+                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.number ? 'text-green-500' : 'text-neutral-600'}`} />
+                                            At least one number
+                                        </div>
+                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.special ? 'text-green-400' : 'text-neutral-500'}`}>
+                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.special ? 'text-green-500' : 'text-neutral-600'}`} />
+                                            One special character (!@#$%^&*)
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </>
                     )}
 
                     <button
