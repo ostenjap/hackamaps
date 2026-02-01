@@ -308,12 +308,26 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                             />
                             <div className="grid grid-cols-2 gap-4 pt-2">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Latitude</p>
-                                    <p className="text-xs text-white font-mono">{formData.latitude || 'Not set'}</p>
+                                    <label className="text-[10px] text-neutral-500 uppercase font-bold ml-1">Latitude</label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        value={formData.latitude}
+                                        onChange={e => setFormData({ ...formData, latitude: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none transition-all"
+                                        placeholder="e.g. 37.7749"
+                                    />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-neutral-500 uppercase font-bold">Longitude</p>
-                                    <p className="text-xs text-white font-mono">{formData.longitude || 'Not set'}</p>
+                                    <label className="text-[10px] text-neutral-500 uppercase font-bold ml-1">Longitude</label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        value={formData.longitude}
+                                        onChange={e => setFormData({ ...formData, longitude: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none transition-all"
+                                        placeholder="e.g. -122.4194"
+                                    />
                                 </div>
                             </div>
                         </div>
