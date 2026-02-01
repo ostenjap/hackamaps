@@ -15,6 +15,7 @@ import { FilterPanel } from './components/FilterPanel';
 import { UserMenu } from './components/Auth/UserMenu';
 import { AuthModal } from './components/Auth/AuthModal';
 import { ProfileModal } from './components/Auth/ProfileModal';
+import { UpdatePasswordModal } from './components/Auth/UpdatePasswordModal';
 import { ManageHackathonsModal } from './components/Hackathon/ManageHackathonsModal';
 import { FaceMapView } from './components/Map/FaceMapView';
 import { useFacePins } from './hooks/useFacePins';
@@ -27,7 +28,13 @@ export default function AppContent() {
     const [captions, setCaptions] = useState<UserCommand[]>([]);
     const { data: events, isLoading } = useEvents();
 
-    const { user, isAuthModalOpen, setIsAuthModalOpen } = useAuth(); // Need user for finding current pin
+    const {
+        user,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        isUpdatePasswordModalOpen,
+        setIsUpdatePasswordModalOpen
+    } = useAuth(); // Need user for finding current pin
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isManageHackathonsOpen, setIsManageHackathonsOpen] = useState(false);
     const [isPinManagerOpen, setIsPinManagerOpen] = useState(false);
@@ -195,6 +202,11 @@ export default function AppContent() {
             <ProfileModal
                 isOpen={isProfileOpen}
                 onClose={() => setIsProfileOpen(false)}
+            />
+
+            <UpdatePasswordModal
+                isOpen={isUpdatePasswordModalOpen}
+                onClose={() => setIsUpdatePasswordModalOpen(false)}
             />
 
             <ManageHackathonsModal

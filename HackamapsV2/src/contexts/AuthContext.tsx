@@ -21,6 +21,8 @@ interface AuthContextType {
     refreshProfile: () => Promise<void>;
     isAuthModalOpen: boolean;
     setIsAuthModalOpen: (open: boolean) => void;
+    isUpdatePasswordModalOpen: boolean;
+    setIsUpdatePasswordModalOpen: (open: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [profile, setProfile] = useState<Profile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [isUpdatePasswordModalOpen, setIsUpdatePasswordModalOpen] = useState(false);
 
     useEffect(() => {
         // Get initial session
@@ -48,6 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (_event === 'PASSWORD_RECOVERY') {
+                setIsUpdatePasswordModalOpen(true);
+            }
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
@@ -102,7 +108,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             signOut,
             refreshProfile: () => user ? fetchProfile(user.id) : Promise.resolve(),
             isAuthModalOpen,
-            setIsAuthModalOpen
+            setIsAuthModalOpen,
+            isUpdatePasswordModalOpen,
+            setIsUpdatePasswordModalOpen
         }}>
             {children}
         </AuthContext.Provider>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../contexts/AuthContext';
-import { X, User, Camera, Loader2, Save, AlertCircle } from 'lucide-react';
+import { X, User, Camera, Loader2, Save, AlertCircle, Lock } from 'lucide-react';
 
 interface ProfileModalProps {
     isOpen: boolean;
@@ -9,7 +9,7 @@ interface ProfileModalProps {
 }
 
 export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
-    const { user, profile, refreshProfile } = useAuth();
+    const { user, profile, refreshProfile, setIsUpdatePasswordModalOpen } = useAuth();
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -191,6 +191,15 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                                 Save Changes
                             </>
                         )}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setIsUpdatePasswordModalOpen(true)}
+                        className="w-full flex items-center justify-center gap-2 py-2 text-xs text-neutral-500 hover:text-white transition-colors"
+                    >
+                        <Lock className="w-3 h-3" />
+                        Change Password
                     </button>
                 </form>
             </div>
