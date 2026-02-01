@@ -18,10 +18,13 @@ Deno.serve(async (req) => {
     }
 
     try {
-        const { tier, success_url, cancel_url } = await req.json();
+        const body = await req.json();
+        console.log('Request body:', JSON.stringify(body));
+        const { tier, success_url, cancel_url } = body;
 
         // Get user from Supabase Auth
         const authHeader = req.headers.get('Authorization');
+        console.log('Auth header present:', !!authHeader);
         if (!authHeader) throw new Error('Missing Authorization header');
 
         const supabaseClient = createClient(
@@ -31,7 +34,12 @@ Deno.serve(async (req) => {
         );
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
 
-        if (authError || !user) throw new Error('Unauthorized');
+        if (authError || !user) {
+            console.error('Auth error or user missing:', authError);
+            throw new Error('Unauthorized');
+        }
+
+        console.log('Authenticated user:', user.email);
 
         let priceId = '';
         let mode: 'payment' | 'subscription' = 'payment';
@@ -43,11 +51,18 @@ Deno.serve(async (req) => {
             priceId = Deno.env.get('STRIPE_ELITE_PRICE_ID') ?? '';
             mode = 'payment';
         } else {
+            console.error('Invalid tier provided:', tier);
             throw new Error('Invalid tier');
         }
 
-        if (!priceId) throw new Error(`Price ID for tier ${tier} not configured`);
+        console.log(`Using tier: ${tier}, Price ID: ${priceId}, Mode: ${mode}`);
 
+        if (!priceId) {
+            console.error(`Missing Price ID for tier: ${tier}`);
+            throw new Error(`Price ID for tier ${tier} not configured`);
+        }
+
+        console.log('Creating Stripe session...');
         const session = await stripe.checkout.sessions.create({
             line_items: [
                 {
@@ -67,11 +82,14 @@ Deno.serve(async (req) => {
             }
         });
 
+        console.log('Stripe session created:', session.id);
+
         return new Response(JSON.stringify({ url: session.url }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 200,
         });
     } catch (error) {
+        console.error('Function caught error:', error.message);
         return new Response(JSON.stringify({ error: error.message }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
