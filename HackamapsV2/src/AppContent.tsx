@@ -219,6 +219,10 @@ export default function AppContent() {
                 onClose={() => setIsPinManagerOpen(false)}
                 currentPin={pins.find(p => p.user_id === user?.id)}
                 onSuccess={refetchPins}
+                onUpgrade={() => {
+                    setView('home');
+                    setIsPinManagerOpen(false);
+                }}
             />
 
             {/* FILTER PANEL */}

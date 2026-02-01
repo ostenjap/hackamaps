@@ -219,22 +219,23 @@ export const FaceMapView = ({ pins, onAddPin }: FaceMapViewProps) => {
                     <p className="text-neutral-400 mt-1">Connect with hackers worldwide</p>
                 </div>
 
-                {isPremium ? (
-                    <button
-                        onClick={onAddPin}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95"
-                    >
+                <button
+                    onClick={onAddPin}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 group"
+                >
+                    {isPremium ? (
                         <Plus className="w-4 h-4" />
-                        SET MY PIN
-                    </button>
-                ) : (
-                    <div className="flex flex-col items-end gap-1">
-                        <Badge variant="outline">
-                            PREMIUM ONLY
-                        </Badge>
-                        <p className="text-[10px] text-neutral-500">Upgrade to join the map</p>
-                    </div>
-                )}
+                    ) : (
+                        <div className="relative">
+                            <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            <div className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500 border border-black text-[7px] flex items-center justify-center text-black font-black">★</span>
+                            </div>
+                        </div>
+                    )}
+                    SET MY PIN
+                </button>
             </div>
 
             <FaceMapContainer pins={pins} />
