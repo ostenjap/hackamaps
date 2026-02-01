@@ -276,12 +276,12 @@ export default function AppContent() {
                     >
                         Map
                     </button>
-                    {/* <button
+                    <button
                         onClick={() => setView('face_map')}
                         className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${view === 'face_map' ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-400 hover:text-white'}`}
                     >
                         Face Map
-                    </button> */}
+                    </button>
                 </nav>
 
                 <div className="relative z-10 pointer-events-auto flex items-center gap-4">
@@ -301,7 +301,7 @@ export default function AppContent() {
                     {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
                     {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
                     {view === 'map' && <MapView events={filteredEvents} />}
-                    {/* {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />} */}
+                    {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
                     {view === 'organizers' && (
                         <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">
                             <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>
