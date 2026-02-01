@@ -39,21 +39,21 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
 
             const file = event.target.files[0];
             const fileExt = file.name.split('.').pop();
-            const filePath = `${user?.id}-${Math.random()}.${fileExt}`;
+            const filePath = `${user?.id}.${fileExt}`;
 
-            // Upload
+            // Upload with upsert: true to overwrite existing file
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
-                .upload(filePath, file);
+                .upload(filePath, file, { upsert: true });
 
             if (uploadError) throw uploadError;
 
-            // Get Public URL
+            // Get Public URL and append timestamp for cache-busting
             const { data: { publicUrl } } = supabase.storage
                 .from('avatars')
                 .getPublicUrl(filePath);
 
-            setAvatarUrl(publicUrl);
+            setAvatarUrl(`${publicUrl}?v=${Date.now()}`);
 
         } catch (error: any) {
             setError(error.message);

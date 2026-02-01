@@ -67,11 +67,11 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
 
             const file = event.target.files[0];
             const fileExt = file.name.split('.').pop();
-            const filePath = `face-${user?.id}-${Math.random()}.${fileExt}`;
+            const filePath = `face-${user?.id}.${fileExt}`;
 
             const { error: uploadError } = await supabase.storage
                 .from('face-pin-images')
-                .upload(filePath, file);
+                .upload(filePath, file, { upsert: true });
 
             if (uploadError) throw uploadError;
 
@@ -79,7 +79,7 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                 .from('face-pin-images')
                 .getPublicUrl(filePath);
 
-            setCustomImageUrl(publicUrl);
+            setCustomImageUrl(`${publicUrl}?v=${Date.now()}`);
         } catch (err: any) {
             setError(err.message);
         } finally {
