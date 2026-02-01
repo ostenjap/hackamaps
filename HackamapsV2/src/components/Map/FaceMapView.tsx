@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { FacePin } from '../../types';
-import { User, Linkedin, Twitter, Plus, MapPin } from 'lucide-react';
+import { User, Plus } from 'lucide-react';
 import { Badge } from '../ui';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -48,7 +48,7 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
         };
     }, []);
 
-    const initMap = () => {
+    function initMap() {
         if (!mapContainer.current || mapInstance.current || !(window as any).L) return;
 
         const L = (window as any).L;
@@ -80,7 +80,7 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
 
         mapInstance.current = map;
         updateMarkers();
-    };
+    }
 
     const updateMarkers = () => {
         if (!markerLayerRef.current || !(window as any).L) return;

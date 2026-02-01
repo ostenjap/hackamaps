@@ -51,7 +51,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         };
     }, []);
 
-    const initMap = () => {
+    function initMap() {
         if (!mapContainer.current || mapInstance.current || !(window as any).L) return;
 
         const L = (window as any).L;
@@ -84,7 +84,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
 
         mapInstance.current = map;
         updateMarkers();
-    };
+    }
 
     const updateMarkers = () => {
         if (!markerLayerRef.current || !(window as any).L) return;
