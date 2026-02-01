@@ -29,10 +29,15 @@ export const PricingTable = () => {
         try {
             setLoading(tier);
 
-            // Explicitly get session to ensure we have a fresh token
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) throw new Error('No active session found');
+            // Get fresh session
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            if (sessionError || !session) {
+                console.error('Session error:', sessionError);
+                setIsAuthModalOpen(true);
+                return;
+            }
 
+            console.log(`Sending checkout request for ${tier}...`);
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
                 body: {
                     tier,
@@ -44,11 +49,20 @@ export const PricingTable = () => {
                 }
             });
 
-            if (error) throw error;
+            if (error) {
+                // If it's a 401, maybe the token expired exactly now
+                if (error.status === 401 || (error as any).message?.includes('401')) {
+                    console.warn('401 Unauthorized from function - refreshing session...');
+                    await supabase.auth.refreshSession();
+                    // Optional: retry once or just tell user to try again
+                }
+                throw error;
+            }
+
             if (data?.url) {
                 window.location.href = data.url;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error initiating upgrade:', error);
             // alert('Something went wrong. Please try again.');
         } finally {
