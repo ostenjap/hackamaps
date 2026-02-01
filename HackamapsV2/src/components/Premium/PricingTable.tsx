@@ -28,12 +28,20 @@ export const PricingTable = () => {
 
         try {
             setLoading(tier);
+
+            // Explicitly get session to ensure we have a fresh token
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error('No active session found');
+
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
                 body: {
                     tier,
                     success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}',
                     cancel_url: window.location.origin + '/pricing'
                 },
+                headers: {
+                    Authorization: `Bearer ${session.access_token}`
+                }
             });
 
             if (error) throw error;
