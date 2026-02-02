@@ -31,9 +31,27 @@ Deno.serve(async (req) => {
             const session = event.data.object as Stripe.Checkout.Session;
             const userId = session.client_reference_id;
             const tier = session.metadata?.tier;
+            const customerId = session.customer as string;
+            const subscriptionId = session.subscription as string;
 
             if (userId && tier) {
-                const { error } = await supabaseAdmin
+                // Update sensitive data in user_secrets
+                const { error: secretsError } = await supabaseAdmin
+                    .from('user_secrets')
+                    .upsert({
+                        id: userId,
+                        stripe_customer_id: customerId,
+                        subscription_id: subscriptionId,
+                        premium_since: new Date().toISOString()
+                    });
+
+                if (secretsError) {
+                    console.error(`Error updating user_secrets: ${secretsError.message}`);
+                    throw secretsError;
+                }
+
+                // Update public tier in profiles
+                const { error: profileError } = await supabaseAdmin
                     .from('profiles')
                     .update({
                         is_premium: true,
@@ -41,9 +59,41 @@ Deno.serve(async (req) => {
                     })
                     .eq('id', userId);
 
-                if (error) throw error;
-                console.log(`Successfully updated profile for user ${userId} to tier ${tier}`);
+                if (profileError) {
+                    console.error(`Error updating profile: ${profileError.message}`);
+                    throw profileError;
+                }
+
+                console.log(`Successfully upgraded user ${userId} to ${tier}`);
             }
+        }
+
+        if (event.type === 'customer.subscription.deleted') {
+            const subscription = event.data.object as Stripe.Subscription;
+            
+            // Find user ID from secrets
+            const { data: secretData, error: lookupError } = await supabaseAdmin
+                .from('user_secrets')
+                .select('id')
+                .eq('subscription_id', subscription.id)
+                .single();
+
+            if (lookupError || !secretData) {
+                console.error(`Could not find user for subscription ${subscription.id}`);
+                return new Response('User not found', { status: 200 }); // Return 200 to acknowledge Stripe
+            }
+
+            // Downgrade profile
+            const { error: profileError } = await supabaseAdmin
+                .from('profiles')
+                .update({
+                    is_premium: false,
+                    tier: 'hobby'
+                })
+                .eq('id', secretData.id);
+
+            if (profileError) throw profileError;
+            console.log(`Successfully downgraded user ${secretData.id} after subscription ${subscription.id} deletion`);
         }
 
         return new Response(JSON.stringify({ received: true }), {
