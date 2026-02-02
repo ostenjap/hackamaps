@@ -56,7 +56,7 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         try {
             if (!isPremium) {
-                setError("Custom images are only available for ZERO TO ONE members.");
+                setError("Custom images are only available for FOUNDER LIFETIME members.");
                 return;
             }
 
@@ -92,7 +92,7 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
         if (!user) return;
 
         if (!isPremium) {
-            setError("Only ZERO TO ONE members can join the Face Map.");
+            setError("Only FOUNDER LIFETIME members can join the Face Map.");
             return;
         }
 
