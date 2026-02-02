@@ -262,7 +262,7 @@ export const PricingTable = () => {
                                         <div className="h-full bg-yellow-500 w-[99.4%] shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
                                     </div>
                                     <div className="flex justify-between w-full text-[9px] font-medium">
-                                        <span className="text-yellow-500/80">Price increases to €50 after 500 members</span>
+                                        <span className="text-yellow-500/80">Price increases to €99 after 500 members</span>
                                         <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
                                     </div>
                                 </div>
@@ -424,7 +424,7 @@ export const PricingTable = () => {
                             },
                             {
                                 q: "Can I upgrade later?",
-                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for FOUNDER LIFETIME access increases to €50."
+                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for FOUNDER LIFETIME access increases to €99."
                             },
                             {
                                 q: "What's in the investor database?",

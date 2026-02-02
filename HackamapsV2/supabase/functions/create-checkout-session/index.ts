@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
     try {
         const body = await req.json();
         console.log('Request body:', JSON.stringify(body));
-        const { tier, success_url, cancel_url } = body;
+        const { tier, interval, success_url, cancel_url } = body;
 
         // Get user from Supabase Auth
         const authHeader = req.headers.get('Authorization');
@@ -45,7 +45,9 @@ Deno.serve(async (req) => {
         let mode: 'payment' | 'subscription' = 'payment';
 
         if (tier === 'premium') {
-            priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID') ?? '';
+            priceId = interval === 'year' 
+                ? Deno.env.get('STRIPE_PREMIUM_YEARLY_PRICE_ID') ?? ''
+                : Deno.env.get('STRIPE_PREMIUM_PRICE_ID') ?? '';
             mode = 'subscription';
         } else if (tier === 'elite') {
             priceId = Deno.env.get('STRIPE_ELITE_PRICE_ID') ?? '';
@@ -78,6 +80,7 @@ Deno.serve(async (req) => {
             allow_promotion_codes: true,
             metadata: {
                 tier,
+                interval: tier === 'elite' ? 'once' : (interval || 'month'),
                 user_id: user.id
             }
         });
