@@ -25,3 +25,5 @@ dist-ssr
 *future-text
 stripe.env
 update-secrets.ps1
+*stripe-cli
+/stripe-cli.zip
