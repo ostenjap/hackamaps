@@ -7,21 +7,25 @@ import { supabase } from '../../lib/supabaseClient';
 export const PricingTable = () => {
     const { user, setIsAuthModalOpen } = useAuth();
     const [loading, setLoading] = useState<string | null>(null);
+    const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('year');
 
     // Auto-resume checkout after login
     useEffect(() => {
         if (user) {
             const pendingTier = sessionStorage.getItem('pending_checkout_tier');
             if (pendingTier === 'premium' || pendingTier === 'elite') {
+                const pendingInterval = sessionStorage.getItem('pending_checkout_interval') as 'month' | 'year' || 'year';
                 sessionStorage.removeItem('pending_checkout_tier');
-                handleUpgrade(pendingTier);
+                sessionStorage.removeItem('pending_checkout_interval');
+                handleUpgrade(pendingTier, pendingInterval);
             }
         }
     }, [user]);
 
-    const handleUpgrade = async (tier: 'premium' | 'elite') => {
+    const handleUpgrade = async (tier: 'premium' | 'elite', interval: 'month' | 'year' = 'year') => {
         if (!user) {
             sessionStorage.setItem('pending_checkout_tier', tier);
+            sessionStorage.setItem('pending_checkout_interval', interval);
             setIsAuthModalOpen(true);
             return;
         }
@@ -41,6 +45,7 @@ export const PricingTable = () => {
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
                 body: {
                     tier,
+                    interval,
                     success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}',
                     cancel_url: window.location.origin + '/pricing'
                 },
@@ -88,6 +93,25 @@ export const PricingTable = () => {
                     </p>
                 </div>
 
+                {/* Billing Toggle */}
+                <div className="flex flex-col items-center gap-4 mb-8">
+                    <div className="flex items-center gap-3 p-1 bg-neutral-900/80 rounded-full border border-white/5 backdrop-blur-sm">
+                        <button
+                            onClick={() => setBillingInterval('month')}
+                            className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${billingInterval === 'month' ? 'bg-white text-black shadow-lg' : 'text-neutral-500 hover:text-white'}`}
+                        >
+                            Monthly
+                        </button>
+                        <button
+                            onClick={() => setBillingInterval('year')}
+                            className={`px-6 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${billingInterval === 'year' ? 'bg-white text-black shadow-lg' : 'text-neutral-500 hover:text-white'}`}
+                        >
+                            Yearly
+                            <Badge className="bg-green-500/10 text-green-500 border-none px-1.5 py-0 text-[9px]">Save 16%</Badge>
+                        </button>
+                    </div>
+                </div>
+
                 {/* Pricing Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 mt-4">
 
@@ -125,16 +149,18 @@ export const PricingTable = () => {
                             <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
                                 Premium <Star className="w-4 h-4 text-blue-400 fill-blue-400" />
                             </h3>
-                            <div className="flex items-center gap-3 flex-wrap">
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-2xl font-bold text-white">€10</span>
-                                    <span className="text-neutral-500 text-sm">/mo</span>
-                                </div>
-                                <div className="w-px h-4 bg-white/10" />
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-lg font-bold text-blue-400">€100</span>
-                                    <span className="text-neutral-500 text-[10px]">/year</span>
-                                </div>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-2xl font-bold text-white">
+                                    {billingInterval === 'month' ? '€10' : '€100'}
+                                </span>
+                                <span className="text-neutral-500 text-sm">
+                                    /{billingInterval === 'month' ? 'mo' : 'year'}
+                                </span>
+                                {billingInterval === 'year' && (
+                                    <span className="ml-2 text-[10px] text-neutral-500 italic">
+                                        (€8.33/mo)
+                                    </span>
+                                )}
                             </div>
                             <p className="mt-1 text-[10px] text-blue-400 font-medium">Full access • Best for active hackers</p>
                         </div>
@@ -162,7 +188,7 @@ export const PricingTable = () => {
                         </ul>
                         <Button
                             className="w-full"
-                            onClick={() => handleUpgrade('premium')}
+                            onClick={() => handleUpgrade('premium', billingInterval)}
                             disabled={loading !== null}
                         >
                             {loading === 'premium' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Upgrade Now'}
@@ -241,7 +267,7 @@ export const PricingTable = () => {
                                     </div>
                                 </div>
                                 <p className="text-[10px] text-neutral-500 italic mb-4">
-                                    "Best €25 investment in my dev career" - @theleanbuild
+                                    "Best €49 investment in my dev career" - @theleanbuild
                                 </p>
                             </div>
                             <Button
@@ -335,18 +361,18 @@ export const PricingTable = () => {
                             <div className="absolute top-0 right-0 p-4 opacity-5">
                                 <Check className="w-24 h-24 text-white" />
                             </div>
-                            <h4 className="text-lg font-bold text-neutral-400 mb-4">PREMIUM SUBSCRIPTION</h4>
+                            <h4 className="text-lg font-bold text-neutral-400 mb-4 uppercase">PREMIUM {billingInterval}ly</h4>
                             <div className="space-y-2 text-2xl font-mono">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-neutral-500 text-sm">Monthly Cost</span>
-                                    <span>€10</span>
+                                    <span className="text-neutral-500 text-sm">Cost</span>
+                                    <span>{billingInterval === 'month' ? '€10/mo' : '€100/yr'}</span>
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                    <span className="text-neutral-500 text-sm">Yearly Total</span>
-                                    <span className="text-white">€100/year</span>
+                                    <span className="text-neutral-500 text-sm">3 Year Total</span>
+                                    <span className="text-white">€300</span>
                                 </div>
                             </div>
-                            <p className="mt-6 text-sm text-neutral-500">Pay every single year to keep your access. Forever.</p>
+                            <p className="mt-6 text-sm text-neutral-500">Subscription adds up over time.</p>
                         </Card>
 
                         <Card className="p-8 bg-yellow-500/5 border-yellow-500/20 relative overflow-hidden ring-1 ring-yellow-500/30">
@@ -357,7 +383,7 @@ export const PricingTable = () => {
                             <div className="space-y-2 text-2xl font-mono">
                                 <div className="flex justify-between items-center text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">One-Time Payment</span>
-                                    <span className="font-bold">€25</span>
+                                    <span className="font-bold">€49</span>
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-yellow-500/10 text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">Years 2, 3, 5, 10...</span>
@@ -485,7 +511,7 @@ export const PricingTable = () => {
                                 disabled={loading !== null}
                             >
                                 {loading === 'elite' ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                                Get FOUNDER LIFETIME Access for €25
+                                Get FOUNDER LIFETIME Access for €49
                             </Button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
                                 Limited to first 500 members • Secure Checkout
