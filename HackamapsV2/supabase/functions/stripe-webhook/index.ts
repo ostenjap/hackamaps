@@ -15,31 +15,34 @@ Deno.serve(async (req) => {
     }
 
     try {
+        // IMPORTANT: Get raw body text for signature verification
         const body = await req.text();
         const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
         
-        console.log(`Webhook secret exists: ${!!webhookSecret}, length: ${webhookSecret?.length || 0}`);
-        console.log(`Signature exists: ${!!signature}, value: ${signature?.substring(0, 50)}...`);
-        console.log(`Body length: ${body.length}, first 100 chars: ${body.substring(0, 100)}`);
-        
-        // TEMPORARY: Skip signature verification for testing
-        // TODO: Re-enable signature verification once we confirm the event processing works
-        const event = JSON.parse(body);
-        console.log(`Event type: ${event.type}, bypassing signature verification for testing`);
-        
-        /* 
         if (!webhookSecret) {
             console.error('STRIPE_WEBHOOK_SECRET is not set');
-            return new Response('Webhook secret not configured', { status: 500 });
+            return new Response(JSON.stringify({ error: 'Webhook secret not configured' }), { 
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
-        // Use async version as required by Supabase Edge Functions
-        const event = await stripe.webhooks.constructEventAsync(
-            body,
-            signature,
-            webhookSecret
-        );
-        */
+        // Verify the webhook signature
+        let event;
+        try {
+            event = await stripe.webhooks.constructEventAsync(
+                body,
+                signature,
+                webhookSecret
+            );
+            console.log(`✅ Signature verified for event: ${event.type}`);
+        } catch (err) {
+            console.error(`❌ Signature verification failed: ${err.message}`);
+            return new Response(JSON.stringify({ error: `Webhook signature verification failed: ${err.message}` }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
         const supabaseAdmin = createClient(
             Deno.env.get('SUPABASE_URL') ?? '',
