@@ -282,33 +282,33 @@ export const MapView = ({ events, onAddHackathon, isPremium }: MapViewProps) => 
                 }
             `}</style>
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h2 className="text-3xl font-bold flex items-center gap-3 tracking-tight">
-                        <Globe className="w-8 h-8 text-blue-500" /> Global Intelligence
+                    <h2 className="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3 tracking-tight">
+                        <Globe className="w-5 h-5 md:w-8 md:h-8 text-blue-500 flex-shrink-0" /> Global Intelligence
                     </h2>
-                    <p className="text-neutral-400 mt-1">Discover hackathons worldwide</p>
+                    <p className="text-xs md:text-sm text-neutral-400 mt-1">Discover hackathons worldwide</p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                     <button
                         onClick={onAddHackathon}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 group"
+                        className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 group text-xs md:text-sm whitespace-nowrap"
                     >
                         {isPremium ? (
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-3 h-3 md:w-4 md:h-4" />
                         ) : (
                             <div className="relative">
-                                <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                                <div className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                                <Plus className="w-3 h-3 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
+                                <div className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500 border border-black text-[7px] flex items-center justify-center text-black font-black">★</span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500 border border-black text-[6px] flex items-center justify-center text-black font-black">★</span>
                                 </div>
                             </div>
                         )}
                         ADD HACKATHON
                     </button>
-                    <Badge variant="outline" className="hidden sm:block">LIVE MODE</Badge>
+                    <Badge variant="outline" className="text-[10px] md:text-xs">LIVE MODE</Badge>
                 </div>
             </div>
 
