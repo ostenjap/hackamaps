@@ -4,7 +4,11 @@ import {
     Terminal,
     Mic,
     ChevronRight,
-    Filter
+    Filter,
+    Home as HomeIcon,
+    Compass,
+    Map as MapIcon,
+    Users
 } from 'lucide-react';
 import type { ViewState, UserCommand, FilterState } from './types';
 import { useEvents } from './hooks/useEvents';
@@ -260,7 +264,7 @@ export default function AppContent() {
                         src="/hackamaps-weblogo.jpg"
                         alt="HackaMaps Logo"
                         onClick={() => setView('home')}
-                        className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity rounded-sm"
+                        className="h-10 md:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity rounded-sm"
                     />
 
                     <button
@@ -345,7 +349,7 @@ export default function AppContent() {
             </div>
 
             {/* COMMAND INTERFACE (Simulated Chat Input) */}
-            <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-4">
+            <div className="fixed bottom-24 md:bottom-8 right-8 z-50 flex flex-col items-end gap-4">
                 <div className={`transition-all duration-500 ease-out origin-right overflow-hidden ${isInputOpen ? 'w-[320px] opacity-100' : 'w-0 opacity-0'}`}>
                     <form onSubmit={handleInputSubmit} className="bg-neutral-900/90 backdrop-blur-xl border border-white/10 rounded-full p-1 pl-4 flex items-center shadow-2xl">
                         <Terminal className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0" />
@@ -373,6 +377,38 @@ export default function AppContent() {
                     {isInputOpen ? <ChevronRight className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
                 </button>
             </div>
+
+            {/* MOBILE NAVIGATION BAR */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#050505]/80 backdrop-blur-xl border-t border-white/5 px-6 py-3 flex items-center justify-between pointer-events-auto">
+                <button
+                    onClick={() => setView('home')}
+                    className={`flex flex-col items-center gap-1 transition-all ${view === 'home' ? 'text-blue-500' : 'text-neutral-500'}`}
+                >
+                    <HomeIcon className="w-5 h-5" />
+                    <span className="text-[10px] font-medium">Home</span>
+                </button>
+                <button
+                    onClick={() => setView('discover')}
+                    className={`flex flex-col items-center gap-1 transition-all ${view === 'discover' ? 'text-blue-500' : 'text-neutral-500'}`}
+                >
+                    <Compass className="w-5 h-5" />
+                    <span className="text-[10px] font-medium">Discover</span>
+                </button>
+                <button
+                    onClick={() => setView('map')}
+                    className={`flex flex-col items-center gap-1 transition-all ${view === 'map' ? 'text-blue-500' : 'text-neutral-500'}`}
+                >
+                    <MapIcon className="w-5 h-5" />
+                    <span className="text-[10px] font-medium">Map</span>
+                </button>
+                <button
+                    onClick={() => setView('face_map')}
+                    className={`flex flex-col items-center gap-1 transition-all ${view === 'face_map' ? 'text-blue-500' : 'text-neutral-500'}`}
+                >
+                    <Users className="w-5 h-5" />
+                    <span className="text-[10px] font-medium">Facemap</span>
+                </button>
+            </nav>
 
         </div>
     );
