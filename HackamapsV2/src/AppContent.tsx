@@ -30,6 +30,7 @@ export default function AppContent() {
 
     const {
         user,
+        profile,
         isAuthModalOpen,
         setIsAuthModalOpen,
         isUpdatePasswordModalOpen,
@@ -185,6 +186,16 @@ export default function AppContent() {
         setInputText('');
     };
 
+    const handleOpenAddHackathon = () => {
+        if (user) {
+            setIsManageHackathonsOpen(true);
+        } else {
+            setIsAuthModalOpen(true);
+        }
+    };
+
+    const isPremium = profile?.tier === 'elite' || profile?.tier === 'pro' || profile?.is_premium;
+
     useEffect(() => {
         if (isInputOpen && inputRef.current) {
             inputRef.current.focus();
@@ -304,7 +315,13 @@ export default function AppContent() {
                 <div className="max-w-7xl mx-auto min-h-full flex flex-col">
                     {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
                     {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
-                    {view === 'map' && <MapView events={filteredEvents} />}
+                    {view === 'map' && (
+                        <MapView
+                            events={filteredEvents}
+                            onAddHackathon={handleOpenAddHackathon}
+                            isPremium={isPremium}
+                        />
+                    )}
                     {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
                     {view === 'organizers' && (
                         <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">

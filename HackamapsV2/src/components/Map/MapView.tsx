@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import type { HackathonEvent } from '../../types';
 import { CATEGORIES } from '../../types';
-import { Globe } from 'lucide-react';
+import { Globe, Plus } from 'lucide-react';
 import { Badge } from '../ui';
 
 interface MapViewProps {
     events: HackathonEvent[];
+    onAddHackathon?: () => void;
+    isPremium?: boolean;
 }
 
 const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
@@ -241,7 +243,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
     );
 };
 
-export const MapView = ({ events }: MapViewProps) => {
+export const MapView = ({ events, onAddHackathon, isPremium }: MapViewProps) => {
     return (
         <div className="w-full h-full flex flex-col animate-in fade-in duration-700">
             <style>{`
@@ -279,12 +281,37 @@ export const MapView = ({ events }: MapViewProps) => {
                     background-color: #0A0A0A !important;
                 }
             `}</style>
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-blue-500" /> Global Intelligence
-                </h2>
-                <Badge variant="outline">LIVE MODE</Badge>
+
+            <div className="flex items-center justify-between mb-6">
+                <div>
+                    <h2 className="text-3xl font-bold flex items-center gap-3 tracking-tight">
+                        <Globe className="w-8 h-8 text-blue-500" /> Global Intelligence
+                    </h2>
+                    <p className="text-neutral-400 mt-1">Discover hackathons worldwide</p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={onAddHackathon}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 group"
+                    >
+                        {isPremium ? (
+                            <Plus className="w-4 h-4" />
+                        ) : (
+                            <div className="relative">
+                                <Plus className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                                <div className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500 border border-black text-[7px] flex items-center justify-center text-black font-black">★</span>
+                                </div>
+                            </div>
+                        )}
+                        ADD HACKATHON
+                    </button>
+                    <Badge variant="outline" className="hidden sm:block">LIVE MODE</Badge>
+                </div>
             </div>
+
             <MapContainer events={events} />
         </div>
     );
