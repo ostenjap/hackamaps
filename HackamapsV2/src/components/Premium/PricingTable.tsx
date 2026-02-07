@@ -8,6 +8,28 @@ export const PricingTable = () => {
     const { user, setIsAuthModalOpen } = useAuth();
     const [loading, setLoading] = useState<string | null>(null);
     const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
+    const [memberCount, setMemberCount] = useState(347);
+    const TOTAL_SPOTS = 500;
+
+    // Fetch dynamic member count from Supabase
+    useEffect(() => {
+        const fetchMemberCount = async () => {
+            try {
+                const { count, error } = await supabase
+                    .from('profiles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('tier', 'elite');
+
+                if (!error && count !== null) {
+                    setMemberCount(Math.max(347, count)); // Ensure it doesn't drop below our initial social proof
+                }
+            } catch (err) {
+                console.error('Error fetching member count:', err);
+            }
+        };
+
+        fetchMemberCount();
+    }, []);
 
     // Auto-resume checkout after login
     useEffect(() => {
@@ -255,14 +277,17 @@ export const PricingTable = () => {
                                     <div className="flex items-center gap-2">
                                         <Zap className="w-3 h-3 text-yellow-500 animate-pulse" />
                                         <span className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">
-                                            497/500 FOUNDER LIFETIME spots remaining
+                                            {TOTAL_SPOTS - memberCount}/{TOTAL_SPOTS} FOUNDER LIFETIME spots remaining
                                         </span>
                                     </div>
                                     <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden border border-white/5">
-                                        <div className="h-full bg-yellow-500 w-[99.4%] shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+                                        <div
+                                            className="h-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)] transition-all duration-1000"
+                                            style={{ width: `${(memberCount / TOTAL_SPOTS) * 100}%` }}
+                                        />
                                     </div>
                                     <div className="flex justify-between w-full text-[9px] font-medium">
-                                        <span className="text-yellow-500/80">Price increases to €99 after 500 members</span>
+                                        <span className="text-yellow-500/80">Price increases to €99 after {TOTAL_SPOTS} members</span>
                                         <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
                                     </div>
                                 </div>
@@ -285,7 +310,7 @@ export const PricingTable = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 border-y border-white/5 py-8">
                     <div className="flex flex-col items-center text-center">
                         <Users className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">347/500</p>
+                        <p className="text-2xl font-bold text-white">{memberCount}/{TOTAL_SPOTS}</p>
                         <p className="text-neutral-500 text-sm">FOUNDER LIFETIME Members</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
@@ -383,7 +408,10 @@ export const PricingTable = () => {
                             <div className="space-y-2 text-2xl font-mono">
                                 <div className="flex justify-between items-center text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">One-Time Payment</span>
-                                    <span className="font-bold">€49</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-yellow-500/30 line-through text-lg">€99</span>
+                                        <span className="font-bold">€49</span>
+                                    </div>
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-yellow-500/10 text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">Years 2, 3, 5, 10...</span>
@@ -502,7 +530,7 @@ export const PricingTable = () => {
                         </Badge>
                         <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Build Forever with FOUNDER LIFETIME.</h3>
                         <p className="text-neutral-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
-                            Stop the recurring drain on your bank account. Join <span className="text-white font-bold">347 members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
+                            Stop the recurring drain on your bank account. Join <span className="text-white font-bold">{memberCount} members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
                         </p>
                         <div className="flex flex-col items-center gap-4">
                             <Button
