@@ -7,14 +7,14 @@ import { supabase } from '../../lib/supabaseClient';
 export const PricingTable = () => {
     const { user, setIsAuthModalOpen } = useAuth();
     const [loading, setLoading] = useState<string | null>(null);
-    const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('year');
+    const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
 
     // Auto-resume checkout after login
     useEffect(() => {
         if (user) {
             const pendingTier = sessionStorage.getItem('pending_checkout_tier');
             if (pendingTier === 'premium' || pendingTier === 'elite') {
-                const pendingInterval = sessionStorage.getItem('pending_checkout_interval') as 'month' | 'year' || 'year';
+                const pendingInterval = sessionStorage.getItem('pending_checkout_interval') as 'month' | 'year' || 'month';
                 sessionStorage.removeItem('pending_checkout_tier');
                 sessionStorage.removeItem('pending_checkout_interval');
                 handleUpgrade(pendingTier, pendingInterval);
@@ -22,7 +22,7 @@ export const PricingTable = () => {
         }
     }, [user]);
 
-    const handleUpgrade = async (tier: 'premium' | 'elite', interval: 'month' | 'year' = 'year') => {
+    const handleUpgrade = async (tier: 'premium' | 'elite', interval: 'month' | 'year' = 'month') => {
         if (!user) {
             sessionStorage.setItem('pending_checkout_tier', tier);
             sessionStorage.setItem('pending_checkout_interval', interval);
