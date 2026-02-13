@@ -81,7 +81,7 @@ export function FilterPanel({
 
             {/* Panel */}
             <div
-                className={`fixed top-0 left-0 h-full z-50 bg-[#0A0A0A] border-r border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] transform transition-transform duration-300 ease-out flex flex-col
+                className={`fixed top-0 left-0 h-[100dvh] z-50 bg-[#0A0A0A] border-r border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] transform transition-transform duration-300 ease-out flex flex-col
           w-[95%] md:w-1/2 lg:w-1/4
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
@@ -104,7 +104,7 @@ export function FilterPanel({
                 </div>
 
                 {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-none">
+                <div className="flex-1 overflow-y-auto p-6 pb-24 space-y-8 scrollbar-none">
 
                     {/* Clear Action */}
                     {activeFilterCount > 0 && (
