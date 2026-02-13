@@ -32,7 +32,12 @@ update-secrets.ps1
 
 .agent/skills/crunchbase-scout/data/dach_ai_startups1.csv
 .agent/skills/crunchbase-scout/data/dach_ai_investors.csv
+
 .agent/skills/crunchbase-scout/data/uk_early_stage_vcs.csv
+.agent/skills/crunchbase-scout/data/france_early_stage_vcs.csv
+
+.agent/skills/crunchbase-scout/data/dach_ai_investors.csv
+
 
 .agent/skills/crunchbase-scout/data/dach_ai_investors.csv
 .
