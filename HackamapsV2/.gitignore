@@ -40,5 +40,13 @@ update-secrets.ps1
 
 
 .agent/skills/crunchbase-scout/data/dach_ai_investors.csv
-.
+.agent/skills/crunchbase-scout/data/usa_ai_infra_investors.csv
+.agent/skills/luma-hacker/scripts/scrape.py
+.agent/skills/luma-hacker/scripts/SKILL.md
+query_supabase.py
+supabase_events.json
+final_cross_check.py
+upcoming_europe_hackathons_2026.csv
+csv_to_sql.py
+populate_hackathons.sql
 
