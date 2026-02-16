@@ -1,11 +1,13 @@
 import React from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import AppContent from './AppContent';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   return (
     <AuthProvider>
       <AppContent />
+      <Analytics />
     </AuthProvider>
   );
 }
