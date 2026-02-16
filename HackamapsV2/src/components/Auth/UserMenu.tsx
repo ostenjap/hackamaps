@@ -34,7 +34,7 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
                 onClick={onOpenAuth}
                 className="px-4 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs font-bold rounded-full transition-all shadow-lg hover:shadow-blue-500/25 border border-white/10"
             >
-                SIGN IN
+                SIGN IN / UP
             </button>
         );
     }
@@ -52,13 +52,13 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`flex items-center gap-3 pl-1 pr-3 py-1 bg-neutral-900/50 hover:bg-neutral-800 border ${isElite ? 'border-yellow-500/40 shadow-[0_0_20px_rgba(234,179,8,0.15)]' :
-                        isPro ? 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.15)]' :
-                            'border-white/10'
+                    isPro ? 'border-blue-500/40 shadow-[0_0_20px_rgba(59,130,246,0.15)]' :
+                        'border-white/10'
                     } rounded-full transition-all group`}
             >
                 <div className={`w-8 h-8 rounded-full bg-gradient-to-tr ${isElite ? 'from-yellow-400 to-yellow-600 shadow-[0_0_15px_rgba(234,179,8,0.6)]' :
-                        isPro ? 'from-blue-400 to-blue-600 shadow-[0_0_15px_rgba(0,123,255,0.6)]' :
-                            'from-blue-500 to-purple-500'
+                    isPro ? 'from-blue-400 to-blue-600 shadow-[0_0_15px_rgba(0,123,255,0.6)]' :
+                        'from-blue-500 to-purple-500'
                     } p-[1px] transition-all duration-300`}>
                     <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
                         {profile?.avatar_url ? (
@@ -70,8 +70,8 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
                 </div>
                 <div className="hidden md:block text-left">
                     <p className={`text-[10px] ${isElite ? 'text-yellow-400 font-bold' :
-                            isPro ? 'text-blue-400 font-bold' :
-                                'text-neutral-400'
+                        isPro ? 'text-blue-400 font-bold' :
+                            'text-neutral-400'
                         } font-mono leading-none mb-0.5 flex items-center gap-1`}>
                         {(isElite || isPro) && (
                             <span className={`w-1 h-1 rounded-full ${isElite ? 'bg-yellow-400' : 'bg-blue-400'} animate-pulse`} />
