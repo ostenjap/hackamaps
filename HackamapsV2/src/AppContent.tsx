@@ -256,10 +256,11 @@ export default function AppContent() {
             </div>
 
             {/* HEADER / NAV */}
-            <header className="fixed top-0 left-0 right-0 z-40 px-6 py-6 flex items-center justify-between pointer-events-none">
+            <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between pointer-events-none">
                 <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-32" />
 
-                <div className="relative z-10 pointer-events-auto cursor-pointer flex items-center gap-4">
+                {/* Left side - flex-1 to push nav to center */}
+                <div className="flex-1 relative z-10 pointer-events-auto cursor-pointer flex items-center gap-4">
                     <img
                         src="/hackamaps-weblogo.jpg"
                         alt="HackaMaps Logo"
@@ -276,6 +277,7 @@ export default function AppContent() {
                     </button>
                 </div>
 
+                {/* Center - Navigation */}
                 <nav className="relative z-10 pointer-events-auto hidden md:flex items-center gap-1 bg-neutral-900/50 border border-white/5 p-1 rounded-full backdrop-blur-md">
                     <button
                         onClick={() => setView('home')}
@@ -303,8 +305,9 @@ export default function AppContent() {
                     </button>
                 </nav>
 
-                <div className="relative z-10 pointer-events-auto flex items-center gap-4">
-                    <a href="#" className="text-xs font-mono text-neutral-500 hover:text-white transition-colors hidden md:block">GITHUB</a>
+                {/* Right side - flex-1 and justify-end to balance the left side */}
+                <div className="flex-1 relative z-10 pointer-events-auto flex items-center justify-end gap-4">
+                    {/* <a href="#" className="text-xs font-mono text-neutral-500 hover:text-white transition-colors hidden md:block">GITHUB</a> */}
                     <UserMenu
                         onOpenAuth={() => setIsAuthModalOpen(true)}
                         onOpenProfile={() => setIsProfileOpen(true)}
