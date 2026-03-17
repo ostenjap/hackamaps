@@ -49,6 +49,8 @@ update-secrets.ps1
 .agent/skills/crunchbase-scout/data/dach_ai_investors.csv
 
 
+.agent/skills/luma-hacker/scripts*
+
 .agent/skills/crunchbase-scout/data/dach_ai_investors.csv
 .agent/skills/crunchbase-scout/data/usa_ai_infra_investors.csv
 .agent/skills/luma-hacker/scripts/scrape.py
