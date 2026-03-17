@@ -30,6 +30,7 @@ export default function AppContent() {
     const [isInputOpen, setIsInputOpen] = useState(false);
     const [inputText, setInputText] = useState('');
     const [captions, setCaptions] = useState<UserCommand[]>([]);
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
     const { data: events, isLoading } = useEvents();
 
     const {
@@ -206,6 +207,19 @@ export default function AppContent() {
         }
     }, [isInputOpen]);
 
+    // Check for session_id on mount
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        if (query.get('session_id')) {
+            setShowSuccessToast(true);
+            // Remove the query param from URL without reloading
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => setShowSuccessToast(false), 5000);
+        }
+    }, []);
+
     return (
         <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
 
@@ -239,6 +253,21 @@ export default function AppContent() {
                     setIsPinManagerOpen(false);
                 }}
             />
+
+            {/* PAYMENT SUCCESS TOAST */}
+            {showSuccessToast && (
+                <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[100] bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl shadow-[0_0_40px_rgba(34,197,94,0.4)] border border-green-400/50 animate-in slide-in-from-top-4 fade-in duration-500 flex flex-col items-center">
+                    <span className="text-2xl mb-1">🎉</span>
+                    <h3 className="font-bold text-lg">Payment Successful!</h3>
+                    <p className="text-sm text-green-100 mb-3">Welcome to your upgraded tier.</p>
+                    <button 
+                        onClick={() => setShowSuccessToast(false)}
+                        className="bg-white/20 hover:bg-white/30 text-white text-xs px-4 py-1.5 rounded-full transition-colors"
+                    >
+                        Dismiss
+                    </button>
+                </div>
+            )}
 
             {/* FILTER PANEL */}
             <FilterPanel
