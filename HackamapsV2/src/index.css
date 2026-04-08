@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 93.75%; /* Scales 16px down to 15px */
+}
+
 @layer utilities {
   @keyframes pulse-gold {
     0% {

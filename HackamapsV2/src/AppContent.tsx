@@ -286,7 +286,7 @@ export default function AppContent() {
 
             {/* HEADER / NAV */}
             <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between pointer-events-none">
-                <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-32" />
+                <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-24" />
 
                 {/* Left side - flex-1 to push nav to center */}
                 <div className="flex-1 relative z-10 pointer-events-auto cursor-pointer flex items-center gap-4">
@@ -294,7 +294,7 @@ export default function AppContent() {
                         src="/hackamaps-weblogo.jpg"
                         alt="HackaMaps Logo"
                         onClick={() => setView('home')}
-                        className="h-10 md:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity rounded-sm"
+                        className="h-10 md:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity rounded-sm"
                     />
 
                     <button
@@ -347,7 +347,7 @@ export default function AppContent() {
 
 
             {/* MAIN CONTENT AREA */}
-            <main className="relative z-10 w-full h-full pt-32 pb-24 px-4 overflow-y-auto scrollbar-none">
+            <main className="relative z-10 w-full h-full pt-24 pb-16 px-4 overflow-y-auto scrollbar-none">
                 <div className="max-w-7xl mx-auto min-h-full flex flex-col">
                     {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
                     {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
