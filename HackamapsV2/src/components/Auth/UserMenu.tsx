@@ -32,7 +32,7 @@ export function UserMenu({ onOpenAuth, onOpenProfile, onOpenManageHackathons }: 
         return (
             <button
                 onClick={onOpenAuth}
-                className="px-4 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs font-bold rounded-full transition-all shadow-lg hover:shadow-blue-500/25 border border-white/10"
+                className="px-3 md:px-4 py-1 flex items-center h-8 md:h-auto md:py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-[10px] md:text-xs font-bold rounded-full transition-all shadow-lg hover:shadow-blue-500/25 border border-white/10"
             >
                 SIGN IN / UP
             </button>

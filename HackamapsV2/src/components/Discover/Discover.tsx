@@ -14,10 +14,10 @@ interface DiscoverProps {
 export const Discover = ({ events, isLoading, setView, onOpenFilter }: DiscoverProps) => {
     return (
         <div className="max-w-6xl mx-auto w-full animate-in slide-in-from-right duration-500">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-6 md:mb-8">
                 <div>
-                    <h2 className="text-3xl font-bold text-white">Trending Events</h2>
-                    <p className="text-neutral-500 mt-1">Curated list of high-signal hackathons.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white">Trending Events</h2>
+                    <p className="text-sm md:text-base text-neutral-500 mt-1">Curated list of high-signal hackathons.</p>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="hidden md:flex" onClick={onOpenFilter}>

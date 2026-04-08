@@ -285,7 +285,7 @@ export default function AppContent() {
             </div>
 
             {/* HEADER / NAV */}
-            <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between pointer-events-none">
+            <header className="fixed top-0 left-0 right-0 z-40 px-3 md:px-6 py-4 flex items-center justify-between pointer-events-none gap-2">
                 <div className="bg-gradient-to-b from-[#050505] via-[#050505]/80 to-transparent absolute inset-0 z-0 h-24" />
 
                 {/* Left side - flex-1 to push nav to center */}
@@ -299,10 +299,10 @@ export default function AppContent() {
 
                     <button
                         onClick={() => setIsFilterOpen(true)}
-                        className="flex items-center gap-2 px-3 py-1 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-600/20 hover:border-blue-500/40 transition-all text-xs font-mono"
+                        className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-1 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-600/20 hover:border-blue-500/40 transition-all text-xs font-mono"
                     >
-                        <Filter className="w-3 h-3" />
-                        FILTER
+                        <Filter className="w-3 h-3 md:w-3 md:h-3" />
+                        <span className="hidden sm:inline">FILTER</span>
                     </button>
                 </div>
 
