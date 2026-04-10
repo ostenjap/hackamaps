@@ -214,7 +214,7 @@ export default function AppContent() {
             setShowSuccessToast(true);
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
-            
+
             // Auto hide after 5 seconds
             setTimeout(() => setShowSuccessToast(false), 5000);
         }
@@ -260,7 +260,7 @@ export default function AppContent() {
                     <span className="text-2xl mb-1">🎉</span>
                     <h3 className="font-bold text-lg">Payment Successful!</h3>
                     <p className="text-sm text-green-100 mb-3">Welcome to your upgraded tier.</p>
-                    <button 
+                    <button
                         onClick={() => setShowSuccessToast(false)}
                         className="bg-white/20 hover:bg-white/30 text-white text-xs px-4 py-1.5 rounded-full transition-colors"
                     >
@@ -399,7 +399,7 @@ export default function AppContent() {
                     </form>
                 </div>
 
-                <button
+                {/* <button
                     onClick={() => setIsInputOpen(!isInputOpen)}
                     className={`h-14 w-14 rounded-full flex items-center justify-center border transition-all duration-300 shadow-[0_0_30px_rgba(0,0,0,0.5)] ${isInputOpen
                         ? 'bg-blue-600 border-blue-400 text-white rotate-90'
@@ -407,7 +407,7 @@ export default function AppContent() {
                         }`}
                 >
                     {isInputOpen ? <ChevronRight className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-                </button>
+                </button> */}
             </div>
 
             {/* MOBILE NAVIGATION BAR */}
