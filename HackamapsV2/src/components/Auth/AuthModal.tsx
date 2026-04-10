@@ -94,15 +94,13 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-md max-h-[90vh] flex flex-col bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
 
                 {/* Glow Effects */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 blur-[60px] rounded-full point-events-none" />
-                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 blur-[60px] rounded-full point-events-none" />
-
-                {/* Header */}
-                <div className="relative p-6 pb-2 flex justify-between items-center">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50 z-10" />
+                
+                {/* Header - Fixed */}
+                <div className="relative p-6 pb-2 flex justify-between items-center flex-shrink-0 z-10">
                     <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
                         {view === 'signin' && 'Welcome Back'}
                         {view === 'signup' && 'Create Account'}
@@ -116,8 +114,10 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                     </button>
                 </div>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4">
+                {/* Scrollable Area */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    {/* Form */}
+                    <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4">
 
                     {error && (
                         <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3 text-red-400 text-xs">
@@ -262,9 +262,10 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                         )}
                     </button>
                 </form>
+                </div>
 
-                {/* Footer */}
-                <div className="p-4 bg-white/5 border-t border-white/5 text-center">
+                {/* Footer - Fixed */}
+                <div className="p-4 bg-white/5 border-t border-white/5 text-center flex-shrink-0 z-10">
                     {view === 'signin' && (
                         <p className="text-xs text-neutral-500">
                             Don't have an account?{' '}
