@@ -61,4 +61,5 @@ final_cross_check.py
 upcoming_europe_hackathons_2026.csv
 csv_to_sql.py
 populate_hackathons.sql
+hackathon-scraper-service
 
