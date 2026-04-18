@@ -11,7 +11,7 @@ export function useEvents() {
             console.log("Attempting to fetch events from Supabase...");
             try {
                 const { data: events, error } = await supabase
-                    .from('hackathons')
+                    .from('hackathons_staging')
                     .select(`
                         *,
                         profiles:user_id (
