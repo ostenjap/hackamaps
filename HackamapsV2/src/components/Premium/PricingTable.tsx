@@ -8,27 +8,32 @@ export const PricingTable = () => {
     const { user, setIsAuthModalOpen } = useAuth();
     const [loading, setLoading] = useState<string | null>(null);
     const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
-    const [memberCount, setMemberCount] = useState(347);
+    const [memberCount, setMemberCount] = useState(0);
+    const [currentPrice, setCurrentPrice] = useState(49);
     const TOTAL_SPOTS = 500;
 
-    // Fetch dynamic member count from Supabase
+    // Fetch dynamic member count from Stripe Stats Function
     useEffect(() => {
-        const fetchMemberCount = async () => {
+        const fetchStats = async () => {
             try {
-                const { count, error } = await supabase
+                const { data, error } = await supabase.functions.invoke('get-stripe-stats');
+
+                if (!error && data) {
+                    setMemberCount(data.memberCount || 0);
+                    setCurrentPrice(data.price || 49);
+                }
+            } catch (err) {
+                console.error('Error fetching stripe stats:', err);
+                // Fallback to minimal query if function fails
+                const { count } = await supabase
                     .from('profiles')
                     .select('*', { count: 'exact', head: true })
                     .eq('tier', 'elite');
-
-                if (!error && count !== null) {
-                    setMemberCount(Math.max(347, count)); // Ensure it doesn't drop below our initial social proof
-                }
-            } catch (err) {
-                console.error('Error fetching member count:', err);
+                if (count !== null) setMemberCount(count);
             }
         };
 
-        fetchMemberCount();
+        fetchStats();
     }, []);
 
     // Auto-resume checkout after login
@@ -110,6 +115,18 @@ export const PricingTable = () => {
                     <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">
                         Stop Paying Monthly. <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Start Building Forever.</span>
                     </h2>
+                    
+                    {/* Price Increase Reminder Banner */}
+                    {memberCount < TOTAL_SPOTS && (
+                        <div className="mt-2 mb-4 bg-red-500/10 border border-red-500/20 rounded-lg p-2 flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-2 duration-700">
+                            <Zap className="w-3 h-3 text-red-500 shadow-lg shadow-red-500/50" />
+                            <p className="text-[10px] text-red-400 font-bold uppercase tracking-tight">
+                                REMINDER: Price increases to €99 after {TOTAL_SPOTS} founder spots are taken
+                            </p>
+                            <Zap className="w-3 h-3 text-red-500 shadow-lg shadow-red-500/50" />
+                        </div>
+                    )}
+
                     <p className="text-neutral-400 text-sm max-w-2xl mx-auto">
                         Join FOUNDER LIFETIME builders and get exclusive access to investors, advanced tools, and a global community.
                     </p>
@@ -230,9 +247,11 @@ export const PricingTable = () => {
                                 FOUNDER LIFETIME <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                             </h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white uppercase">€49</span>
+                                <span className="text-2xl font-bold text-white uppercase">€{currentPrice}</span>
                                 <span className="text-neutral-500 text-sm">once</span>
-                                <span className="ml-2 text-neutral-500 line-through text-sm">€99</span>
+                                {currentPrice < 99 && (
+                                    <span className="ml-2 text-neutral-500 line-through text-sm">€99</span>
+                                )}
                             </div>
                             <p className="mt-1 text-[10px] text-yellow-500 font-bold uppercase tracking-widest">
                                 pay once, access forever, never pay again
@@ -287,7 +306,11 @@ export const PricingTable = () => {
                                         />
                                     </div>
                                     <div className="flex justify-between w-full text-[9px] font-medium">
-                                        <span className="text-yellow-500/80">Price increases to €99 after {TOTAL_SPOTS} members</span>
+                                        <span className={memberCount >= TOTAL_SPOTS ? "text-red-400 font-bold" : "text-yellow-500/80"}>
+                                            {memberCount >= TOTAL_SPOTS 
+                                                ? "FOUNDER SPOTS SOLD OUT - REGULAR PRICE €99" 
+                                                : `Price increases to €99 after ${TOTAL_SPOTS} members`}
+                                        </span>
                                         <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
                                     </div>
                                 </div>
@@ -539,7 +562,7 @@ export const PricingTable = () => {
                                 disabled={loading !== null}
                             >
                                 {loading === 'elite' ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                                Get FOUNDER LIFETIME Access for €49
+                                {memberCount >= TOTAL_SPOTS ? 'Get Lifetime Access for €99' : `Get FOUNDER LIFETIME Access for €${currentPrice}`}
                             </Button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
                                 Limited to first 500 members • Secure Checkout

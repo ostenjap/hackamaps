@@ -56,6 +56,16 @@ Deno.serve(async (req) => {
             const customerId = session.customer as string;
             const subscriptionId = session.subscription as string;
 
+            // Increment founder spots if elite tier
+            if (tier === 'elite') {
+                console.log('Incrementing founder spots in site_stats...');
+                const { error: statsError } = await supabaseAdmin.rpc('increment_founder_spots');
+                if (statsError) {
+                    console.error(`Error incrementing founder spots: ${statsError.message}`);
+                    // Don't throw, we still want to upgrade the user
+                }
+            }
+
             if (userId && tier) {
                 // Update sensitive data in user_secrets
                 const { error: secretsError } = await supabaseAdmin
