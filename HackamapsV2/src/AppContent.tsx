@@ -27,6 +27,7 @@ import { PinManagerModal } from './components/Map/PinManagerModal';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
+    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [isInputOpen, setIsInputOpen] = useState(false);
     const [inputText, setInputText] = useState('');
     const [captions, setCaptions] = useState<UserCommand[]>([]);
@@ -321,7 +322,10 @@ export default function AppContent() {
                         Discover
                     </button>
                     <button
-                        onClick={() => setView('map')}
+                        onClick={() => {
+                            setView('map');
+                            setSelectedEventId(null);
+                        }}
                         className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${view === 'map' ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-400 hover:text-white'}`}
                     >
                         Map
@@ -350,12 +354,24 @@ export default function AppContent() {
             <main className="relative z-10 w-full h-full pt-24 pb-16 px-4 overflow-y-auto scrollbar-none">
                 <div className="max-w-7xl mx-auto min-h-full flex flex-col">
                     {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
-                    {view === 'discover' && <Discover events={filteredEvents} isLoading={isLoading} setView={setView} onOpenFilter={() => setIsFilterOpen(true)} />}
+                    {view === 'discover' && (
+                        <Discover 
+                            events={filteredEvents} 
+                            isLoading={isLoading} 
+                            setView={setView} 
+                            onOpenFilter={() => setIsFilterOpen(true)}
+                            onSelectEvent={(id) => {
+                                setSelectedEventId(id);
+                                setView('map');
+                            }}
+                        />
+                    )}
                     {view === 'map' && (
                         <MapView
                             events={filteredEvents}
                             onAddHackathon={handleOpenAddHackathon}
                             isPremium={isPremium}
+                            selectedEventId={selectedEventId}
                         />
                     )}
                     {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
@@ -427,7 +443,10 @@ export default function AppContent() {
                     <span className="text-[10px] font-medium">Discover</span>
                 </button>
                 <button
-                    onClick={() => setView('map')}
+                    onClick={() => {
+                        setView('map');
+                        setSelectedEventId(null);
+                    }}
                     className={`flex flex-col items-center gap-1 transition-all ${view === 'map' ? 'text-blue-500' : 'text-neutral-500'}`}
                 >
                     <MapIcon className="w-5 h-5" />

@@ -9,9 +9,10 @@ interface DiscoverProps {
     isLoading: boolean;
     setView: (view: ViewState) => void;
     onOpenFilter: () => void;
+    onSelectEvent: (id: string) => void;
 }
 
-export const Discover = ({ events, isLoading, setView, onOpenFilter }: DiscoverProps) => {
+export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEvent }: DiscoverProps) => {
     return (
         <div className="max-w-6xl mx-auto w-full animate-in slide-in-from-right duration-500">
             <div className="flex items-center justify-between mb-6 md:mb-8">
@@ -35,7 +36,7 @@ export const Discover = ({ events, isLoading, setView, onOpenFilter }: DiscoverP
                     events.map(event => {
                         const cat = CATEGORIES.find(c => c.id === event.type);
                         return (
-                            <Card key={event.id} onClick={() => setView('map')} className="cursor-pointer group relative p-6 flex flex-col justify-between min-h-[280px]">
+                            <Card key={event.id} onClick={() => onSelectEvent(event.id)} className="cursor-pointer group relative p-6 flex flex-col justify-between min-h-[280px]">
                                 <div>
                                     <div className="flex justify-between items-start mb-4">
                                         <Badge style={{ backgroundColor: cat?.color ? `${cat.color}20` : undefined, color: cat?.color, borderColor: cat?.color }}>

@@ -8,12 +8,14 @@ interface MapViewProps {
     events: HackathonEvent[];
     onAddHackathon?: () => void;
     isPremium?: boolean;
+    selectedEventId?: string | null;
 }
 
-const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
+const MapContainer = ({ events, selectedEventId }: { events: HackathonEvent[], selectedEventId?: string | null }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
     const markerLayerRef = useRef<any>(null);
+    const markersRef = useRef<{ [key: string]: any }>({});
 
     // Initialize Map
     useEffect(() => {
@@ -95,6 +97,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         try {
             // console.log("Updating markers. Events count:", events?.length);
             markerLayerRef.current.clearLayers();
+            markersRef.current = {};
 
             if (!Array.isArray(events)) return;
 
@@ -210,9 +213,11 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         </div>
                     `;
 
-                    L.marker([lat, lng], { icon: customIcon })
+                    const marker = L.marker([lat, lng], { icon: customIcon })
                         .bindPopup(popupHtml)
                         .addTo(markerLayerRef.current);
+                    
+                    markersRef.current[ev.id] = marker;
                 } catch (e) {
                     console.error("Marker error", e);
                 }
@@ -229,6 +234,20 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
         }
     }, [events]);
 
+    // Focus on selected event
+    useEffect(() => {
+        if (selectedEventId && mapInstance.current && markersRef.current[selectedEventId]) {
+            const event = events.find(e => e.id === selectedEventId);
+            if (event) {
+                const marker = markersRef.current[selectedEventId];
+                mapInstance.current.setView(event.coords, 8, { animate: true });
+                setTimeout(() => {
+                    marker.openPopup();
+                }, 500);
+            }
+        }
+    }, [selectedEventId, events]);
+
     return (
         <div className="w-full h-[60vh] min-h-[400px] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl bg-neutral-900">
             <div ref={mapContainer} className="w-full h-full z-10" />
@@ -243,7 +262,7 @@ const MapContainer = ({ events }: { events: HackathonEvent[] }) => {
     );
 };
 
-export const MapView = ({ events, onAddHackathon, isPremium }: MapViewProps) => {
+export const MapView = ({ events, onAddHackathon, isPremium, selectedEventId }: MapViewProps) => {
     return (
         <div className="w-full h-full flex flex-col animate-in fade-in duration-700">
             <style>{`
@@ -312,7 +331,7 @@ export const MapView = ({ events, onAddHackathon, isPremium }: MapViewProps) => 
                 </div>
             </div>
 
-            <MapContainer events={events} />
+            <MapContainer events={events} selectedEventId={selectedEventId} />
         </div>
     );
 };
