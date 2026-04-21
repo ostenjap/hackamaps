@@ -68,12 +68,15 @@ export function useEvents() {
 }
 
 // Helper to map DB categories to the UI 'type' (used for icon/color logic if needed)
-function determineType(categories: string[] | null): 'web3' | 'ai' | 'cloud' | 'generic' {
+function determineType(categories: string[] | null): 'web3' | 'ai' | 'cloud' | 'generic' | 'fintech' | 'defense' | 'social' {
     if (!categories || categories.length === 0) return 'generic';
     const lowerCats = categories.map(c => c.toLowerCase());
 
     if (lowerCats.some(c => c.includes('web3') || c.includes('blockchain') || c.includes('crypto'))) return 'web3';
     if (lowerCats.some(c => c.includes('ai') || c.includes('ml') || c.includes('llm'))) return 'ai';
+    if (lowerCats.some(c => c.includes('defense') || c.includes('military') || c.includes('security'))) return 'defense';
+    if (lowerCats.some(c => c.includes('fintech') || c.includes('finance') || c.includes('banking'))) return 'fintech';
+    if (lowerCats.some(c => c.includes('social') || c.includes('community'))) return 'social';
     if (lowerCats.some(c => c.includes('cloud') || c.includes('devops'))) return 'cloud';
 
     return 'generic';
