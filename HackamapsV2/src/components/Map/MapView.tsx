@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import type { HackathonEvent } from '../../types';
 import { CATEGORIES } from '../../types';
-import { Globe, Plus } from 'lucide-react';
+import { Globe, Plus, Filter } from 'lucide-react';
 import { Badge } from '../ui';
 
 interface MapViewProps {
     events: HackathonEvent[];
     onAddHackathon?: () => void;
+    onOpenFilter?: () => void;
     isPremium?: boolean;
     selectedEventId?: string | null;
 }
@@ -262,7 +263,7 @@ const MapContainer = ({ events, selectedEventId }: { events: HackathonEvent[], s
     );
 };
 
-export const MapView = ({ events, onAddHackathon, isPremium, selectedEventId }: MapViewProps) => {
+export const MapView = ({ events, onAddHackathon, onOpenFilter, isPremium, selectedEventId }: MapViewProps) => {
     return (
         <div className="w-full h-full flex flex-col animate-in fade-in duration-700">
             <style>{`
@@ -301,13 +302,26 @@ export const MapView = ({ events, onAddHackathon, isPremium, selectedEventId }: 
                 }
             `}</style>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative">
                 <div>
                     <h2 className="text-xl md:text-3xl font-bold flex items-center gap-2 md:gap-3 tracking-tight">
                         <Globe className="w-5 h-5 md:w-8 md:h-8 text-blue-500 flex-shrink-0" /> Global Intelligence
                     </h2>
                     <p className="text-xs md:text-sm text-neutral-400 mt-1">Discover hackathons worldwide</p>
                 </div>
+
+                {/* Centered Filter Button */}
+                {onOpenFilter && (
+                    <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+                        <button
+                            onClick={onOpenFilter}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-neutral-900/50 border border-white/10 text-white rounded-full text-[11px] font-black tracking-[0.2em] hover:bg-white/10 hover:border-blue-500/50 transition-all group shadow-xl"
+                        >
+                            <Filter className="w-3.5 h-3.5 text-blue-500 group-hover:scale-110 transition-transform" />
+                            FILTER MAP
+                        </button>
+                    </div>
+                )}
 
                 <div className="flex items-center gap-3 md:gap-4">
                     <button

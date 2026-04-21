@@ -370,6 +370,7 @@ export default function AppContent() {
                         <MapView
                             events={filteredEvents}
                             onAddHackathon={handleOpenAddHackathon}
+                            onOpenFilter={() => setIsFilterOpen(true)}
                             isPremium={isPremium}
                             selectedEventId={selectedEventId}
                         />
