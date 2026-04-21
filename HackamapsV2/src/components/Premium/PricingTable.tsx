@@ -296,7 +296,7 @@ export const PricingTable = () => {
                                     <div className="flex items-center gap-2">
                                         <Zap className="w-3 h-3 text-yellow-500 animate-pulse" />
                                         <span className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">
-                                            {TOTAL_SPOTS - memberCount}/{TOTAL_SPOTS} FOUNDER LIFETIME spots remaining
+                                            Only {TOTAL_SPOTS - memberCount} spots left
                                         </span>
                                     </div>
                                     <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden border border-white/5">
