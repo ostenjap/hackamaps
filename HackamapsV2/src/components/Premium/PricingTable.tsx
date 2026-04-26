@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare, Loader2 } from 'lucide-react';
+import { Check, X, Star, Crown, Zap, Users, Trophy, MessageSquare, Loader2, Mail } from 'lucide-react';
 import { Button, Card, Badge } from '../ui';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
@@ -569,6 +569,20 @@ export const PricingTable = () => {
                             </p>
                         </div>
                     </div>
+                </div>
+
+                {/* Secondary Contact CTA */}
+                <div className="mt-12 text-center pb-20">
+                    <p className="text-neutral-500 text-sm mb-6">Still have questions? We're here to help.</p>
+                    <Button 
+                        variant="primary" 
+                        size="lg"
+                        className="rounded-2xl px-12"
+                        onClick={() => window.location.href = 'mailto:hello@hackamaps.com'}
+                    >
+                        <Mail className="w-5 h-5 mr-2" />
+                        Contact
+                    </Button>
                 </div>
             </div>
         </section>
