@@ -50,53 +50,40 @@ export const PricingTable = () => {
     }, [user]);
 
     const handleUpgrade = async (tier: 'premium' | 'elite', interval: 'month' | 'year' = 'month') => {
-        if (!user) {
-            sessionStorage.setItem('pending_checkout_tier', tier);
-            sessionStorage.setItem('pending_checkout_interval', interval);
-            setIsAuthModalOpen(true);
-            return;
-        }
-
         try {
             setLoading(tier);
 
-            // Get fresh session
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            if (sessionError || !session) {
-                console.error('Session error:', sessionError);
-                setIsAuthModalOpen(true);
-                return;
-            }
-
-            console.log(`Sending checkout request for ${tier}...`);
-            const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+            // Get session if it exists
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            console.log(`Sending checkout request for ${tier}${session ? ' (authenticated)' : ' (guest)'}...`);
+            
+            const invokeOptions: any = {
                 body: {
                     tier,
                     interval,
-                    success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}',
+                    success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}&checkout=success',
                     cancel_url: window.location.origin + '/pricing'
-                },
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`
                 }
-            });
+            };
 
-            if (error) {
-                // If it's a 401, maybe the token expired exactly now
-                if (error.status === 401 || (error as any).message?.includes('401')) {
-                    console.warn('401 Unauthorized from function - refreshing session...');
-                    await supabase.auth.refreshSession();
-                    // Optional: retry once or just tell user to try again
-                }
-                throw error;
+            // Only add headers if we have a session
+            if (session?.access_token) {
+                invokeOptions.headers = {
+                    Authorization: `Bearer ${session.access_token}`
+                };
             }
+
+            const { data, error } = await supabase.functions.invoke('create-checkout-session', invokeOptions);
+
+            if (error) throw error;
 
             if (data?.url) {
                 window.location.href = data.url;
             }
         } catch (error: any) {
             console.error('Error initiating upgrade:', error);
-            // alert('Something went wrong. Please try again.');
+            // Optional: fallback to auth modal if something really breaks, but usually it's better to show an error
         } finally {
             setLoading(null);
         }

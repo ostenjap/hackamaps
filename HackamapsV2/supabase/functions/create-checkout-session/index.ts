@@ -17,29 +17,66 @@ Deno.serve(async (req) => {
         return new Response('ok', { headers: corsHeaders });
     }
 
+    const supabaseAdmin = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
     try {
         const body = await req.json();
         console.log('Request body:', JSON.stringify(body));
         const { tier, interval, success_url, cancel_url } = body;
 
-        // Get user from Supabase Auth
-        const authHeader = req.headers.get('Authorization');
-        console.log('Auth header present:', !!authHeader);
-        if (!authHeader) throw new Error('Missing Authorization header');
+        // 1. Rate limiting (basic IP-based)
+        const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+        const { data: rateData } = await supabaseAdmin
+            .from('api_rate_limits')
+            .select('*')
+            .eq('ip', clientIp)
+            .single();
 
-        const supabaseClient = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-            { global: { headers: { Authorization: authHeader } } }
-        );
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        const now = new Date();
+        if (rateData) {
+            const lastRequest = new Date(rateData.last_request_at);
+            const diffMs = now.getTime() - lastRequest.getTime();
+            
+            // Limit: 5 requests per minute
+            if (diffMs < 60000 && rateData.request_count >= 5) {
+                return new Response(JSON.stringify({ error: 'Too many requests. Please try again in a minute.' }), {
+                    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                    status: 429,
+                });
+            }
 
-        if (authError || !user) {
-            console.error('Auth error or user missing:', authError);
-            throw new Error('Unauthorized');
+            await supabaseAdmin
+                .from('api_rate_limits')
+                .update({ 
+                    last_request_at: now.toISOString(),
+                    request_count: diffMs < 60000 ? rateData.request_count + 1 : 1
+                })
+                .eq('ip', clientIp);
+        } else {
+            await supabaseAdmin.from('api_rate_limits').insert({ ip: clientIp, last_request_at: now.toISOString(), request_count: 1 });
         }
 
-        console.log('Authenticated user:', user.email);
+        // 2. Get user from Supabase Auth (Optional)
+        const authHeader = req.headers.get('Authorization');
+        let user = null;
+        if (authHeader) {
+            const supabaseClient = createClient(
+                Deno.env.get('SUPABASE_URL') ?? '',
+                Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+                { global: { headers: { Authorization: authHeader } } }
+            );
+            const { data: { user: authUser } } = await supabaseClient.auth.getUser();
+            user = authUser;
+        }
+
+        if (user) {
+            console.log('Authenticated user:', user.email);
+        } else {
+            console.log('Guest checkout request');
+        }
 
         let priceId = '';
         let mode: 'payment' | 'subscription' = 'payment';
@@ -53,36 +90,42 @@ Deno.serve(async (req) => {
             priceId = Deno.env.get('STRIPE_ELITE_PRICE_ID') ?? '';
             mode = 'payment';
         } else {
-            console.error('Invalid tier provided:', tier);
             throw new Error('Invalid tier');
         }
 
-        console.log(`Using tier: ${tier}, Price ID: ${priceId}, Mode: ${mode}`);
-
-        if (!priceId) {
-            console.error(`Missing Price ID for tier: ${tier}`);
-            throw new Error(`Price ID for tier ${tier} not configured`);
-        }
+        if (!priceId) throw new Error(`Price ID for tier ${tier} not configured`);
 
         console.log('Creating Stripe session...');
-        const session = await stripe.checkout.sessions.create({
-            line_items: [
-                {
-                    price: priceId,
-                    quantity: 1,
-                },
-            ],
+        const sessionOptions: any = {
+            line_items: [{ price: priceId, quantity: 1 }],
             mode,
             success_url,
             cancel_url,
-            client_reference_id: user.id,
-            customer_email: user.email,
             allow_promotion_codes: true,
             metadata: {
                 tier,
                 interval: tier === 'elite' ? 'once' : (interval || 'month'),
-                user_id: user.id
+                user_id: user?.id || ''
             }
+        };
+
+        if (user) {
+            sessionOptions.client_reference_id = user.id;
+            sessionOptions.customer_email = user.email;
+        } else {
+            // For guest checkout, allow Stripe to collect email and create customer
+            sessionOptions.customer_creation = 'always';
+        }
+
+        const session = await stripe.checkout.sessions.create(sessionOptions);
+
+        // 3. Track session for idempotency
+        await supabaseAdmin.from('stripe_checkout_sessions').insert({
+            id: session.id,
+            user_id: user?.id || null,
+            email: user?.email || 'pending_stripe_collection',
+            tier: tier,
+            status: 'created'
         });
 
         console.log('Stripe session created:', session.id);
