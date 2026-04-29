@@ -28,7 +28,7 @@ export const Home = ({ eventCount, setView }: HomeProps) => {
 
                 <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter mb-2 text-white">
                     Find Your <br className="md:hidden" />
-                    Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 font-mono italic">Build</span>.
+                    Next <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 font-mono italic">Hack</span>.
                 </h1>
 
                 <p className="text-neutral-400 max-w-lg mx-auto text-base md:text-lg leading-relaxed mb-6 px-2">
