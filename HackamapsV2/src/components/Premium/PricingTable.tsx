@@ -10,7 +10,7 @@ export const PricingTable = () => {
     const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
     const [memberCount, setMemberCount] = useState(0);
     const [currentPrice, setCurrentPrice] = useState(49);
-    
+
     // Constants for the "Price Staircase" FOMO strategy
     const DISCOUNT_LIMIT = 25;
     const DISCOUNT_PRICE = 49;
@@ -63,14 +63,14 @@ export const PricingTable = () => {
 
             // Get session if it exists
             const { data: { session } } = await supabase.auth.getSession();
-            
+
             console.log(`Sending checkout request for ${tier}${session ? ' (authenticated)' : ' (guest)'}...`);
-            
+
             // Construct URLs - prioritize VITE_APP_URL if defined, otherwise use current origin
             const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-            
+
             console.log(`Checkout origin: ${window.location.origin}, Base URL: ${baseUrl}`);
-            
+
             const invokeOptions: any = {
                 body: {
                     tier,
@@ -112,10 +112,19 @@ export const PricingTable = () => {
                     <Badge variant="secondary" className="mb-2 bg-yellow-900/30 text-yellow-500 border-yellow-500/30 animate-pulse text-[9px]">
                         LIMITED TIME: 50% OFF
                     </Badge>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </div>
+                        <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+                            {Math.floor(Math.random() * (16 - 8 + 1) + 8)} builders looking at this page right now
+                        </span>
+                    </div>
                     <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">
                         Stop Paying Monthly. <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Start Building Forever.</span>
                     </h2>
-                    
+
                     {/* High-Urgency Price Increase Banner */}
                     <div className="mt-2 mb-4">
                         {isDiscountAvailable ? (
@@ -316,8 +325,8 @@ export const PricingTable = () => {
                                     </div>
                                     <div className="flex justify-between w-full text-[9px] font-medium">
                                         <span className={!isDiscountAvailable ? "text-red-400 font-bold" : "text-yellow-500/80"}>
-                                            {!isDiscountAvailable 
-                                                ? "FOUNDER DISCOUNT SOLD OUT" 
+                                            {!isDiscountAvailable
+                                                ? "FOUNDER DISCOUNT SOLD OUT"
                                                 : `Price increases to $${FULL_PRICE} after ${DISCOUNT_LIMIT} members`}
                                         </span>
                                         <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
@@ -336,6 +345,11 @@ export const PricingTable = () => {
                             </Button>
                         </div>
                     </Card>
+                </div>
+
+                <div className="text-center mb-6">
+                    <p className="text-[11px] text-neutral-500 max-w-xl mx-auto leading-relaxed font-medium italic">
+                        VCs want high-signal founders, not spam. If everyone has this list, it’s worthless.<br /> We cap access to protect your unfair advantage.                    </p>
                 </div>
 
                 {/* Social Proof */}
@@ -562,7 +576,15 @@ export const PricingTable = () => {
                         </Badge>
                         <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Build Forever with FOUNDER LIFETIME.</h3>
                         <p className="text-neutral-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
-                            Stop the recurring drain on your bank account. Join <span className="text-white font-bold">{memberCount} members</span> who have already secured their lifetime advantage. Not satisfied? 100% money-back guarantee.
+                            {isDiscountAvailable ? (
+                                <>
+                                    <span className="text-white font-bold">{memberCount} builders</span> have already secured their lifetime VC list and premium pins. <br /> Only <span className="text-white font-bold">{spotsLeft} early-pricing spots</span> remain. <br />Claim your permanent edge before the window closes.
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-white font-bold">{memberCount} builders</span> have already secured their lifetime edge. The founder discount is gone, but the window to join the inner circle is still open.
+                                </>
+                            )}
                         </p>
                         <div className="flex flex-col items-center gap-4">
                             <Button
@@ -583,8 +605,8 @@ export const PricingTable = () => {
                 {/* Secondary Contact CTA */}
                 <div className="mt-12 text-center pb-20">
                     <p className="text-neutral-500 text-sm mb-6">Still have questions? We're here to help.</p>
-                    <Button 
-                        variant="primary" 
+                    <Button
+                        variant="primary"
                         size="lg"
                         className="rounded-2xl px-12"
                         onClick={() => window.location.href = 'mailto:hello@hackamaps.com'}
