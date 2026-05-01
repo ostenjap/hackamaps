@@ -58,12 +58,17 @@ export const PricingTable = () => {
             
             console.log(`Sending checkout request for ${tier}${session ? ' (authenticated)' : ' (guest)'}...`);
             
+            // Construct URLs - prioritize VITE_APP_URL if defined, otherwise use current origin
+            const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
+            
+            console.log(`Checkout origin: ${window.location.origin}, Base URL: ${baseUrl}`);
+            
             const invokeOptions: any = {
                 body: {
                     tier,
                     interval,
-                    success_url: window.location.origin + '/?session_id={CHECKOUT_SESSION_ID}&checkout=success',
-                    cancel_url: window.location.origin + '/pricing'
+                    success_url: `${baseUrl}/?session_id={CHECKOUT_SESSION_ID}&checkout=success`,
+                    cancel_url: `${baseUrl}/pricing`
                 }
             };
 
