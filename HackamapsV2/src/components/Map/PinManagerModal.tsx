@@ -205,7 +205,7 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                                 <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                             </button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-mono">
-                                Starting from €10.00/month
+                                Starting from $10.00/month
                             </p>
                         </div>
                     </div>

@@ -87,7 +87,24 @@ Deno.serve(async (req) => {
                 : Deno.env.get('STRIPE_PREMIUM_PRICE_ID') ?? '';
             mode = 'subscription';
         } else if (tier === 'elite') {
-            priceId = Deno.env.get('STRIPE_ELITE_PRICE_ID') ?? '';
+            // Fetch current count to determine price
+            const { data: stats } = await supabaseAdmin
+                .from('site_stats')
+                .select('founder_spots_sold')
+                .eq('id', 'global')
+                .single();
+            
+            const count = stats?.founder_spots_sold || 0;
+            
+            if (count < 25) {
+                // Use Discount Price
+                priceId = Deno.env.get('STRIPE_ELITE_PRICE_ID') ?? '';
+                console.log(`Using discount price for spot #${count + 1}`);
+            } else {
+                // Use Full Price
+                priceId = Deno.env.get('STRIPE_ELITE_FULL_PRICE_ID') ?? '';
+                console.log(`Discount sold out (${count} spots). Using full price.`);
+            }
             mode = 'payment';
         } else {
             throw new Error('Invalid tier');

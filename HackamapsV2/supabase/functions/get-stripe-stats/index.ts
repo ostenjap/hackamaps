@@ -63,8 +63,8 @@ Deno.serve(async (req) => {
 
         return new Response(JSON.stringify({ 
             memberCount: stats?.founder_spots_sold || 0,
-            totalSpots: 500,
-            price: (stats?.founder_spots_sold || 0) >= 500 ? 99 : 49
+            totalSpots: 25,
+            price: (stats?.founder_spots_sold || 0) >= 25 ? 99 : 49
         }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 200,

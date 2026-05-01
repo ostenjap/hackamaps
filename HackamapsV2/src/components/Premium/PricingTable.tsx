@@ -10,7 +10,15 @@ export const PricingTable = () => {
     const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
     const [memberCount, setMemberCount] = useState(0);
     const [currentPrice, setCurrentPrice] = useState(49);
-    const TOTAL_SPOTS = 500;
+    
+    // Constants for the "Price Staircase" FOMO strategy
+    const DISCOUNT_LIMIT = 25;
+    const DISCOUNT_PRICE = 49;
+    const FULL_PRICE = 99;
+
+    const isDiscountAvailable = memberCount < DISCOUNT_LIMIT;
+    const spotsLeft = Math.max(0, DISCOUNT_LIMIT - memberCount);
+    const displayPrice = isDiscountAvailable ? DISCOUNT_PRICE : FULL_PRICE;
 
     // Fetch dynamic member count from Stripe Stats Function
     useEffect(() => {
@@ -108,16 +116,25 @@ export const PricingTable = () => {
                         Stop Paying Monthly. <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">Start Building Forever.</span>
                     </h2>
                     
-                    {/* Price Increase Reminder Banner */}
-                    {memberCount < TOTAL_SPOTS && (
-                        <div className="mt-2 mb-4 bg-red-500/10 border border-red-500/20 rounded-lg p-2 flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-2 duration-700">
-                            <Zap className="w-3 h-3 text-red-500 shadow-lg shadow-red-500/50" />
-                            <p className="text-[10px] text-red-400 font-bold uppercase tracking-tight">
-                                REMINDER: Price increases to €99 after {TOTAL_SPOTS} founder spots are taken
-                            </p>
-                            <Zap className="w-3 h-3 text-red-500 shadow-lg shadow-red-500/50" />
-                        </div>
-                    )}
+                    {/* High-Urgency Price Increase Banner */}
+                    <div className="mt-2 mb-4">
+                        {isDiscountAvailable ? (
+                            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2 flex items-center justify-center gap-2 animate-pulse">
+                                <Zap className="w-3 h-3 text-red-500 fill-red-500" />
+                                <p className="text-[10px] text-red-400 font-bold uppercase tracking-tight">
+                                    ONLY {spotsLeft} / {DISCOUNT_LIMIT} FOUNDER SPOTS LEFT AT ${DISCOUNT_PRICE}. NEXT PRICE: ${FULL_PRICE}
+                                </p>
+                                <Zap className="w-3 h-3 text-red-500 fill-red-500" />
+                            </div>
+                        ) : (
+                            <div className="bg-neutral-500/10 border border-neutral-500/20 rounded-lg p-2 flex items-center justify-center gap-2">
+                                <Crown className="w-3 h-3 text-yellow-500" />
+                                <p className="text-[10px] text-neutral-400 font-bold uppercase tracking-tight">
+                                    FOUNDER DISCOUNT ENDED. REGULAR PRICE ${FULL_PRICE} NOW IN EFFECT.
+                                </p>
+                            </div>
+                        )}
+                    </div>
 
                     <p className="text-neutral-400 text-sm max-w-2xl mx-auto">
                         Join FOUNDER LIFETIME builders and get exclusive access to investors, advanced tools, and a global community.
@@ -151,7 +168,7 @@ export const PricingTable = () => {
                         <div className="mb-2">
                             <h3 className="text-base font-bold text-white mb-1">Free</h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white">€0</span>
+                                <span className="text-2xl font-bold text-white">$0</span>
                                 <span className="text-neutral-500 text-sm">/forever</span>
                             </div>
                             <p className="mt-1 text-[10px] text-neutral-400 font-medium">Essential features for every builder</p>
@@ -182,14 +199,14 @@ export const PricingTable = () => {
                             </h3>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-2xl font-bold text-white">
-                                    {billingInterval === 'month' ? '€10' : '€100'}
+                                    {billingInterval === 'month' ? '$10' : '$100'}
                                 </span>
                                 <span className="text-neutral-500 text-sm">
                                     /{billingInterval === 'month' ? 'mo' : 'year'}
                                 </span>
                                 {billingInterval === 'year' && (
                                     <span className="ml-2 text-[10px] text-neutral-500 italic">
-                                        (€8.33/mo)
+                                        ($8.33/mo)
                                     </span>
                                 )}
                             </div>
@@ -239,26 +256,26 @@ export const PricingTable = () => {
                                 FOUNDER LIFETIME <Crown className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                             </h3>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white uppercase">€{currentPrice}</span>
+                                <span className="text-2xl font-bold text-white uppercase">${displayPrice}</span>
                                 <span className="text-neutral-500 text-sm">once</span>
-                                {currentPrice < 99 && (
-                                    <span className="ml-2 text-neutral-500 line-through text-sm">€99</span>
+                                {isDiscountAvailable && (
+                                    <span className="ml-2 text-neutral-500 line-through text-sm">${FULL_PRICE}</span>
                                 )}
                             </div>
                             <p className="mt-1 text-[10px] text-yellow-500 font-bold uppercase tracking-widest">
-                                pay once, access forever, never pay again
+                                {isDiscountAvailable ? 'pay once, access forever, never pay again' : 'Full access. Best investment for builders.'}
                             </p>
                         </div>
 
                         {/* <div className="mb-6 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
                             <p className="text-[10px] text-yellow-500 font-bold uppercase mb-2">Value Breakdown</p>
                             <div className="space-y-1 text-xs text-neutral-400">
-                                <div className="flex justify-between"><span>Investor Database</span> <span>€299/y</span></div>
-                                <div className="flex justify-between"><span>Discord Elite</span> <span>€99/y</span></div>
-                                <div className="flex justify-between"><span>Office Hours</span> <span>€240/y</span></div>
-                                <div className="flex justify-between"><span>Starter Kits</span> <span>€79</span></div>
+                                <div className="flex justify-between"><span>Investor Database</span> <span>$299/y</span></div>
+                                <div className="flex justify-between"><span>Discord Elite</span> <span>$99/y</span></div>
+                                <div className="flex justify-between"><span>Office Hours</span> <span>$240/y</span></div>
+                                <div className="flex justify-between"><span>Starter Kits</span> <span>$79</span></div>
                                 <div className="flex justify-between border-t border-white/5 pt-1 mt-1 text-white font-bold">
-                                    <span>Total Value</span> <span>€717</span>
+                                    <span>Total Value</span> <span>$717</span>
                                 </div>
                             </div>
                         </div> */}
@@ -288,26 +305,26 @@ export const PricingTable = () => {
                                     <div className="flex items-center gap-2">
                                         <Zap className="w-3 h-3 text-yellow-500 animate-pulse" />
                                         <span className="text-[11px] text-yellow-500 font-bold uppercase tracking-wider">
-                                            Only {TOTAL_SPOTS - memberCount} spots left
+                                            {isDiscountAvailable ? `Only ${spotsLeft} spots left at this price` : 'Standard Membership Open'}
                                         </span>
                                     </div>
                                     <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden border border-white/5">
                                         <div
                                             className="h-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)] transition-all duration-1000"
-                                            style={{ width: `${(memberCount / TOTAL_SPOTS) * 100}%` }}
+                                            style={{ width: `${(Math.min(memberCount, DISCOUNT_LIMIT) / DISCOUNT_LIMIT) * 100}%` }}
                                         />
                                     </div>
                                     <div className="flex justify-between w-full text-[9px] font-medium">
-                                        <span className={memberCount >= TOTAL_SPOTS ? "text-red-400 font-bold" : "text-yellow-500/80"}>
-                                            {memberCount >= TOTAL_SPOTS 
-                                                ? "FOUNDER SPOTS SOLD OUT - REGULAR PRICE €99" 
-                                                : `Price increases to €99 after ${TOTAL_SPOTS} members`}
+                                        <span className={!isDiscountAvailable ? "text-red-400 font-bold" : "text-yellow-500/80"}>
+                                            {!isDiscountAvailable 
+                                                ? "FOUNDER DISCOUNT SOLD OUT" 
+                                                : `Price increases to $${FULL_PRICE} after ${DISCOUNT_LIMIT} members`}
                                         </span>
                                         <span className="text-neutral-500 italic">Last spot taken 47m ago</span>
                                     </div>
                                 </div>
                                 <p className="text-[10px] text-neutral-500 italic mb-4">
-                                    "Best €49 investment in my dev career" - @theleanbuild
+                                    "Best $49 investment in my dev career" - @theleanbuild
                                 </p>
                             </div>
                             <Button
@@ -325,12 +342,12 @@ export const PricingTable = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 border-y border-white/5 py-8">
                     <div className="flex flex-col items-center text-center">
                         <Users className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">{memberCount}/{TOTAL_SPOTS}</p>
+                        <p className="text-2xl font-bold text-white">{memberCount}/{DISCOUNT_LIMIT}</p>
                         <p className="text-neutral-500 text-sm">FOUNDER LIFETIME Members</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
                         <Trophy className="w-5 h-5 text-neutral-500 mb-4" />
-                        <p className="text-2xl font-bold text-white">€2.4M+</p>
+                        <p className="text-2xl font-bold text-white">$2.4M+</p>
                         <p className="text-neutral-500 text-sm">Prize Money Won</p>
                     </div>
                     <div className="flex flex-col items-center text-center">
@@ -405,11 +422,11 @@ export const PricingTable = () => {
                             <div className="space-y-2 text-2xl font-mono">
                                 <div className="flex justify-between items-center">
                                     <span className="text-neutral-500 text-sm">Cost</span>
-                                    <span>{billingInterval === 'month' ? '€10/mo' : '€100/yr'}</span>
+                                    <span>{billingInterval === 'month' ? '$10/mo' : '$100/yr'}</span>
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-white/5">
                                     <span className="text-neutral-500 text-sm">3 Year Total</span>
-                                    <span className="text-white">€300</span>
+                                    <span className="text-white">$300</span>
                                 </div>
                             </div>
                             <p className="mt-6 text-sm text-neutral-500">Subscription adds up over time.</p>
@@ -424,13 +441,13 @@ export const PricingTable = () => {
                                 <div className="flex justify-between items-center text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">One-Time Payment</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-yellow-500/30 line-through text-lg">€99</span>
-                                        <span className="font-bold">€49</span>
+                                        <span className="text-yellow-500/30 line-through text-lg">$99</span>
+                                        <span className="font-bold">$49</span>
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center pt-2 border-t border-yellow-500/10 text-yellow-500">
                                     <span className="text-yellow-500/50 text-sm font-sans uppercase font-bold">Years 2, 3, 5, 10...</span>
-                                    <span className="font-bold">€0</span>
+                                    <span className="font-bold">$0</span>
                                 </div>
                             </div>
                             <p className="mt-6 text-sm text-yellow-500/80 font-medium">Pay once. Build forever. No renewals, no hidden fees.</p>
@@ -440,8 +457,8 @@ export const PricingTable = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[
                             { time: "After 3 Months", saving: "Saved Money", detail: "Elite already paid for itself", color: "text-blue-400" },
-                            { time: "After 1 Year", saving: "€75 Saved", detail: "Versus Paying Premium", color: "text-green-400" },
-                            { time: "After 3 Years", saving: "€275 Saved", detail: "Total building advantage", color: "text-yellow-500" }
+                            { time: "After 1 Year", saving: "$75 Saved", detail: "Versus Paying Premium", color: "text-green-400" },
+                            { time: "After 3 Years", saving: "$275 Saved", detail: "Total building advantage", color: "text-yellow-500" }
                         ].map((item, i) => (
                             <div key={i} className="bg-white/5 rounded-2xl p-6 border border-white/5 text-center">
                                 <p className="text-neutral-500 text-xs uppercase tracking-widest mb-2">{item.time}</p>
@@ -467,7 +484,7 @@ export const PricingTable = () => {
                             },
                             {
                                 q: "Can I upgrade later?",
-                                a: "Yes, but the 50% lifetime discount is only available for the first 500 members. Once those spots are gone, the price for FOUNDER LIFETIME access increases to €99."
+                                a: `Yes, but the $${DISCOUNT_PRICE} lifetime discount is only available for the first ${DISCOUNT_LIMIT} members. Once those spots are gone, the price for FOUNDER LIFETIME access increases to $${FULL_PRICE}.`
                             },
                             {
                                 q: "What's in the investor database?",
@@ -554,10 +571,10 @@ export const PricingTable = () => {
                                 disabled={loading !== null}
                             >
                                 {loading === 'elite' ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                                {memberCount >= TOTAL_SPOTS ? 'Get Lifetime Access for €99' : `Get FOUNDER LIFETIME Access for €${currentPrice}`}
+                                {!isDiscountAvailable ? `Get Lifetime Access for $${FULL_PRICE}` : `Get FOUNDER LIFETIME Access for $${DISCOUNT_PRICE}`}
                             </Button>
                             <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">
-                                Limited to first 500 members • Secure Checkout
+                                Limited to first {DISCOUNT_LIMIT} members • Secure Checkout
                             </p>
                         </div>
                     </div>
