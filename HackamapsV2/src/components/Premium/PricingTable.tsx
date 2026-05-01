@@ -10,6 +10,7 @@ export const PricingTable = () => {
     const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month');
     const [memberCount, setMemberCount] = useState(0);
     const [currentPrice, setCurrentPrice] = useState(49);
+    const [activeVisitors, setActiveVisitors] = useState(12);
 
     // Constants for the "Price Staircase" FOMO strategy
     const DISCOUNT_LIMIT = 25;
@@ -42,6 +43,8 @@ export const PricingTable = () => {
         };
 
         fetchStats();
+        // Set a random stable number of visitors
+        setActiveVisitors(Math.floor(Math.random() * (16 - 8 + 1) + 8));
     }, []);
 
     // Auto-resume checkout after login
@@ -118,7 +121,7 @@ export const PricingTable = () => {
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                         </div>
                         <span className="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
-                            {Math.floor(Math.random() * (16 - 8 + 1) + 8)} builders looking at this page right now
+                            {activeVisitors} builders looking at this page right now
                         </span>
                     </div>
                     <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">
