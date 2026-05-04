@@ -191,25 +191,29 @@ export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
         return <div className="min-h-screen bg-black text-white flex items-center justify-center">City not found</div>;
     }
 
-    // Filter events to only show those in or near this city
+    // Filter events to only show those in or near this city/region
     const cityEvents = useMemo(() => {
         if (!events) return [];
         const cityName = cityConfig.name.toLowerCase();
-        return events.filter(ev => 
-            (ev.location && ev.location.toLowerCase().includes(cityName)) ||
-            (ev.title && ev.title.toLowerCase().includes(cityName)) ||
-            (ev.description && ev.description.toLowerCase().includes(cityName))
-        );
-    }, [events, cityConfig.name]);
+        const keywords = cityConfig.keywords || [cityName];
+        
+        return events.filter(ev => {
+            const searchStr = `${ev.location || ''} ${ev.title || ''} ${ev.description || ''}`.toLowerCase();
+            return keywords.some(keyword => searchStr.includes(keyword.toLowerCase()));
+        });
+    }, [events, cityConfig]);
+
 
     return (
         <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-blue-500/30 flex flex-col items-center">
             <Helmet>
-                <title>Upcoming Hackathons in {cityConfig.name} (2026) | Hackamaps</title>
-                <meta name="description" content={`Find the best upcoming in-person hackathons, AI builder events, and coding competitions in ${cityConfig.name}. Map view, dates, and registration links.`} />
-                <meta property="og:title" content={`${cityConfig.name} Hackathons Map - Hackamaps`} />
-                <meta property="og:description" content={`Discover tech events and hackathons in ${cityConfig.name} on our interactive map.`} />
+                <title>{cityConfig.slug === 'asia' ? 'Hackathons in Asia (2026) | India, China, Thailand, Singapore & more' : `Upcoming Hackathons in ${cityConfig.name} (2026) | Hackamaps`}</title>
+                <meta name="description" content={cityConfig.slug === 'asia' ? "Discover the best upcoming hackathons in India, China, Thailand, Singapore and across Asia. Filter by date and location on our interactive developer event map." : `Find the best upcoming in-person hackathons, AI builder events, and coding competitions in ${cityConfig.name}. Map view, dates, and registration links.`} />
+                <meta property="og:title" content={cityConfig.slug === 'asia' ? 'Asia Hackathons Map - India, Singapore, Thailand, China' : `${cityConfig.name} Hackathons Map - Hackamaps`} />
+                <meta property="og:description" content={cityConfig.slug === 'asia' ? 'Explore the vibrant tech scene across Asia. Find hackathons in major hubs like Bengaluru, Singapore, Bangkok, and Shanghai.' : `Discover tech events and hackathons in ${cityConfig.name} on our interactive map.`} />
+
                 <meta name="twitter:card" content="summary_large_image" />
+
                 
                 {/* Event Schema: JSON-LD */}
                 <script type="application/ld+json">
@@ -317,21 +321,24 @@ export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
 
             {/* SEO Content Section */}
             <section className="w-full max-w-4xl mx-auto px-6 mb-24 text-neutral-300 prose prose-invert prose-lg relative z-10">
-                <h2 className="text-3xl font-bold text-white mb-6">Why Attend a Hackathon in {cityConfig.name}?</h2>
+                <h2 className="text-3xl font-bold text-white mb-6">{cityConfig.slug === 'asia' ? 'Why Build in Asia?' : `Why Attend a Hackathon in ${cityConfig.name}?`}</h2>
                 <p className="mb-6">
-                    {cityConfig.name} is a world-class destination for developers and builders. From innovative startups to global tech giants, the city offers unparalleled opportunities to network, learn, and showcase your skills.
+                    {cityConfig.slug === 'asia' 
+                        ? "Asia is the world's most dynamic tech frontier. From India's massive developer ecosystem and China's AI-driven innovation to Singapore's global financial tech and Thailand's growing builder communities, the continent offers unparalleled opportunities for builders."
+                        : `${cityConfig.name} is a world-class destination for developers and builders. From innovative startups to global tech giants, the city offers unparalleled opportunities to network, learn, and showcase your skills.`}
                 </p>
+
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 mb-12 not-prose">
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
                         <Globe className="w-8 h-8 text-blue-500 mb-4" />
                         <h3 className="text-xl font-bold text-white mb-2">Global Impact</h3>
-                        <p className="text-sm text-neutral-400">Events in {cityConfig.name} often attract global attention and high-tier sponsors.</p>
+                        <p className="text-sm text-neutral-400">Events in {cityConfig.name === 'Asia' ? 'major Asian hubs' : cityConfig.name} often attract global attention and high-tier sponsors.</p>
                     </div>
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
                         <Zap className="w-8 h-8 text-purple-500 mb-4" />
                         <h3 className="text-xl font-bold text-white mb-2">Innovation Hub</h3>
-                        <p className="text-sm text-neutral-400">Collaborate with the brightest minds in {cityConfig.name}'s tech ecosystem.</p>
+                        <p className="text-sm text-neutral-400">Collaborate with the brightest minds in {cityConfig.name === 'Asia' ? 'Asia\'s' : `${cityConfig.name}'s`} tech ecosystem.</p>
                     </div>
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
                         <Users className="w-8 h-8 text-green-500 mb-4" />
@@ -339,6 +346,27 @@ export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
                         <p className="text-sm text-neutral-400">Build lasting connections with the local developer and founder community.</p>
                     </div>
                 </div>
+
+                {cityConfig.slug === 'asia' && (
+                    <div className="mb-12">
+                        <h3 className="text-2xl font-bold text-white mb-4">Top Destinations for Hackathons in Asia</h3>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0">
+                            <li className="bg-neutral-900/30 p-4 rounded-xl border border-white/5">
+                                <strong>🇸🇬 Singapore:</strong> The gateway to SE Asia and a world-class hub for Fintech and Web3.
+                            </li>
+                            <li className="bg-neutral-900/30 p-4 rounded-xl border border-white/5">
+                                <strong>🇹🇭 Thailand (Bangkok):</strong> A rapidly growing hub for AI builders and digital nomads.
+                            </li>
+                            <li className="bg-neutral-900/30 p-4 rounded-xl border border-white/5">
+                                <strong>🇨🇳 China (Shanghai/Shenzhen):</strong> The heart of hardware and AI innovation.
+                            </li>
+                            <li className="bg-neutral-900/30 p-4 rounded-xl border border-white/5">
+                                <strong>🇮🇳 India (Bengaluru):</strong> Home to one of the world's largest developer populations.
+                            </li>
+                        </ul>
+                    </div>
+                )}
+
 
                 <h2 className="text-3xl font-bold text-white mb-6">Find Your Next Event</h2>
                 <p>
