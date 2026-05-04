@@ -67,8 +67,22 @@ const CityMapContainer = ({ events, cityConfig }: { events: HackathonEvent[], ci
         markerLayerRef.current = markerLayer;
 
         mapInstance.current = map;
+
+        // Draw radius circle if applicable
+        if (cityConfig.radius) {
+            L.circle(cityConfig.coords, {
+                radius: cityConfig.radius * 1000, // convert to meters
+                color: '#3b82f6',
+                fillColor: '#3b82f6',
+                fillOpacity: 0.05,
+                weight: 1,
+                dashArray: '5, 10'
+            }).addTo(map);
+        }
+
         updateMarkers();
     }
+
 
     const updateMarkers = () => {
         if (!markerLayerRef.current || !(window as any).L) return;
@@ -191,17 +205,45 @@ export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
         return <div className="min-h-screen bg-black text-white flex items-center justify-center">City not found</div>;
     }
 
+    // Helper for distance calculation
+    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371; // Radius of the earth in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    };
+
     // Filter events to only show those in or near this city/region
     const cityEvents = useMemo(() => {
         if (!events) return [];
         const cityName = cityConfig.name.toLowerCase();
         const keywords = cityConfig.keywords || [cityName];
+        const cityLat = cityConfig.coords[0];
+        const cityLng = cityConfig.coords[1];
+        const radius = cityConfig.radius;
         
         return events.filter(ev => {
+            // 1. Keyword check
             const searchStr = `${ev.location || ''} ${ev.title || ''} ${ev.description || ''}`.toLowerCase();
-            return keywords.some(keyword => searchStr.includes(keyword.toLowerCase()));
+            const matchesKeywords = keywords.some(keyword => searchStr.includes(keyword.toLowerCase()));
+            
+            if (matchesKeywords) return true;
+
+            // 2. Radius check (if applicable)
+            if (radius && ev.coords && ev.coords.length === 2) {
+                const dist = calculateDistance(cityLat, cityLng, ev.coords[0], ev.coords[1]);
+                if (dist <= radius) return true;
+            }
+
+            return false;
         });
     }, [events, cityConfig]);
+
 
 
     return (
