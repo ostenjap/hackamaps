@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import type { HackathonEvent } from '../../types';
 import { CATEGORIES } from '../../types';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight, Globe, Zap, Users } from 'lucide-react';
 import { Badge } from '../ui';
 import { useEvents } from '../../hooks/useEvents';
 import { Helmet } from 'react-helmet-async';
+import { SEO_CITIES, type CityConfig } from '../../config/cities';
 
-const BERLIN_COORDS: [number, number] = [52.5200, 13.4050];
-const ZOOM_LEVEL = 11;
-
-const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
+const CityMapContainer = ({ events, cityConfig }: { events: HackathonEvent[], cityConfig: CityConfig }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
     const markerLayerRef = useRef<any>(null);
@@ -47,7 +45,7 @@ const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
                 markerLayerRef.current = null;
             }
         };
-    }, []);
+    }, [cityConfig.slug]); // Re-init if city changes
 
     function initMap() {
         if (!mapContainer.current || mapInstance.current || !(window as any).L) return;
@@ -56,8 +54,8 @@ const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
         const map = L.map(mapContainer.current, {
             zoomControl: true,
             attributionControl: false,
-            minZoom: 5,
-        }).setView(BERLIN_COORDS, ZOOM_LEVEL);
+            minZoom: 3,
+        }).setView(cityConfig.coords, cityConfig.zoom);
 
         const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
@@ -150,7 +148,7 @@ const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
                         ${ev.website ? `
                             <a href="${ev.website}" target="_blank" rel="noopener noreferrer" style="color: white !important;"
                                class="block w-full text-center bg-[#8B5CF6] hover:bg-[#7c3aed] text-white font-medium py-2 px-4 rounded-lg transition-all text-sm">
-                               Visit Website
+                                Visit Website
                             </a>
                         ` : ''}
                     </div>
@@ -175,7 +173,7 @@ const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
         <div className="w-full h-full rounded-2xl border border-white/10 overflow-hidden relative shadow-2xl bg-neutral-900">
             <div ref={mapContainer} className="w-full h-full z-10" />
             <div className="absolute bottom-4 left-4 z-[400] bg-black/80 backdrop-blur border border-white/10 p-3 rounded-lg">
-                <div className="text-[10px] text-gray-400 font-mono mb-1">BERLIN, DE</div>
+                <div className="text-[10px] text-gray-400 font-mono mb-1 uppercase">${cityConfig.name}, ${cityConfig.country}</div>
                 <div className="text-xs text-blue-400 font-mono flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                     {events.length} Hackathons Found
@@ -185,26 +183,32 @@ const BerlinMapContainer = ({ events }: { events: HackathonEvent[] }) => {
     );
 };
 
-export const HackathonsInBerlin = () => {
+export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
+    const cityConfig = SEO_CITIES[cityKey];
     const { data: events, isLoading } = useEvents();
 
-    // Filter events to only show those in or near Berlin
-    const berlinEvents = useMemo(() => {
+    if (!cityConfig) {
+        return <div className="min-h-screen bg-black text-white flex items-center justify-center">City not found</div>;
+    }
+
+    // Filter events to only show those in or near this city
+    const cityEvents = useMemo(() => {
         if (!events) return [];
+        const cityName = cityConfig.name.toLowerCase();
         return events.filter(ev => 
-            (ev.location && ev.location.toLowerCase().includes('berlin')) ||
-            (ev.title && ev.title.toLowerCase().includes('berlin')) ||
-            (ev.description && ev.description.toLowerCase().includes('berlin'))
+            (ev.location && ev.location.toLowerCase().includes(cityName)) ||
+            (ev.title && ev.title.toLowerCase().includes(cityName)) ||
+            (ev.description && ev.description.toLowerCase().includes(cityName))
         );
-    }, [events]);
+    }, [events, cityConfig.name]);
 
     return (
         <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-blue-500/30 flex flex-col items-center">
             <Helmet>
-                <title>Upcoming Hackathons in Berlin (2026) | Hackamaps</title>
-                <meta name="description" content="Find the best upcoming in-person hackathons, AI builder events, and coding competitions in Berlin. Map view, dates, and registration links." />
-                <meta property="og:title" content="Berlin Hackathons Map - Hackamaps" />
-                <meta property="og:description" content="Discover tech events and hackathons in Berlin on our interactive map." />
+                <title>Upcoming Hackathons in {cityConfig.name} (2026) | Hackamaps</title>
+                <meta name="description" content={`Find the best upcoming in-person hackathons, AI builder events, and coding competitions in ${cityConfig.name}. Map view, dates, and registration links.`} />
+                <meta property="og:title" content={`${cityConfig.name} Hackathons Map - Hackamaps`} />
+                <meta property="og:description" content={`Discover tech events and hackathons in ${cityConfig.name} on our interactive map.`} />
                 <meta name="twitter:card" content="summary_large_image" />
                 
                 {/* Event Schema: JSON-LD */}
@@ -212,7 +216,7 @@ export const HackathonsInBerlin = () => {
                     {JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "ItemList",
-                        "itemListElement": berlinEvents.slice(0, 3).map((ev, index) => ({
+                        "itemListElement": cityEvents.slice(0, 3).map((ev, index) => ({
                             "@type": "ListItem",
                             "position": index + 1,
                             "item": {
@@ -221,11 +225,11 @@ export const HackathonsInBerlin = () => {
                                 "startDate": ev.startDate instanceof Date ? ev.startDate.toISOString().split('T')[0] : "2026-05-04",
                                 "location": {
                                     "@type": "Place",
-                                    "name": ev.location || "Berlin, Germany",
+                                    "name": ev.location || `${cityConfig.name}, ${cityConfig.country}`,
                                     "address": {
                                         "@type": "PostalAddress",
-                                        "addressLocality": "Berlin",
-                                        "addressCountry": "DE"
+                                        "addressLocality": cityConfig.name,
+                                        "addressCountry": cityConfig.country === 'USA' ? 'US' : cityConfig.country.slice(0, 2).toUpperCase()
                                     }
                                 },
                                 "description": ev.description
@@ -276,15 +280,15 @@ export const HackathonsInBerlin = () => {
                 <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none" />
                 
                 <Badge variant="outline" className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-1.5 text-sm uppercase tracking-widest font-semibold">
-                    Germany's Tech Hub
+                    {cityConfig.name}'s Tech Hub
                 </Badge>
                 
                 <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-gray-400">
-                    Upcoming Hackathons in Berlin (2026)
+                    Upcoming Hackathons in {cityConfig.name} (2026)
                 </h1>
                 
                 <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mb-10 leading-relaxed">
-                    Discover the most exciting builder events, coding competitions, and tech gatherings in the heart of Europe. Join the Berlin hacker ecosystem today.
+                    {cityConfig.description} Discover the most exciting builder events, coding competitions, and tech gatherings in {cityConfig.name}.
                 </p>
 
                 <a 
@@ -306,39 +310,39 @@ export const HackathonsInBerlin = () => {
                             Loading map...
                         </div>
                     ) : (
-                        <BerlinMapContainer events={berlinEvents} />
+                        <CityMapContainer events={cityEvents} cityConfig={cityConfig} />
                     )}
                 </div>
             </section>
 
             {/* SEO Content Section */}
             <section className="w-full max-w-4xl mx-auto px-6 mb-24 text-neutral-300 prose prose-invert prose-lg relative z-10">
-                <h2 className="text-3xl font-bold text-white mb-6">Why Attend a Hackathon in Berlin?</h2>
+                <h2 className="text-3xl font-bold text-white mb-6">Why Attend a Hackathon in {cityConfig.name}?</h2>
                 <p className="mb-6">
-                    Berlin is renowned for its vibrant startup culture, underground tech scenes, and world-class developer talent. From blockchain summits to AI innovation weekends, the city offers unparalleled opportunities to build, network, and launch your next big idea.
+                    {cityConfig.name} is a world-class destination for developers and builders. From innovative startups to global tech giants, the city offers unparalleled opportunities to network, learn, and showcase your skills.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 mb-12 not-prose">
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
-                        <MapPin className="w-8 h-8 text-blue-500 mb-4" />
-                        <h3 className="text-xl font-bold text-white mb-2">Central Location</h3>
-                        <p className="text-sm text-neutral-400">Accessible from anywhere in Europe, making it a melting pot for international talent.</p>
+                        <Globe className="w-8 h-8 text-blue-500 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Global Impact</h3>
+                        <p className="text-sm text-neutral-400">Events in {cityConfig.name} often attract global attention and high-tier sponsors.</p>
                     </div>
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
-                        <svg className="w-8 h-8 text-purple-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        <h3 className="text-xl font-bold text-white mb-2">Innovative Tech</h3>
-                        <p className="text-sm text-neutral-400">Home to major hubs for Web3, AI, Fintech, and open-source development.</p>
+                        <Zap className="w-8 h-8 text-purple-500 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Innovation Hub</h3>
+                        <p className="text-sm text-neutral-400">Collaborate with the brightest minds in {cityConfig.name}'s tech ecosystem.</p>
                     </div>
                     <div className="bg-neutral-900/50 border border-white/10 p-6 rounded-2xl">
-                        <svg className="w-8 h-8 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <h3 className="text-xl font-bold text-white mb-2">Amazing Community</h3>
-                        <p className="text-sm text-neutral-400">Join thousands of passionate builders who collaborate and share knowledge freely.</p>
+                        <Users className="w-8 h-8 text-green-500 mb-4" />
+                        <h3 className="text-xl font-bold text-white mb-2">Strong Community</h3>
+                        <p className="text-sm text-neutral-400">Build lasting connections with the local developer and founder community.</p>
                     </div>
                 </div>
 
                 <h2 className="text-3xl font-bold text-white mb-6">Find Your Next Event</h2>
                 <p>
-                    Whether you are a seasoned full-stack developer, a designer, or just starting out in the world of coding, Berlin has an event for you. Use Hackamaps to discover the next hackathon near you and register today.
+                    Whether you are a seasoned full-stack developer, a designer, or just starting out, {cityConfig.name} has an event for you. Use Hackamaps to discover the next hackathon near you and register today.
                 </p>
                 <div className="mt-8 flex justify-center not-prose">
                     <a href="https://hackamaps.com" className="text-blue-400 hover:text-blue-300 font-medium underline underline-offset-4">
@@ -349,12 +353,12 @@ export const HackathonsInBerlin = () => {
                 <h2 className="text-3xl font-bold text-white mt-12 mb-6">Frequently Asked Questions</h2>
                 <div className="space-y-6 not-prose">
                     <div>
-                        <h3 className="text-xl font-bold text-white">Are hackathons in Berlin free?</h3>
-                        <p className="text-neutral-400">Yes! The vast majority of coding events and hackathons in Berlin are 100% free to attend, and often provide food, drinks, and sometimes travel reimbursements.</p>
+                        <h3 className="text-xl font-bold text-white">Are hackathons in {cityConfig.name} free?</h3>
+                        <p className="text-neutral-400">Most community-driven hackathons are free. Some specialized or corporate events might have a small commitment fee or registration process.</p>
                     </div>
                     <div>
-                        <h3 className="text-xl font-bold text-white">Do I need a team to join a Berlin hackathon?</h3>
-                        <p className="text-neutral-400">Not at all. Most events have a dedicated team-building session on Friday night where solo developers and designers can find teammates.</p>
+                        <h3 className="text-xl font-bold text-white">How do I find teams for {cityConfig.name} events?</h3>
+                        <p className="text-neutral-400">Hackathons usually have dedicated Discord servers or on-site team-matching sessions to help solo participants find teammates.</p>
                     </div>
                 </div>
             </section>

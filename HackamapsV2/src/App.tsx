@@ -4,15 +4,21 @@ import AppContent from './AppContent';
 import { Analytics } from '@vercel/analytics/react';
 import { HelmetProvider } from 'react-helmet-async';
 
-import { HackathonsInBerlin } from './components/SEO/HackathonsInBerlin';
+import { CityLandingPage } from './components/SEO/CityLandingPage';
+import { SEO_CITIES } from './config/cities';
 
 export default function App() {
-  const isBerlinPage = typeof window !== 'undefined' && window.location.pathname === '/hackathons-in-berlin';
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  
+  // Match /hackathons-in-:city (e.g., /hackathons-in-berlin)
+  const cityMatch = pathname.match(/^\/hackathons-in-([a-z-]+)$/);
+  const cityKey = cityMatch ? cityMatch[1] : null;
+  const cityConfig = cityKey ? SEO_CITIES[cityKey] : null;
 
-  if (isBerlinPage) {
+  if (cityConfig) {
     return (
       <HelmetProvider>
-        <HackathonsInBerlin />
+        <CityLandingPage cityKey={cityKey!} />
         <Analytics />
       </HelmetProvider>
     );
