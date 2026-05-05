@@ -24,6 +24,26 @@ export default function App() {
     );
   }
 
+  // Handle auth callback
+  if (pathname === '/auth/callback') {
+    return (
+      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center space-y-4 text-white">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">Completing login...</h2>
+          <p className="text-neutral-400">Please wait while we verify your session.</p>
+        </div>
+        <script>
+          {`
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 2000);
+          `}
+        </script>
+      </div>
+    );
+  }
+
   return (
     <HelmetProvider>
       <AuthProvider>

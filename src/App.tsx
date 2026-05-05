@@ -9,6 +9,7 @@ import Map from "./pages/Map";
 import ProfilePublic from "./pages/ProfilePublic";
 import ProfilePrivate from "./pages/ProfilePrivate";
 import Auth from "./pages/Auth";
+import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/profile-wiecen-public" element={<ProfilePublic />} />
             <Route path="/profile-wiecen-private" element={<ProfilePrivate />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
