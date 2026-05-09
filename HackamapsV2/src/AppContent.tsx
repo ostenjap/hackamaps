@@ -56,7 +56,7 @@ export default function AppContent() {
         selectedContinents: [],
         locationSearch: "",
         selectedWeeksAhead: 0,
-        eventStatus: 'upcoming'
+        eventStatus: 'all'
     });
 
     const handleSetFilters = (updates: Partial<FilterState>) => {

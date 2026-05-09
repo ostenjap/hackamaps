@@ -56,7 +56,7 @@ export function FilterPanel({
             selectedContinents: [],
             locationSearch: "",
             selectedWeeksAhead: 0,
-            eventStatus: 'upcoming'
+            eventStatus: 'all'
         });
     };
 
@@ -65,7 +65,7 @@ export function FilterPanel({
         selectedContinents.length +
         (locationSearch ? 1 : 0) +
         (selectedWeeksAhead > 0 ? 1 : 0) +
-        (eventStatus !== 'upcoming' ? 1 : 0);
+        (eventStatus !== 'all' ? 1 : 0);
 
     const getTargetDate = (): Date => {
         const date = new Date();
