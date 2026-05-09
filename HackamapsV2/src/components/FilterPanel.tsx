@@ -121,12 +121,12 @@ export function FilterPanel({
                     <div className="space-y-3">
                         <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-purple-500" />
-                            Location
+                            Quick Search
                         </label>
                         <div className="relative group">
                             <input
                                 type="text"
-                                placeholder="Search city or country..."
+                                placeholder="Search title, city or country..."
                                 value={locationSearch}
                                 onChange={(e) => setFilters({ locationSearch: e.target.value })}
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all"
