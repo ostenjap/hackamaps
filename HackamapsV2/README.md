@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# 🚀 HackaMaps: The Global Hackathon Quest Map
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+HackaMaps is a premium, real-time interactive platform designed for hackers to discover, track, and navigate the global hackathon ecosystem. 
 
-Currently, two official plugins are available:
+## ✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🔍 Advanced Filtering System
+We've implemented a powerful, intuitive filter panel that helps you find exactly what you're looking for:
+*   **Quick Search**: A high-speed search field that filters by **Event Title**, **City**, or **Country** simultaneously.
+*   **Event Status Toggle**:
+    *   **All**: The default view, showing the complete history and future of hackathons.
+    *   **Upcoming**: Focus solely on future opportunities.
+    *   **Past**: Explore historical data and previous winners.
+*   **Visual Timeframe**: A dynamic "Starting Time" slider to filter events by their proximity (automatically disabled for past events to improve UX).
+*   **Geo-Filtering**: Filter by specific Continents or Categories (AI, Web3, FinTech, etc.).
 
-## React Compiler
+### 🗺️ Interactive Maps
+*   **Hackathon Map**: A high-performance map view to visualize hackathons globally with custom markers.
+*   **Hacker Face Map**: A unique social map where hackers can drop "pins" to showcase their location, social links, and network.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+*   **Frontend**: React 18, TypeScript, Vite
+*   **Styling**: Tailwind CSS + Framer Motion (for premium animations)
+*   **Backend/Auth**: Supabase (PostgreSQL + Real-time)
+*   **Payments**: Stripe API Integration
+*   **Icons**: Lucide React
+*   **Maps**: React Leaflet
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1.  **Clone the repository**
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Environment Setup**:
+    Ensure your `.env` file contains the necessary `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+4.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📄 License
+Internal use only. Part of the FaradayX HackerMaps ecosystem.
