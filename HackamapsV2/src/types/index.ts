@@ -42,6 +42,7 @@ export interface FilterState {
     selectedContinents: string[];
     locationSearch: string;
     selectedWeeksAhead: number;
+    eventStatus: 'upcoming' | 'past' | 'all';
 }
 
 export const CATEGORIES = [

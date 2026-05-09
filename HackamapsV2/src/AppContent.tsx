@@ -55,7 +55,8 @@ export default function AppContent() {
         selectedCategories: [],
         selectedContinents: [],
         locationSearch: "",
-        selectedWeeksAhead: 0
+        selectedWeeksAhead: 0,
+        eventStatus: 'upcoming'
     });
 
     const handleSetFilters = (updates: Partial<FilterState>) => {
@@ -88,7 +89,17 @@ export default function AppContent() {
             if (!matches) return false;
         }
 
-        // 4. Time Frame (Start Date Threshold)
+        // 4. Past vs Future vs All
+        const now = new Date();
+        if (filters.eventStatus === 'upcoming' && event.startDate < now) {
+            return false;
+        }
+        if (filters.eventStatus === 'past' && event.startDate >= now) {
+            return false;
+        }
+        // If 'all', we don't return false based on date.
+
+        // 5. Time Frame (Start Date Threshold)
         if (filters.selectedWeeksAhead > 0) {
             const thresholdDate = new Date();
             thresholdDate.setDate(thresholdDate.getDate() + (filters.selectedWeeksAhead * 7));

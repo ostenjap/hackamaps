@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Globe, Filter } from "lucide-react";
+import { X, MapPin, Globe, Filter, History } from "lucide-react";
 import { Button, Badge } from "./ui";
 import { CATEGORIES, CONTINENTS } from "../types";
 import type { FilterState } from "../types";
@@ -30,6 +30,7 @@ export function FilterPanel({
     selectedContinents,
     locationSearch,
     selectedWeeksAhead,
+    eventStatus,
     setFilters,
 }: FilterPanelProps) {
 
@@ -54,7 +55,8 @@ export function FilterPanel({
             selectedCategories: [],
             selectedContinents: [],
             locationSearch: "",
-            selectedWeeksAhead: 0
+            selectedWeeksAhead: 0,
+            eventStatus: 'upcoming'
         });
     };
 
@@ -62,7 +64,8 @@ export function FilterPanel({
         selectedCategories.length +
         selectedContinents.length +
         (locationSearch ? 1 : 0) +
-        (selectedWeeksAhead > 0 ? 1 : 0);
+        (selectedWeeksAhead > 0 ? 1 : 0) +
+        (eventStatus !== 'upcoming' ? 1 : 0);
 
     const getTargetDate = (): Date => {
         const date = new Date();
@@ -198,27 +201,74 @@ export function FilterPanel({
                     </div>
 
                     {/* Time Frame */}
-                    <div className="space-y-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className={`space-y-4 p-4 rounded-xl bg-white/5 border border-white/10 transition-all duration-300 ${
+                        eventStatus === 'past' ? 'opacity-40 grayscale pointer-events-none' : ''
+                    }`}>
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-neutral-300">Starting Time</span>
                             <span className="text-xs text-blue-400 font-mono">
-                                {selectedWeeksAhead === 0 ? "All Time" : `+${selectedWeeksAhead} Weeks`}
+                                {eventStatus === 'past' ? 'N/A' : (selectedWeeksAhead === 0 ? "All Time" : `+${selectedWeeksAhead} Weeks`)}
                             </span>
                         </div>
 
                         <div className="space-y-4">
                             <div className="flex justify-between text-xs text-neutral-500 font-mono">
-                                <span>{selectedWeeksAhead === 0 ? "Showing all events" : `Events starting after ${formatDateWithOrdinal(getTargetDate())}`}</span>
+                                <span>
+                                    {eventStatus === 'past' 
+                                        ? "Filter disabled for past events" 
+                                        : (selectedWeeksAhead === 0 ? "Showing all events" : `Events starting after ${formatDateWithOrdinal(getTargetDate())}`)}
+                                </span>
                             </div>
                             <input
                                 type="range"
                                 min="0"
                                 max="52"
                                 value={selectedWeeksAhead}
+                                disabled={eventStatus === 'past'}
                                 onChange={(e) => setFilters({ selectedWeeksAhead: Number(e.target.value) })}
                                 className="w-full h-1 bg-neutral-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                             />
                         </div>
+                    </div>
+
+                    {/* Event Status (Past vs Upcoming) */}
+                    <div className="space-y-3">
+                        <label className="text-sm font-medium text-neutral-300 flex items-center gap-2">
+                            <History className="w-4 h-4 text-orange-500" />
+                            Event Status
+                        </label>
+                        <div className="flex p-1 bg-white/5 rounded-lg border border-white/10 gap-1">
+                            <button
+                                onClick={() => setFilters({ eventStatus: 'upcoming' })}
+                                className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${eventStatus === 'upcoming'
+                                        ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20"
+                                        : "text-neutral-500 hover:text-neutral-300"
+                                    }`}
+                            >
+                                Upcoming
+                            </button>
+                            <button
+                                onClick={() => setFilters({ eventStatus: 'all' })}
+                                className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${eventStatus === 'all'
+                                        ? "bg-purple-500 text-white shadow-lg shadow-purple-500/20"
+                                        : "text-neutral-500 hover:text-neutral-300"
+                                    }`}
+                            >
+                                All
+                            </button>
+                            <button
+                                onClick={() => setFilters({ eventStatus: 'past' })}
+                                className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${eventStatus === 'past'
+                                        ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
+                                        : "text-neutral-500 hover:text-neutral-300"
+                                    }`}
+                            >
+                                Past
+                            </button>
+                        </div>
+                        <p className="text-[10px] text-neutral-500 px-1 italic">
+                            * Default shows only future hackathons.
+                        </p>
                     </div>
 
                 </div>
