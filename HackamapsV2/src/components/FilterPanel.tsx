@@ -267,7 +267,7 @@ export function FilterPanel({
                             </button>
                         </div>
                         <p className="text-[10px] text-neutral-500 px-1 italic">
-                            * Default shows only future hackathons.
+                            * Showing all events by default.
                         </p>
                     </div>
 
