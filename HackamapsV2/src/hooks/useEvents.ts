@@ -62,6 +62,9 @@ export function useEvents() {
         }
 
         fetchEvents();
+
+        window.addEventListener('hackathons_changed', fetchEvents);
+        return () => window.removeEventListener('hackathons_changed', fetchEvents);
     }, []);
 
     return { data, isLoading };

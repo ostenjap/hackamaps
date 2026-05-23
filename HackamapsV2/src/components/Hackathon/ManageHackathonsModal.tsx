@@ -199,6 +199,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
 
             setView('list');
             fetchUserHackathons();
+            window.dispatchEvent(new Event('hackathons_changed'));
         } catch (err: any) {
             console.error("Submission Exception:", err);
             setError(err.message || "An unexpected error occurred");
