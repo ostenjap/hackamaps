@@ -17,17 +17,23 @@ function Calendar({
             showOutsideDays={showOutsideDays}
             className={cn("p-3", className)}
             classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                months: "relative flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-4",
-                caption: "flex justify-center pt-1 relative items-center",
+                month_caption: "flex justify-center pt-1 relative items-center",
                 caption_label: "text-sm font-medium text-white",
-                nav: "space-x-1 flex items-center",
+                nav: "absolute w-full flex items-center justify-between z-10",
                 nav_button: cn(
                     "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-white/10 rounded-md transition-colors flex items-center justify-center"
                 ),
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
-                table: "w-full border-collapse space-y-1",
+                button_previous: cn(
+                    "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-white/10 rounded-md transition-colors flex items-center justify-center absolute left-1"
+                ),
+                button_next: cn(
+                    "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-white/10 rounded-md transition-colors flex items-center justify-center absolute right-1"
+                ),
+                table: "w-full border-collapse space-y-1 pt-4",
                 head_row: "flex",
                 head_cell:
                     "text-neutral-500 rounded-md w-9 font-normal text-[0.8rem]",
@@ -49,6 +55,15 @@ function Calendar({
                 ...classNames,
             }}
 
+            components={{
+                Chevron: (props) => {
+                    if (props.orientation === 'left') {
+                        return <ChevronLeft className="h-4 w-4" />
+                    }
+                    return <ChevronRight className="h-4 w-4" />
+                },
+                ...props.components,
+            }}
             {...props}
         />
     )

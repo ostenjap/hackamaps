@@ -337,8 +337,8 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                                             </label>
                                         </div>
                                         <div className="flex-1">
-                                            <input type="url" value={formData.website_url} onChange={e => setFormData({ ...formData, website_url: e.target.value })}
-                                                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="https://..." />
+                                            <input type="url" value={logoUrl || ''} onChange={e => setLogoUrl(e.target.value)}
+                                                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="Image Link (https://...)" />
                                         </div>
                                     </div>
                                 </div>
@@ -363,15 +363,21 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
+                                    <label className="text-xs text-neutral-400">Website URL</label>
+                                    <input type="url" value={formData.website_url} onChange={e => setFormData({ ...formData, website_url: e.target.value })}
+                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="https://myhackathon.com" />
+                                </div>
+                                <div className="space-y-1">
                                     <label className="text-xs text-neutral-400">Prize Pool</label>
                                     <input type="text" value={formData.prize_pool} onChange={e => setFormData({ ...formData, prize_pool: e.target.value })}
                                         className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500/50 outline-none" placeholder="$10,000" />
                                 </div>
-                                <div className="flex items-center gap-3 pt-6">
-                                    <input type="checkbox" id="is_online" checked={formData.is_online} onChange={e => setFormData({ ...formData, is_online: e.target.checked })}
-                                        className="rounded border-white/10 bg-white/5 text-blue-500 focus:ring-blue-500/50" />
-                                    <label htmlFor="is_online" className="text-sm text-white cursor-pointer select-none">This is an online event</label>
-                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 py-1">
+                                <input type="checkbox" id="is_online" checked={formData.is_online} onChange={e => setFormData({ ...formData, is_online: e.target.checked })}
+                                    className="rounded border-white/10 bg-white/5 text-blue-500 focus:ring-blue-500/50" />
+                                <label htmlFor="is_online" className="text-sm text-white cursor-pointer select-none">This is an online event</label>
                             </div>
 
                             <div className="space-y-1">
