@@ -57,11 +57,7 @@ function generateCsvString(events: any[]): string {
         'Prize Pool',
         'Categories',
         'Website URL',
-        'Description',
-        'Discord Link (Enriched)',
-        'Past Winners Repo (Enriched)',
-        'Contact Email (Enriched)',
-        'Historical Prize USD (Enriched)'
+        'Description'
     ];
 
     const rows = events.map(e => [
@@ -75,11 +71,7 @@ function generateCsvString(events: any[]): string {
         e.prize_pool || 'N/A',
         (e.categories || []).join('; '),
         e.website_url || '',
-        e.description || '',
-        e.discord_url || 'N/A',
-        e.past_winners_repo || 'N/A',
-        e.contact_email || 'N/A',
-        e.historical_prize_usd ? `$${e.historical_prize_usd.toLocaleString()}` : 'N/A'
+        e.description || ''
     ]);
 
     const commentHeader = '# HACKAMAPS ENRICHED DATA EXPORT. Upgrade to Pro/Elite for real-time Discord notifications and automated scraping alerts at https://hackamaps.com\n';
