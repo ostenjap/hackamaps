@@ -1,18 +1,20 @@
 import React from 'react';
 import { Search, Share2, Calendar, MapPin } from 'lucide-react';
 import { Card, Badge, Button } from '../ui';
-import type { HackathonEvent, ViewState } from '../../types';
+import type { HackathonEvent, ViewState, FilterState } from '../../types';
 import { CATEGORIES } from '../../types';
+import { ExportButton } from '../Export/ExportButton';
 
 interface DiscoverProps {
     events: HackathonEvent[];
     isLoading: boolean;
     setView: (view: ViewState) => void;
     onOpenFilter: () => void;
-    onSelectEvent: (id: string) => void;
+    onSelectEvent?: (id: string) => void;
+    filters: FilterState;
 }
 
-export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEvent }: DiscoverProps) => {
+export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEvent, filters }: DiscoverProps) => {
     return (
         <div className="max-w-6xl mx-auto w-full animate-in slide-in-from-right duration-500">
             <div className="flex items-center justify-between mb-6 md:mb-8">
@@ -20,10 +22,11 @@ export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEve
                     <h2 className="text-2xl md:text-3xl font-bold text-white">Trending Events</h2>
                     <p className="text-sm md:text-base text-neutral-500 mt-1">Curated list of high-signal hackathons.</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-3 items-center">
                     <Button variant="outline" size="sm" className="hidden md:flex" onClick={onOpenFilter}>
                         <Search className="w-4 h-4 mr-2" /> Filter
                     </Button>
+                    <ExportButton filters={filters} />
                 </div>
             </div>
 
@@ -36,7 +39,7 @@ export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEve
                     events.map(event => {
                         const cat = CATEGORIES.find(c => c.id === event.type);
                         return (
-                            <Card key={event.id} onClick={() => onSelectEvent(event.id)} className="cursor-pointer group relative p-6 flex flex-col justify-between min-h-[280px]">
+                            <Card key={event.id} onClick={() => onSelectEvent?.(event.id)} className="cursor-pointer group relative p-6 flex flex-col justify-between min-h-[280px]">
                                 <div>
                                     <div className="flex justify-between items-start mb-4">
                                         <Badge style={{ backgroundColor: cat?.color ? `${cat.color}20` : undefined, color: cat?.color, borderColor: cat?.color }}>

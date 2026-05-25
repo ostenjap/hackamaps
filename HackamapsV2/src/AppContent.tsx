@@ -24,6 +24,7 @@ import { ManageHackathonsModal } from './components/Hackathon/ManageHackathonsMo
 import { FaceMapView } from './components/Map/FaceMapView';
 import { useFacePins } from './hooks/useFacePins';
 import { PinManagerModal } from './components/Map/PinManagerModal';
+import { DownloadSuccessModal } from './components/Export/DownloadSuccessModal';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
@@ -32,6 +33,7 @@ export default function AppContent() {
     const [inputText, setInputText] = useState('');
     const [captions, setCaptions] = useState<UserCommand[]>([]);
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [isExportSuccessOpen, setIsExportSuccessOpen] = useState(false);
     const { data: events, isLoading } = useEvents();
 
     const {
@@ -219,10 +221,14 @@ export default function AppContent() {
         }
     }, [isInputOpen]);
 
-    // Check for session_id on mount
+    // Check for session_id or export_success on mount
     useEffect(() => {
         const query = new URLSearchParams(window.location.search);
-        if (query.get('session_id')) {
+        if (query.get('export_success') === 'true') {
+            setIsExportSuccessOpen(true);
+            // Remove the query param from URL without reloading
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (query.get('session_id')) {
             setShowSuccessToast(true);
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
@@ -264,6 +270,12 @@ export default function AppContent() {
                     setView('home');
                     setIsPinManagerOpen(false);
                 }}
+            />
+
+            <DownloadSuccessModal
+                isOpen={isExportSuccessOpen}
+                onClose={() => setIsExportSuccessOpen(false)}
+                onUpgrade={() => setView('home')}
             />
 
             {/* PAYMENT SUCCESS TOAST */}
@@ -375,6 +387,7 @@ export default function AppContent() {
                                 setSelectedEventId(id);
                                 setView('map');
                             }}
+                            filters={filters}
                         />
                     )}
                     {view === 'map' && (
