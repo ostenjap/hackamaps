@@ -1,4 +1,4 @@
-export type ViewState = 'home' | 'discover' | 'map' | 'organizers' | 'face_map';
+export type ViewState = 'home' | 'discover' | 'map' | 'organizers' | 'face_map' | 'impressum' | 'privacy';
 
 export interface HackathonEvent {
     id: string;

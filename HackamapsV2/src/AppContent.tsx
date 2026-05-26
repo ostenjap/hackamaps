@@ -25,6 +25,9 @@ import { FaceMapView } from './components/Map/FaceMapView';
 import { useFacePins } from './hooks/useFacePins';
 import { PinManagerModal } from './components/Map/PinManagerModal';
 import { DownloadSuccessModal } from './components/Export/DownloadSuccessModal';
+import { Impressum } from './components/Legal/Impressum';
+import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
+import { Footer } from './components/Home/Footer';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>('home');
@@ -375,37 +378,44 @@ export default function AppContent() {
 
             {/* MAIN CONTENT AREA */}
             <main className="relative z-10 w-full h-full pt-24 pb-16 px-4 overflow-y-auto scrollbar-none">
-                <div className="max-w-7xl mx-auto min-h-full flex flex-col">
-                    {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
-                    {view === 'discover' && (
-                        <Discover 
-                            events={filteredEvents} 
-                            isLoading={isLoading} 
-                            setView={setView} 
-                            onOpenFilter={() => setIsFilterOpen(true)}
-                            onSelectEvent={(id) => {
-                                setSelectedEventId(id);
-                                setView('map');
-                            }}
-                            filters={filters}
-                        />
-                    )}
-                    {view === 'map' && (
-                        <MapView
-                            events={filteredEvents}
-                            onAddHackathon={handleOpenAddHackathon}
-                            onOpenFilter={() => setIsFilterOpen(true)}
-                            isPremium={isPremium}
-                            selectedEventId={selectedEventId}
-                        />
-                    )}
-                    {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
-                    {view === 'organizers' && (
-                        <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">
-                            <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>
-                            <p className="text-neutral-400">Restricted Access. Login required.</p>
-                        </div>
-                    )}
+                <div className="max-w-7xl mx-auto min-h-full flex flex-col justify-between">
+                    <div className="flex-1">
+                        {view === 'home' && <Home eventCount={filteredEvents.length} setView={setView} />}
+                        {view === 'discover' && (
+                            <Discover 
+                                events={filteredEvents} 
+                                isLoading={isLoading} 
+                                setView={setView} 
+                                onOpenFilter={() => setIsFilterOpen(true)}
+                                onSelectEvent={(id) => {
+                                    setSelectedEventId(id);
+                                    setView('map');
+                                }}
+                                filters={filters}
+                            />
+                        )}
+                        {view === 'map' && (
+                            <MapView
+                                events={filteredEvents}
+                                onAddHackathon={handleOpenAddHackathon}
+                                onOpenFilter={() => setIsFilterOpen(true)}
+                                isPremium={isPremium}
+                                selectedEventId={selectedEventId}
+                            />
+                        )}
+                        {view === 'face_map' && <FaceMapView pins={pins} onAddPin={() => setIsPinManagerOpen(true)} />}
+                        {view === 'organizers' && (
+                            <div className="text-center animate-in fade-in flex-1 flex flex-col justify-center">
+                                <h1 className="text-4xl font-bold mb-4">Organizer Portal</h1>
+                                <p className="text-neutral-400">Restricted Access. Login required.</p>
+                            </div>
+                        )}
+                        {view === 'impressum' && <Impressum />}
+                        {view === 'privacy' && <PrivacyPolicy />}
+                    </div>
+
+                    {/* GDPR Compliance Footer */}
+                    <Footer setView={setView} />
                 </div>
             </main>
 
