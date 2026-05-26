@@ -63,3 +63,8 @@ csv_to_sql.py
 populate_hackathons.sql
 hackathon-scraper-service
 
+# Security, secrets, and private scripts
+.env
+supabase_rls_fix.sql
+scratch/
+scripts/security_check.js
