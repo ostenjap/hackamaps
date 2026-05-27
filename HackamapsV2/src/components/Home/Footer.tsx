@@ -42,7 +42,7 @@ export function Footer({ setView }: FooterProps) {
                         Privacy Policy (Datenschutz)
                     </button>
                     <a
-                        href="mailto:support@hackamaps.com"
+                        href="mailto:ojap@hackamaps.com"
                         className="hover:text-white transition-colors duration-200 cursor-pointer font-medium"
                     >
                         Support

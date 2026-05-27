@@ -10,34 +10,17 @@ export function Impressum() {
             <section className="space-y-6 text-sm leading-relaxed">
                 <div>
                     <h2 className="text-lg font-bold text-white mb-2">Angaben gemäß § 5 TMG</h2>
-                    <p className="font-semibold text-white">Hackamaps UG (haftungsbeschränkt)</p>
-                    <p>Musterstraße 42</p>
-                    <p>10115 Berlin</p>
+                    <p className="font-semibold text-white">Osten Wiecen Jap</p>
+                    <p>Eichbuschallee 53 Container 0231</p>
+                    <p>12437 Berlin</p>
                     <p>Deutschland</p>
                 </div>
 
                 <div>
-                    <h2 className="text-lg font-bold text-white mb-2">Vertreten durch</h2>
-                    <p>O Ostenjap (Geschäftsführer)</p>
-                </div>
-
-                <div>
                     <h2 className="text-lg font-bold text-white mb-2">Kontakt</h2>
-                    <p>E-Mail: <a href="mailto:support@hackamaps.com" className="text-blue-400 hover:underline">support@hackamaps.com</a></p>
+                    <p>Telefon: <a href="tel:+4917666531672" className="text-blue-400 hover:underline">+49 176 66531672</a></p>
+                    <p>E-Mail: <a href="mailto:ojap@hackamaps.com" className="text-blue-400 hover:underline">ojap@hackamaps.com</a></p>
                     <p>Website: <a href="https://hackamaps.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">https://hackamaps.com</a></p>
-                </div>
-
-                <div>
-                    <h2 className="text-lg font-bold text-white mb-2">Registereintrag</h2>
-                    <p>Eintragung im Handelsregister.</p>
-                    <p>Registergericht: Amtsgericht Charlottenburg (Berlin)</p>
-                    <p>Registernummer: HRB 99999 B</p>
-                </div>
-
-                <div>
-                    <h2 className="text-lg font-bold text-white mb-2">Umsatzsteuer-ID</h2>
-                    <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:</p>
-                    <p className="font-mono text-neutral-400">DE 999999999</p>
                 </div>
 
                 <div className="border-t border-white/10 pt-6 mt-8">

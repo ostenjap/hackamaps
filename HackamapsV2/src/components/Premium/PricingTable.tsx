@@ -612,7 +612,7 @@ export const PricingTable = () => {
                         variant="primary"
                         size="lg"
                         className="rounded-2xl px-12"
-                        onClick={() => window.location.href = 'mailto:hello@hackamaps.com'}
+                        onClick={() => window.location.href = 'mailto:ojap@hackamaps.com'}
                     >
                         <Mail className="w-5 h-5 mr-2" />
                         Contact

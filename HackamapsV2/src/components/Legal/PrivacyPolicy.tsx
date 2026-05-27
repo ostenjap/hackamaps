@@ -20,9 +20,9 @@ export function PrivacyPolicy() {
 
                 <div>
                     <h2 className="text-lg font-bold text-white mb-2">2. Verantwortliche Stelle</h2>
-                    <p className="font-semibold text-white">Hackamaps UG (haftungsbeschränkt)</p>
-                    <p>Musterstraße 42, 10115 Berlin, Deutschland</p>
-                    <p>E-Mail: <a href="mailto:support@hackamaps.com" className="text-blue-400 hover:underline">support@hackamaps.com</a></p>
+                    <p className="font-semibold text-white">Osten Wiecen Jap</p>
+                    <p>Eichbuschallee 53 Container 0231, 12437 Berlin, Deutschland</p>
+                    <p>E-Mail: <a href="mailto:ojap@hackamaps.com" className="text-blue-400 hover:underline">ojap@hackamaps.com</a></p>
                 </div>
 
                 <div>
