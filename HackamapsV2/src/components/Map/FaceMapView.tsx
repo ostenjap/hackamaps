@@ -155,13 +155,6 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
     return (
         <div className="w-full h-[60vh] min-h-[400px] rounded-xl border border-white/10 overflow-hidden relative shadow-2xl bg-neutral-900">
             <div ref={mapContainer} className="w-full h-full z-10" />
-            <div className="absolute bottom-4 left-4 z-[400] bg-black/80 backdrop-blur border border-white/10 p-3 rounded-lg">
-                <div className="text-[10px] text-gray-400 font-mono mb-1">NETWORK ACTIVE</div>
-                <div className="text-xs text-blue-400 font-mono flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                    {pins.length} HACKERS ONLINE
-                </div>
-            </div>
         </div>
     );
 };
