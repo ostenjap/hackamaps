@@ -9,14 +9,8 @@ export function useFacePins() {
     const fetchPins = async () => {
         try {
             const { data, error } = await supabase
-                .from('face_pins')
-                .select(`
-                    *,
-                    profiles:user_id (
-                        username,
-                        avatar_url
-                    )
-                `);
+                .from('face_pins_public')
+                .select('*');
 
             if (error) {
                 console.error('Error fetching face pins:', error);
@@ -24,12 +18,7 @@ export function useFacePins() {
             }
 
             if (data) {
-                const mappedPins: FacePin[] = data.map((pin: any) => ({
-                    ...pin,
-                    username: pin.profiles?.username,
-                    avatar_url: pin.profiles?.avatar_url
-                }));
-                setPins(mappedPins);
+                setPins(data as FacePin[]);
             }
         } catch (err) {
             console.error('Unexpected error in fetchPins:', err);

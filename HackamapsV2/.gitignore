@@ -68,3 +68,4 @@ hackathon-scraper-service
 supabase_rls_fix.sql
 scratch/
 scripts/security_check.js
+.agent/

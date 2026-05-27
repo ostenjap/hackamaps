@@ -332,6 +332,10 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                             </div>
                         </div>
 
+                        <div className="text-[11px] text-neutral-400 leading-relaxed text-center px-4 bg-white/[0.01] p-3 rounded-xl border border-white/5 font-mono">
+                            By publishing your pin, you consent to making your username, profile image, socials, and location visible to other authenticated hackers on our Face Map in accordance with our <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Datenschutzerklärung (GDPR)</a>.
+                        </div>
+
                         <div className="flex gap-3 pt-4">
                             {currentPin && (
                                 <button

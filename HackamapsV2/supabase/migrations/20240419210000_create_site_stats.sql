@@ -36,4 +36,4 @@ BEGIN
         last_updated = NOW()
     WHERE id = 'global';
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
