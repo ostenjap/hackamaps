@@ -28,8 +28,10 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
         location_name: ''
     });
     const [customImageUrl, setCustomImageUrl] = useState<string | null>(null);
+    const [consentChecked, setConsentChecked] = useState(false);
 
     useEffect(() => {
+        setConsentChecked(false);
         if (currentPin) {
             setFormData({
                 description: currentPin.description || '',
@@ -332,9 +334,17 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                             </div>
                         </div>
 
-                        <div className="text-[11px] text-neutral-400 leading-relaxed text-center px-4 bg-white/[0.01] p-3 rounded-xl border border-white/5 font-mono">
-                            By publishing your pin, you consent to making your username, profile image, socials, and location visible to other authenticated hackers on our Face Map in accordance with our <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Datenschutzerklärung (GDPR)</a>.
-                        </div>
+                        <label className="flex items-start gap-3 p-3 bg-white/[0.01] hover:bg-white/[0.03] active:bg-white/[0.02] rounded-xl border border-white/5 transition-colors cursor-pointer select-none">
+                            <input
+                                type="checkbox"
+                                checked={consentChecked}
+                                onChange={e => setConsentChecked(e.target.checked)}
+                                className="mt-0.5 w-4 h-4 rounded border-white/10 bg-black/40 text-blue-600 focus:ring-blue-500 focus:ring-offset-neutral-900 focus:ring-1 outline-none transition-all cursor-pointer"
+                            />
+                            <span className="text-[11px] text-neutral-400 leading-relaxed font-mono">
+                                By placing your pin, you consent to making your username, profile image, socials, and location visible to other authenticated hackers on our Face Map in accordance with our <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline inline-flex" onClick={e => e.stopPropagation()}>Datenschutzerklärung (GDPR)</a>.
+                            </span>
+                        </label>
 
                         <div className="flex gap-3 pt-4">
                             {currentPin && (
@@ -349,8 +359,8 @@ export function PinManagerModal({ isOpen, onClose, currentPin, onSuccess, onUpgr
                             )}
                             <button
                                 type="submit"
-                                disabled={loading || uploading}
-                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 disabled:opacity-50"
+                                disabled={loading || uploading || !consentChecked}
+                                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Save className="w-5 h-5" /> {currentPin ? 'Update Pin' : 'Publish My Pin'}</>}
                             </button>
