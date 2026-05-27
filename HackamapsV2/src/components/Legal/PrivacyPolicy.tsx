@@ -2,7 +2,7 @@ import React from 'react';
 
 export function PrivacyPolicy() {
     return (
-        <div className="max-w-3xl mx-auto px-6 py-12 text-neutral-300 animate-in fade-in duration-500">
+        <div className="max-w-3xl mx-auto px-6 py-12 text-neutral-300 animate-in fade-in duration-500 font-sans">
             <h1 className="text-3xl font-extrabold text-white mb-8 tracking-tight font-mono">
                 Datenschutzerklärung <span className="text-blue-500 font-sans text-sm block font-medium mt-1">Privacy Policy</span>
             </h1>
@@ -14,33 +14,50 @@ export function PrivacyPolicy() {
                         Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Personenbezogene Daten werden auf dieser Webseite nur im technisch notwendigen Umfang sowie zur Bereitstellung unserer Dienstleistungen erhoben.
                     </p>
                     <p>
-                        Die folgende Datenschutzerklärung gibt Ihnen einen Überblick darüber, wie wir diesen Schutz gewährleisten und welche Art von Daten zu welchem Zweck erhoben werden.
+                        Die folgende Datenschutzerklärung gibt Ihnen einen Überblick darüber, wie wir diesen Schutz gewährleisten und welche Art von Daten zu welchem Zweck erhoben werden. Wir verwenden aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung.
                     </p>
                 </div>
 
                 <div>
                     <h2 className="text-lg font-bold text-white mb-2">2. Verantwortliche Stelle</h2>
                     <p className="font-semibold text-white">Osten Wiecen Jap</p>
-                    <p>Eichbuschallee 53 Container 0231, 12437 Berlin, Deutschland</p>
-                    <p>E-Mail: <a href="mailto:ojap@hackamaps.com" className="text-blue-400 hover:underline">ojap@hackamaps.com</a></p>
+                    <p>Eichbuschallee 53 Container 0231</p>
+                    <p>12437 Berlin, Deutschland</p>
+                    <p className="mt-1">
+                        E-Mail: <a href="mailto:ojap@hackamaps.com" className="text-blue-400 hover:underline">ojap@hackamaps.com</a>
+                    </p>
                 </div>
 
                 <div>
                     <h2 className="text-lg font-bold text-white mb-2">3. Datenerfassung auf unserer Website</h2>
-                    <h3 className="font-semibold text-white mt-3 mb-1">A. Registrierung und Benutzerprofil (Supabase)</h3>
+                    
+                    <h3 className="font-semibold text-white mt-4 mb-1">A. Server-Log-Dateien</h3>
                     <p className="mb-2">
-                        Wenn Sie sich auf unserer Webseite registrieren, erheben wir personenbezogene Daten wie Ihre E-Mail-Adresse, Ihren Namen, Ihren Benutzernamen sowie Ihr Profilbild (Avatar).
+                        Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt (z. B. Browsertyp, Betriebssystem, Referrer URL, Uhrzeit der Serveranfrage, IP-Adresse). Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.
                     </p>
                     <p className="mb-2">
-                        Die Datenverarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO zur Durchführung des Nutzungsvertrags. Wir schützen diese Profile durch strenge Row-Level-Security (RLS) Richtlinien, sodass Ihre privaten Daten nur für Sie selbst zugänglich sind.
-                    </p>
-
-                    <h3 className="font-semibold text-white mt-3 mb-1">B. Zahlungsabwicklung (Stripe)</h3>
-                    <p className="mb-2">
-                        Wenn Sie ein Premium-Abonnement erwerben, erfolgt die Zahlungsabwicklung über den Zahlungsdienstleister Stripe. Stripe erfasst Zahlungs- und Transaktionsdaten gem. Art. 6 Abs. 1 lit. b DSGVO. Wir selbst speichern keine Kreditkarteninformationen.
+                        Die Erfassung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der technisch fehlerfreien Darstellung und Optimierung der Website).
                     </p>
 
-                    <h3 className="font-semibold text-white mt-3 mb-1">C. Hacker Face Map (Pins)</h3>
+                    <h3 className="font-semibold text-white mt-4 mb-1">B. Verzicht auf Tracking-Cookies / Lokaler Speicher (Local Storage)</h3>
+                    <p className="mb-2">
+                        Diese Webseite verzichtet vollständig auf den Einsatz von Tracking- oder Analyse-Cookies. Zur Sicherstellung der Kernfunktionen (insbesondere dem Login-Status) verwenden wir den "Local Storage" des Browsers. Dies ist technisch zwingend erforderlich (§ 25 Abs. 2 TTDSG) und basiert auf unserem berechtigten Interesse (Art. 6 Abs. 1 lit. f DSGVO).
+                    </p>
+
+                    <h3 className="font-semibold text-white mt-4 mb-1">C. Registrierung und Benutzerprofil (Supabase)</h3>
+                    <p className="mb-2">
+                        Wenn Sie sich registrieren, erheben wir Daten wie Ihre E-Mail-Adresse, Ihren Namen, Ihren Benutzernamen sowie Ihr Profilbild (Avatar). Die Datenverarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO zur Durchführung des Nutzungsvertrags. 
+                    </p>
+                    <p className="mb-2">
+                        Wir nutzen für die Datenbank und Authentifizierung den Dienst Supabase (Supabase, Inc., 970 Toa Payoh North #07-04, Singapore 318992). Die Datenübertragung in Drittländer wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Wir schützen diese Profile durch strenge Row-Level-Security (RLS), sodass private Daten nur für Sie selbst zugänglich sind.
+                    </p>
+
+                    <h3 className="font-semibold text-white mt-4 mb-1">D. Zahlungsabwicklung (Stripe)</h3>
+                    <p className="mb-2">
+                        Wenn Sie ein Premium-Abonnement erwerben, erfolgt die Zahlungsabwicklung über den Zahlungsdienstleister Stripe (Stripe Payments Europe, Ltd., 1 Grand Canal Street Lower, Grand Canal Dock, Dublin, Irland). Stripe erfasst Zahlungs- und Transaktionsdaten gem. Art. 6 Abs. 1 lit. b DSGVO. Wir selbst speichern keine Kreditkarteninformationen.
+                    </p>
+
+                    <h3 className="font-semibold text-white mt-4 mb-1">E. Hacker Face Map (Pins)</h3>
                     <p className="mb-2">
                         Wenn Sie der Face Map beitreten, werden Ihr Profilbild, Ihr Name, Ihre geographischen Koordinaten (Breiten- und Längengrad) sowie Ihre Social-Media-Links für andere Nutzer sichtbar auf der Karte gerendert. 
                     </p>
