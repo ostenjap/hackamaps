@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import { X, Mail, Lock, User, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, AlertCircle } from 'lucide-react';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -11,79 +10,9 @@ interface AuthModalProps {
 type AuthView = 'signin' | 'signup' | 'forgot_password';
 
 export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModalProps) {
-    const [view, setView] = useState<AuthView>(initialView);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [fullName, setFullName] = useState('');
-    const [username, setUsername] = useState('');
-
-    const passwordRequirements = {
-        length: password.length >= 8,
-        number: /\d/.test(password),
-        special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-    };
-
-    const isPasswordValid = Object.values(passwordRequirements).every(Boolean);
+    const [view] = useState<AuthView>(initialView);
 
     if (!isOpen) return null;
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        setSuccessMsg(null);
-
-        if (view === 'signup') {
-            if (!isPasswordValid) {
-                setError("Please meet all password requirements.");
-                return;
-            }
-            if (password !== confirmPassword) {
-                setError("Passwords do not match.");
-                return;
-            }
-        }
-
-        setLoading(true);
-
-        try {
-            if (view === 'signin') {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-                if (error) throw error;
-                onClose();
-            } else if (view === 'signup') {
-                const { error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            full_name: fullName,
-                            username: username
-                        }
-                    }
-                });
-                if (error) throw error;
-                setSuccessMsg("Check your email to confirm your account!");
-            } else if (view === 'forgot_password') {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + '/reset-password',
-                });
-                if (error) throw error;
-                setSuccessMsg("Password reset link sent to your email.");
-            }
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -115,187 +44,12 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                 </div>
 
                 {/* Scrollable Area */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar">
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4">
-
-                    {error && (
-                        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3 text-red-400 text-xs">
-                            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <span>{error}</span>
-                        </div>
-                    )}
-
-                    {successMsg && (
-                        <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg flex items-start gap-3 text-green-400 text-xs">
-                            <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <span>{successMsg}</span>
-                        </div>
-                    )}
-
-                    {view === 'signup' && (
-                        <>
-                            <div className="space-y-1">
-                                <label className="text-xs text-neutral-400 font-medium ml-1">Full Name</label>
-                                <div className="relative group">
-                                    <User className="absolute left-3 top-2.5 w-4 h-4 text-neutral-500 group-focus-within:text-blue-400 transition-colors" />
-                                    <input
-                                        type="text"
-                                        required
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                        placeholder="John Doe"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-1">
-                                <label className="text-xs text-neutral-400 font-medium ml-1">Username</label>
-                                <div className="relative group">
-                                    <span className="absolute left-3 top-2.5 text-neutral-500 group-focus-within:text-blue-400 font-mono text-xs mt-0.5">@</span>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                        placeholder="jdhacker"
-                                    />
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-                    <div className="space-y-1">
-                        <label className="text-xs text-neutral-400 font-medium ml-1">Email</label>
-                        <div className="relative group">
-                            <Mail className="absolute left-3 top-2.5 w-4 h-4 text-neutral-500 group-focus-within:text-blue-400 transition-colors" />
-                            <input
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                placeholder="name@example.com"
-                            />
-                        </div>
-                    </div>
-
-                    {view !== 'forgot_password' && (
-                        <>
-                            <div className="space-y-1">
-                                <div className="flex justify-between items-center ml-1">
-                                    <label className="text-xs text-neutral-400 font-medium">Password</label>
-                                    {view === 'signin' && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setView('forgot_password')}
-                                            className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
-                                        >
-                                            Forgot Password?
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="relative group">
-                                    <Lock className="absolute left-3 top-2.5 w-4 h-4 text-neutral-500 group-focus-within:text-blue-400 transition-colors" />
-                                    <input
-                                        type="password"
-                                        required
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                        placeholder="••••••••"
-                                    />
-                                </div>
-                            </div>
-
-                            {view === 'signup' && (
-                                <>
-                                    <div className="space-y-1">
-                                        <label className="text-xs text-neutral-400 font-medium ml-1">Confirm Password</label>
-                                        <div className="relative group">
-                                            <CheckCircle2 className={`absolute left-3 top-2.5 w-4 h-4 transition-colors ${password && confirmPassword ? (password === confirmPassword ? 'text-green-500' : 'text-red-500') : 'text-neutral-500'}`} />
-                                            <input
-                                                type="password"
-                                                required
-                                                value={confirmPassword}
-                                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                                className="w-full bg-black/20 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 focus:bg-blue-900/5 transition-all placeholder:text-neutral-700"
-                                                placeholder="••••••••"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-2 space-y-1.5 p-3 bg-white/[0.02] border border-white/5 rounded-xl">
-                                        <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-1">Security Requirements</div>
-                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.length ? 'text-green-400' : 'text-neutral-500'}`}>
-                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.length ? 'text-green-500' : 'text-neutral-600'}`} />
-                                            Min 8 characters
-                                        </div>
-                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.number ? 'text-green-400' : 'text-neutral-500'}`}>
-                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.number ? 'text-green-500' : 'text-neutral-600'}`} />
-                                            At least one number
-                                        </div>
-                                        <div className={`flex items-center gap-2 text-[11px] transition-colors ${passwordRequirements.special ? 'text-green-400' : 'text-neutral-500'}`}>
-                                            <CheckCircle2 className={`w-3 h-3 ${passwordRequirements.special ? 'text-green-500' : 'text-neutral-600'}`} />
-                                            One special character (!@#$%^&*)
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full mt-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white py-2.5 rounded-lg font-medium text-sm transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] flex items-center justify-center gap-2"
-                    >
-                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
-                            <>
-                                {view === 'signin' && 'Sign In'}
-                                {view === 'signup' && 'Create Account'}
-                                {view === 'forgot_password' && 'Send Reset Link'}
-                                <ArrowRight className="w-4 h-4" />
-                            </>
-                        )}
-                    </button>
-                </form>
-                </div>
-
-                {/* Footer - Fixed */}
-                <div className="p-4 bg-white/5 border-t border-white/5 text-center flex-shrink-0 z-10">
-                    {view === 'signin' && (
-                        <p className="text-xs text-neutral-500">
-                            Don't have an account?{' '}
-                            <button
-                                onClick={() => setView('signup')}
-                                className="text-white hover:underline decoration-blue-500 underline-offset-2"
-                            >
-                                Sign up
-                            </button>
-                        </p>
-                    )}
-                    {view === 'signup' && (
-                        <p className="text-xs text-neutral-500">
-                            Already have an account?{' '}
-                            <button
-                                onClick={() => setView('signin')}
-                                className="text-white hover:underline decoration-blue-500 underline-offset-2"
-                            >
-                                Sign in
-                            </button>
-                        </p>
-                    )}
-                    {view === 'forgot_password' && (
-                        <button
-                            onClick={() => setView('signin')}
-                            className="text-xs text-neutral-400 hover:text-white transition-colors"
-                        >
-                            Return to Sign In
-                        </button>
-                    )}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-8 text-center flex flex-col items-center justify-center min-h-[300px]">
+                    <AlertCircle className="w-16 h-16 text-yellow-500 mb-4 opacity-80" />
+                    <h3 className="text-xl font-bold text-white mb-2">System Maintenance</h3>
+                    <p className="text-sm text-neutral-400 max-w-sm">
+                        Authentication is temporarily disabled for scheduled security maintenance. We apologize for the inconvenience and will be back shortly.
+                    </p>
                 </div>
             </div>
         </div>
