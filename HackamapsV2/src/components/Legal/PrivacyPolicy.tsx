@@ -49,7 +49,7 @@ export function PrivacyPolicy() {
                         Wenn Sie sich registrieren, erheben wir Daten wie Ihre E-Mail-Adresse, Ihren Namen, Ihren Benutzernamen sowie Ihr Profilbild (Avatar). Die Datenverarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO zur Durchführung des Nutzungsvertrags. 
                     </p>
                     <p className="mb-2">
-                        Wir nutzen für die Datenbank und Authentifizierung den Dienst Supabase (Supabase, Inc., 970 Toa Payoh North #07-04, Singapore 318992). Die Datenübertragung in Drittländer wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Wir schützen diese Profile durch strenge Row-Level-Security (RLS), sodass private Daten nur für Sie selbst zugänglich sind.
+                        Wir nutzen für die Datenbank und Authentifizierung den Dienst Supabase (Supabase, Inc., 970 Toa Payoh North #07-04, Singapore 318992). Die physische Speicherung der Daten erfolgt auf Servern im Vereinigten Königreich (London). Für das Vereinigte Königreich liegt ein Angemessenheitsbeschluss der EU-Kommission gem. Art. 45 DSGVO vor, der ein angemessenes Datenschutzniveau bestätigt. Die Datenübertragung in Drittländer wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Wir schützen diese Profile durch strenge Row-Level-Security (RLS), sodass private Daten nur für Sie selbst zugänglich sind.
                     </p>
 
                     <h3 className="font-semibold text-white mt-4 mb-1">D. Zahlungsabwicklung (Stripe)</h3>
