@@ -9,6 +9,15 @@ interface FaceMapViewProps {
     onAddPin: () => void;
 }
 
+function escapeHtml(unsafe: string): string {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
@@ -91,12 +100,26 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
         pins.forEach(pin => {
             if (!pin.latitude || !pin.longitude) return;
 
-            const imageUrl = pin.custom_image_url || pin.avatar_url || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            const rawImageUrl = pin.custom_image_url || pin.avatar_url || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            let safeImageUrl = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
+            if (rawImageUrl) {
+                try {
+                    const parsed = new URL(rawImageUrl);
+                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                        safeImageUrl = parsed.href.replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    }
+                } catch {
+                    // Safe Supabase path validation
+                    if (/^[a-zA-Z0-9_\-\.\/]+$/.test(rawImageUrl)) {
+                        safeImageUrl = rawImageUrl;
+                    }
+                }
+            }
 
             const iconHtml = `
                 <div class="relative group">
                     <div class="w-10 h-10 rounded-full border-2 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] overflow-hidden bg-neutral-900 transition-transform hover:scale-110">
-                        <img src="${imageUrl}" class="w-full h-full object-cover" />
+                        <img src="${safeImageUrl}" class="w-full h-full object-cover" />
                     </div>
                     <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-2 border-black" />
                 </div>
@@ -110,32 +133,56 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
                 popupAnchor: [0, -20]
             });
 
+            // Escaped values for XSS protection
+            const cleanUsername = escapeHtml(pin.username || 'user');
+            const cleanDescription = escapeHtml(pin.description || 'No description provided.');
+
+            let safeLinkedinUrl = '';
+            if (pin.linkedin_url) {
+                try {
+                    const parsed = new URL(pin.linkedin_url);
+                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                        safeLinkedinUrl = parsed.href.replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    }
+                } catch {}
+            }
+
+            let safeXUrl = '';
+            if (pin.x_url) {
+                try {
+                    const parsed = new URL(pin.x_url);
+                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                        safeXUrl = parsed.href.replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    }
+                } catch {}
+            }
+
             const popupHtml = `
                 <div class="font-sans min-w-[240px] p-1">
                     <div class="flex items-center gap-3 mb-3">
-                        <img src="${imageUrl}" class="w-12 h-12 rounded-full border border-white/20 object-cover" />
+                        <img src="${safeImageUrl}" class="w-12 h-12 rounded-full border border-white/20 object-cover" />
                         <div>
-                            <h3 class="text-base font-bold text-white leading-tight">@${pin.username || 'user'}</h3>
+                            <h3 class="text-base font-bold text-white leading-tight">@${cleanUsername}</h3>
                             <p class="text-[10px] text-blue-400 font-mono uppercase tracking-wider">Hacker Profile</p>
                         </div>
                     </div>
                     
                     <p class="text-sm text-neutral-300 mb-4 italic leading-relaxed">
-                        "${pin.description || 'No description provided.'}"
+                        "${cleanDescription}"
                     </p>
                     
                     <div class="flex items-center gap-3 border-t border-white/5 pt-3">
-                        ${pin.linkedin_url ? `
-                            <a href="${pin.linkedin_url}" target="_blank" rel="noopener" class="text-neutral-400 hover:text-blue-400 transition-colors">
+                        ${safeLinkedinUrl ? `
+                            <a href="${safeLinkedinUrl}" target="_blank" rel="noopener" class="text-neutral-400 hover:text-blue-400 transition-colors">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                             </a>
                         ` : ''}
-                        ${pin.x_url ? `
-                            <a href="${pin.x_url}" target="_blank" rel="noopener" class="text-neutral-400 hover:text-white transition-colors">
+                        ${safeXUrl ? `
+                            <a href="${safeXUrl}" target="_blank" rel="noopener" class="text-neutral-400 hover:text-white transition-colors">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                             </a>
                         ` : ''}
-                        ${!pin.linkedin_url && !pin.x_url ? '<span class="text-[10px] text-neutral-500 italic">No social links</span>' : ''}
+                        ${!safeLinkedinUrl && !safeXUrl ? '<span class="text-[10px] text-neutral-500 italic">No social links</span>' : ''}
                     </div>
                 </div>
             `;
