@@ -51,6 +51,17 @@ Deno.serve(async (req) => {
 
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object as Stripe.Checkout.Session;
+            
+            // Ignore spreadsheet export checkouts (handled by stripe-export-webhook)
+            const isExport = session.metadata?.is_export === 'true';
+            if (isExport) {
+                console.log(`Spreadsheet export checkout ${session.id} ignored by main webhook.`);
+                return new Response(JSON.stringify({ received: true, ignored: true }), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+
             const sessionId = session.id;
             const userId = session.client_reference_id;
             const customerEmail = session.customer_details?.email || session.customer_email;
