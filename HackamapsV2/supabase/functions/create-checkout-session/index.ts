@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
         if (user) {
             sessionOptions.client_reference_id = user.id;
             sessionOptions.customer_email = user.email;
-        } else {
+        } else if (mode === 'payment') {
             // For guest checkout, allow Stripe to collect email and create customer
             sessionOptions.customer_creation = 'always';
         }
