@@ -43,7 +43,8 @@ export function useEvents() {
                                 website: event.website_url || '',
                                 description: event.description || '',
                                 logoUrl: event.logo_url || '',
-                                isPro: event.profiles?.is_premium || false
+                                isPro: event.profiles?.is_premium || false,
+                                source: event.source || ''
                             };
                         } catch (mapErr) {
                             console.error("Error mapping event:", event, mapErr);

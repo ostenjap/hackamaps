@@ -197,9 +197,15 @@ const MapContainer = ({ events, selectedEventId }: { events: HackathonEvent[], s
                             <div class="flex justify-between items-start mb-3">
                                 <h3 class="text-lg font-bold text-gray-100 leading-tight pr-4">
                                     ${cleanTitle}
-                                    ${isPro ? '<span class="ml-2 text-[10px] bg-yellow-500/20 text-yellow-500 px-1.5 py-0.5 rounded border border-yellow-500/30 uppercase tracking-tighter">PRO</span>' : ''}
+                                     ${isPro ? '<span class="ml-2 text-[10px] bg-yellow-500/20 text-yellow-500 px-1.5 py-0.5 rounded border border-yellow-500/30 uppercase tracking-tighter">PRO</span>' : ''}
                                 </h3>
                             </div>
+                            ${ev.source ? `
+                                <div class="text-[10px] text-purple-400 font-mono tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                                    Source: ${escapeHtml(ev.source)}
+                                </div>
+                            ` : ''}
                             
                             <p class="text-sm text-gray-400 mb-4 line-clamp-2 leading-relaxed">
                                 ${cleanDescription}

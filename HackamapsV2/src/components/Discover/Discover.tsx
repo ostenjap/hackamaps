@@ -54,6 +54,12 @@ export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEve
                                     <div className="flex items-center text-neutral-400 text-sm gap-2">
                                         <MapPin className="w-4 h-4" /> {event.location}
                                     </div>
+                                    {event.source && (
+                                        <div className="text-[11px] text-neutral-500 mt-2 font-mono flex items-center gap-1.5 uppercase tracking-wider">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50" />
+                                            Source: {event.source}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="pt-4 border-t border-white/10 mt-4">

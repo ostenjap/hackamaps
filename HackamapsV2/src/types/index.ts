@@ -16,6 +16,7 @@ export interface HackathonEvent {
     website?: string;
     description?: string;
     isPro?: boolean;
+    source?: string;
 }
 
 export interface FacePin {

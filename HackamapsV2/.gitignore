@@ -69,3 +69,4 @@ supabase_rls_fix.sql
 scratch/
 scripts/security_check.js
 .agent/
+supabase/migrations/20260607194500_add_source_to_hackathons.sql
