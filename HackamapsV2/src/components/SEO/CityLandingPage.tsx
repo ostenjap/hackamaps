@@ -94,11 +94,17 @@ const CityMapContainer = ({ events, cityConfig }: { events: HackathonEvent[], ci
             if (!Array.isArray(events)) return;
 
             events.forEach(ev => {
-                if (!ev || !ev.coords || ev.coords.length !== 2) return;
+                if (!ev || !ev.coords || ev.coords.length !== 2) {
+                    console.error(`Error: Hackathon "${ev?.title || 'Unknown'}" (ID: ${ev?.id || 'Unknown'}) is missing latitude/longitude coordinates and will not be displayed on the city map.`);
+                    return;
+                }
 
-                const lat = Number(ev.coords[0]);
-                const lng = Number(ev.coords[1]);
-                if (isNaN(lat) || isNaN(lng)) return;
+                const lat = ev.coords[0];
+                const lng = ev.coords[1];
+                if (lat === null || lng === null || isNaN(lat) || isNaN(lng)) {
+                    console.error(`Error: Hackathon "${ev.title}" (ID: ${ev.id}) has invalid coordinates [${lat}, ${lng}] and will not be displayed on the city map.`);
+                    return;
+                }
 
                 const categoryColor = CATEGORIES ? (CATEGORIES.find(c => c.id === ev.type)?.color || '#3b82f6') : '#3b82f6';
                 const isPro = ev.isPro;

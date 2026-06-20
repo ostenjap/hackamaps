@@ -36,7 +36,14 @@ export function useEvents() {
                                 location: event.is_online ? 'Remote' : `${event.city || ''}, ${event.country || ''}`,
                                 country: event.country || '',
                                 continent: determineContinent(event.country, event.city),
-                                coords: [Number(event.latitude) || 0, Number(event.longitude) || 0],
+                                coords: (() => {
+                                    const lat = event.latitude !== null && event.latitude !== undefined ? Number(event.latitude) : null;
+                                    const lng = event.longitude !== null && event.longitude !== undefined ? Number(event.longitude) : null;
+                                    if (lat !== null && !isNaN(lat) && lng !== null && !isNaN(lng)) {
+                                        return [lat, lng] as [number, number];
+                                    }
+                                    return null;
+                                })(),
                                 prize: event.prize_pool || 'N/A',
                                 tags: event.categories || [],
                                 type: determineType(event.categories),

@@ -98,7 +98,10 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
         markerLayerRef.current.clearLayers();
 
         pins.forEach(pin => {
-            if (!pin.latitude || !pin.longitude) return;
+            if (!pin.latitude || !pin.longitude || isNaN(pin.latitude) || isNaN(pin.longitude)) {
+                console.error(`Error: Pin for user (ID: ${pin.user_id}) has missing or invalid coordinates [${pin.latitude}, ${pin.longitude}] and will not be displayed on the Face Map.`);
+                return;
+            }
 
             const rawImageUrl = pin.custom_image_url || pin.avatar_url || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
             let safeImageUrl = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';

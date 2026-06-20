@@ -8,7 +8,7 @@ export interface HackathonEvent {
     location: string;
     country: string; // For filtering
     continent: string; // For filtering
-    coords: [number, number];
+    coords: [number, number] | null;
     prize: string;
     tags: string[];
     type: 'web3' | 'ai' | 'cloud' | 'generic' | 'fintech' | 'defense' | 'social';
