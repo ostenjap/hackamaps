@@ -3,6 +3,7 @@ import type { HackathonEvent } from '../../types';
 import { CATEGORIES } from '../../types';
 import { Globe, Plus, Filter } from 'lucide-react';
 import { Badge } from '../ui';
+import { trackEvent } from '../../lib/posthog';
 
 interface MapViewProps {
     events: HackathonEvent[];
@@ -256,6 +257,17 @@ const MapContainer = ({ events, selectedEventId }: { events: HackathonEvent[], s
                     const marker = L.marker([lat, lng], { icon: customIcon })
                         .bindPopup(popupHtml)
                         .addTo(markerLayerRef.current);
+                    
+                    marker.on('popupopen', () => {
+                        trackEvent('hackathon_marker_clicked', {
+                            event_id: ev.id,
+                            title: ev.title,
+                            location: ev.location,
+                            category: ev.type,
+                            source: ev.source || 'user',
+                            is_pro: ev.isPro || false
+                        });
+                    });
                     
                     markersRef.current[ev.id] = marker;
                 } catch (e) {

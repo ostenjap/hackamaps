@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { X, Mail, Lock, User, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { trackEvent } from '../../lib/posthog';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -57,6 +58,7 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                     password,
                 });
                 if (error) throw error;
+                trackEvent('user_signed_in');
                 onClose();
             } else if (view === 'signup') {
                 const { error } = await supabase.auth.signUp({
@@ -70,15 +72,18 @@ export function AuthModal({ isOpen, onClose, initialView = 'signin' }: AuthModal
                     }
                 });
                 if (error) throw error;
+                trackEvent('user_signed_up');
                 setSuccessMsg("Check your email to confirm your account!");
             } else if (view === 'forgot_password') {
                 const { error } = await supabase.auth.resetPasswordForEmail(email, {
                     redirectTo: window.location.origin + '/reset-password',
                 });
                 if (error) throw error;
+                trackEvent('user_password_reset_requested');
                 setSuccessMsg("Password reset link sent to your email.");
             }
         } catch (err: any) {
+            trackEvent('auth_error', { view, error: err.message });
             setError(err.message);
         } finally {
             setLoading(false);

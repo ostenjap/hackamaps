@@ -5,6 +5,7 @@ import { X, Plus, Trash2, Edit2, Save, Calendar, MapPin, Globe, DollarSign, Load
 import { DateTimePicker } from '../ui/date-time-picker';
 import { AddressAutocomplete } from '../ui/address-autocomplete';
 import type { HackathonEvent } from '../../types';
+import { trackEvent } from '../../lib/posthog';
 
 interface ManageHackathonsModalProps {
     isOpen: boolean;
@@ -76,6 +77,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
         });
         setLogoUrl(hackathon.logo_url || null);
         setEditId(hackathon.id);
+        trackEvent('hackathon_edit_started', { hackathon_id: hackathon.id, name: hackathon.name });
         setView('edit');
     };
 
@@ -84,6 +86,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
         try {
             const { error } = await supabase.from('hackathons').delete().eq('id', id);
             if (error) throw error;
+            trackEvent('hackathon_deleted', { hackathon_id: id });
             fetchUserHackathons();
         } catch (err: any) {
             setError(err.message);
@@ -185,6 +188,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                     console.error("Update Error:", updateError);
                     throw updateError;
                 }
+                trackEvent('hackathon_updated', { hackathon_id: editId, name: formData.name });
             } else {
                 // Let Supabase generate the ID (defaults to gen_random_uuid())
                 const { error: insertError } = await supabase
@@ -195,6 +199,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                     console.error("Insert Error:", insertError);
                     throw insertError;
                 }
+                trackEvent('hackathon_created', { name: formData.name, is_online: formData.is_online, city: formData.city });
             }
 
             setView('list');
@@ -239,7 +244,7 @@ export function ManageHackathonsModal({ isOpen, onClose }: ManageHackathonsModal
                     <div className="flex items-center gap-2">
                         {view === 'list' ? (
                             <button
-                                onClick={() => { resetForm(); setView('add'); }}
+                                onClick={() => { resetForm(); trackEvent('hackathon_add_started'); setView('add'); }}
                                 className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-2"
                             >
                                 <Plus className="w-4 h-4" /> Add New

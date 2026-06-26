@@ -39,9 +39,9 @@ export function PrivacyPolicy() {
                         Die Erfassung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der technisch fehlerfreien Darstellung und Optimierung der Website).
                     </p>
 
-                    <h3 className="font-semibold text-white mt-4 mb-1">B. Verzicht auf Tracking-Cookies / Lokaler Speicher (Local Storage)</h3>
+                    <h3 className="font-semibold text-white mt-4 mb-1">B. Lokaler Speicher (Local Storage)</h3>
                     <p className="mb-2">
-                        Diese Webseite verzichtet vollständig auf den Einsatz von Tracking- oder Analyse-Cookies. Zur Sicherstellung der Kernfunktionen (insbesondere dem Login-Status) verwenden wir den "Local Storage" des Browsers. Dies ist technisch zwingend erforderlich (§ 25 Abs. 2 TTDSG) und basiert auf unserem berechtigten Interesse (Art. 6 Abs. 1 lit. f DSGVO).
+                        Zur Sicherstellung der Kernfunktionen (insbesondere dem Login-Status) verwenden wir den "Local Storage" des Browsers. Dies ist technisch zwingend erforderlich (§ 25 Abs. 2 TTDSG) und basiert auf unserem berechtigten Interesse (Art. 6 Abs. 1 lit. f DSGVO).
                     </p>
 
                     <h3 className="font-semibold text-white mt-4 mb-1">C. Registrierung und Benutzerprofil (Supabase)</h3>
@@ -61,8 +61,19 @@ export function PrivacyPolicy() {
                     <p className="mb-2">
                         Wenn Sie der Face Map beitreten, werden Ihr Profilbild, Ihr Name, Ihre geographischen Koordinaten (Breiten- und Längengrad) sowie Ihre Social-Media-Links für andere Nutzer sichtbar auf der Karte gerendert. 
                     </p>
-                    <p>
+                    <p className="mb-2">
                         Diese Freigabe erfolgt ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Sie können Ihre Einwilligung und Ihren Pin jederzeit über Ihr Profil löschen.
+                    </p>
+
+                    <h3 className="font-semibold text-white mt-4 mb-1">F. Analyse-Dienst (PostHog)</h3>
+                    <p className="mb-2">
+                        Wir nutzen zur Analyse des Nutzerverhaltens und zur Verbesserung unseres Angebots den Open-Source-Analysedienst PostHog (PostHog, Inc., 2261 Market Street #4008, San Francisco, CA 94114, USA). Die von uns genutzte Instanz wird auf Servern innerhalb der Europäischen Union (Frankfurt am Main, Deutschland, eu.i.posthog.com) betrieben.
+                    </p>
+                    <p className="mb-2">
+                        Die Nutzung erfolgt ausschließlich nach Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Wenn Sie der Erfassung zustimmen, werden pseudonymisierte Nutzungsdaten (z. B. aufgerufene Seiten, Klicks, Browsertyp) erhoben. Bei angemeldeten Nutzern können zudem Ihre Benutzer-ID sowie Profildaten (wie Name, E-Mail-Adresse und Abonnement-Status) verknüpft werden, um das Nutzungserlebnis und den Support zu optimieren.
+                    </p>
+                    <p>
+                        Die Datenverarbeitung und Speicherung erfolgt ausschließlich in der EU (Frankfurt). Ein Datentransfer in Drittländer wird dadurch vermieden. Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft über die "Cookie Settings" im Footer der Website widerrufen.
                     </p>
                 </div>
 
@@ -88,7 +99,7 @@ export function PrivacyPolicy() {
 
                 <div className="border-t border-white/10 pt-6 mt-8">
                     <p className="text-xs text-neutral-500 italic">
-                        Stand: Mai 2026. Diese Datenschutzerklärung entspricht den Vorgaben der EU-Datenschutz-Grundverordnung (DSGVO).
+                        Stand: Juni 2026. Diese Datenschutzerklärung entspricht den Vorgaben der EU-Datenschutz-Grundverordnung (DSGVO).
                     </p>
                 </div>
             </section>

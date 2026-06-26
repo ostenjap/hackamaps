@@ -28,9 +28,22 @@ import { DownloadSuccessModal } from './components/Export/DownloadSuccessModal';
 import { Impressum } from './components/Legal/Impressum';
 import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
 import { Footer } from './components/Home/Footer';
+import { CookieConsent } from './components/ui/CookieConsent';
+import { trackPageView, trackEvent } from './lib/posthog';
 
 export default function AppContent() {
-    const [view, setView] = useState<ViewState>('home');
+    const [view, setView] = useState<ViewState>(() => {
+        if (typeof window !== 'undefined') {
+            const path = window.location.pathname;
+            if (path === '/privacy') return 'privacy';
+            if (path === '/impressum') return 'impressum';
+            if (path === '/discover') return 'discover';
+            if (path === '/map') return 'map';
+            if (path === '/face_map') return 'face_map';
+            if (path === '/organizers') return 'organizers';
+        }
+        return 'home';
+    });
     const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
     const [isInputOpen, setIsInputOpen] = useState(false);
     const [inputText, setInputText] = useState('');
@@ -53,6 +66,33 @@ export default function AppContent() {
     const { pins, refetch: refetchPins } = useFacePins();
 
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Sync URL with view state
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const currentPath = window.location.pathname;
+        const targetPath = view === 'home' ? '/' : `/${view}`;
+        if (currentPath !== targetPath) {
+            window.history.pushState(null, '', targetPath);
+        }
+    }, [view]);
+
+    // Handle back/forward navigation
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const handlePopState = () => {
+            const path = window.location.pathname;
+            if (path === '/privacy') setView('privacy');
+            else if (path === '/impressum') setView('impressum');
+            else if (path === '/discover') setView('discover');
+            else if (path === '/map') setView('map');
+            else if (path === '/face_map') setView('face_map');
+            else if (path === '/organizers') setView('organizers');
+            else if (path === '/') setView('home');
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
 
     // --- Filter State ---
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -229,10 +269,17 @@ export default function AppContent() {
         const query = new URLSearchParams(window.location.search);
         if (query.get('export_success') === 'true') {
             setIsExportSuccessOpen(true);
+            trackEvent('export_successful', {
+                type: 'one_dollar_checkout'
+            });
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
         } else if (query.get('session_id')) {
             setShowSuccessToast(true);
+            trackEvent('payment_successful', {
+                session_id: query.get('session_id'),
+                type: 'membership_upgrade'
+            });
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -240,6 +287,11 @@ export default function AppContent() {
             setTimeout(() => setShowSuccessToast(false), 5000);
         }
     }, []);
+
+    // Track tab/view changes in PostHog
+    useEffect(() => {
+        trackPageView(view);
+    }, [view]);
 
     return (
         <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
@@ -496,6 +548,8 @@ export default function AppContent() {
                 </button>
             </nav>
 
+            {/* GDPR Cookie Consent Banner */}
+            <CookieConsent />
         </div>
     );
 }

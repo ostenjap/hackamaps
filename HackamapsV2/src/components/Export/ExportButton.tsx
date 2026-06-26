@@ -3,6 +3,7 @@ import { Download, FileSpreadsheet, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import type { FilterState } from '../../types';
+import { trackEvent } from '../../lib/posthog';
 
 interface ExportButtonProps {
     filters: FilterState;
@@ -20,6 +21,11 @@ export const ExportButton = ({ filters }: ExportButtonProps) => {
     const handleExport = async () => {
         setIsLoading(true);
         setErrorMsg(null);
+
+        trackEvent('export_button_clicked', {
+            is_premium: isPremium,
+            filters
+        });
 
         try {
             if (isPremium) {
@@ -77,6 +83,9 @@ export const ExportButton = ({ filters }: ExportButtonProps) => {
                 }
 
                 if (data.url) {
+                    trackEvent('export_stripe_checkout_initiated', {
+                        filters
+                    });
                     // Redirect directly to Stripe Checkout
                     window.location.href = data.url;
                 } else {

@@ -41,6 +41,12 @@ export function Footer({ setView }: FooterProps) {
                     >
                         Privacy Policy (Datenschutz)
                     </button>
+                    <button
+                        onClick={() => window.dispatchEvent(new Event('open_cookie_consent'))}
+                        className="hover:text-white transition-colors duration-200 cursor-pointer font-medium"
+                    >
+                        Cookie Settings
+                    </button>
                     <a
                         href="mailto:ojap@hackamaps.com"
                         className="hover:text-white transition-colors duration-200 cursor-pointer font-medium"
