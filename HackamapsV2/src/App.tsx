@@ -5,20 +5,36 @@ import AppContent from './AppContent';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { CityLandingPage } from './components/SEO/CityLandingPage';
+import { ProgrammaticSEOLayout } from './components/SEO/ProgrammaticSEOLayout';
 import { SEO_CITIES } from './config/cities';
 
 export default function App() {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-  
-  // Match /hackathons-in-:city (e.g., /hackathons-in-berlin)
-  const cityMatch = pathname.match(/^\/hackathons-in-([a-z-]+)$/);
-  const cityKey = cityMatch ? cityMatch[1] : null;
-  const cityConfig = cityKey ? SEO_CITIES[cityKey] : null;
 
-  if (cityConfig) {
+  // Match /hackathons/tag/:tag (e.g., /hackathons/tag/ai)
+  const tagMatch = pathname.match(/^\/hackathons\/tag\/([a-z0-9-]+)$/);
+  if (tagMatch) {
     return (
       <HelmetProvider>
-        <CityLandingPage cityKey={cityKey!} />
+        <ProgrammaticSEOLayout mode="tag" slug={tagMatch[1]} />
+      </HelmetProvider>
+    );
+  }
+
+  // Match /hackathons-in-:city (e.g., /hackathons-in-berlin)
+  const cityMatch = pathname.match(/^\/hackathons-in-([a-z0-9-]+)$/);
+  const cityKey = cityMatch ? cityMatch[1] : null;
+
+  if (cityKey) {
+    // Curated cities keep the rich, hand-tuned landing page; any other city
+    // present in the database falls through to the generic DB-driven layout.
+    return (
+      <HelmetProvider>
+        {SEO_CITIES[cityKey] ? (
+          <CityLandingPage cityKey={cityKey} />
+        ) : (
+          <ProgrammaticSEOLayout mode="city" slug={cityKey} />
+        )}
         {/* <Analytics /> */}
       </HelmetProvider>
     );

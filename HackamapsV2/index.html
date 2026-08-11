@@ -16,11 +16,11 @@
       frame-src 'self' https://accounts.google.com;
     ">
 
-  <title>Hackamaps - Plan Your Coding Vacation | Discover Global Hackathons</title>
+  <!-- <title> and <meta name="description"> are injected per-page via
+       react-helmet-async (homepage defaults live in AppContent) so prerendered
+       programmatic-SEO pages don't end up with duplicate tags. -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-  <meta name="description"
-    content="Plan your coding vacation with Hackamaps - discover hackathons across 6 continents and travel the world while building amazing projects. Find hackathon travel opportunities worldwide.">
   <meta name="keywords"
     content="hackathon travel, coding vacation, global hackathons, developer events worldwide, hackathon map, coding retreats, developer travel, hackathons, hackathon map, hackathon travel, coding events, developer meetups, programming competitions, hackathon calendar">
   <meta name="author" content="Hackamaps" />
@@ -97,12 +97,8 @@
     }
     </script>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Hackamaps — Find Hackathons Worldwide & Plan Coding Travel">
-  <meta property="og:description"
-    content="Discover hackathons worldwide and plan your next coding adventure. Interactive map, filters, featured listings, and promotion for organizers.">
+  <!-- Open Graph (og:title/description/url injected per-page via Helmet) -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://hackamaps.com/">
   <meta property="og:image" content="https://hackamaps.com/og-image.png">
 
   <!-- Twitter -->
@@ -113,8 +109,9 @@
     content="Discover hackathons worldwide and plan your next coding adventure. Interactive map & event promotion for organizers.">
   <meta name="twitter:image" content="https://hackamaps.com/twitter-image.png">
 
-  <!-- Canonical -->
-  <link rel="canonical" href="https://hackamaps.com/">
+  <!-- Canonical is injected per-page via react-helmet-async (see AppContent /
+       CityLandingPage / ProgrammaticSEOLayout) to avoid duplicate canonicals on
+       prerendered programmatic-SEO pages. -->
 </head>
 
 <body>

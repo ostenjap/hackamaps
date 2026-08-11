@@ -29,6 +29,7 @@ import { Impressum } from './components/Legal/Impressum';
 import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
 import { Footer } from './components/Home/Footer';
 import { CookieConsent } from './components/ui/CookieConsent';
+import { Helmet } from 'react-helmet-async';
 import { trackPageView, trackEvent } from './lib/posthog';
 
 export default function AppContent() {
@@ -295,6 +296,14 @@ export default function AppContent() {
 
     return (
         <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
+            <Helmet>
+                <title>Hackamaps - Plan Your Coding Vacation | Discover Global Hackathons</title>
+                <meta name="description" content="Plan your coding vacation with Hackamaps - discover hackathons across 6 continents and travel the world while building amazing projects. Find hackathon travel opportunities worldwide." />
+                <link rel="canonical" href="https://hackamaps.com/" />
+                <meta property="og:title" content="Hackamaps — Find Hackathons Worldwide & Plan Coding Travel" />
+                <meta property="og:description" content="Discover hackathons worldwide and plan your next coding adventure. Interactive map, filters, featured listings, and promotion for organizers." />
+                <meta property="og:url" content="https://hackamaps.com/" />
+            </Helmet>
 
             <AuthModal
                 isOpen={isAuthModalOpen}

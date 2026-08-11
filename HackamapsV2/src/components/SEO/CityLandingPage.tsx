@@ -262,7 +262,11 @@ export const CityLandingPage = ({ cityKey }: { cityKey: string }) => {
 
                 <meta name="twitter:card" content="summary_large_image" />
 
-                
+                {/* Self-referencing canonical — overrides the homepage canonical
+                    hardcoded in index.html so this page is indexed on its own URL. */}
+                <link rel="canonical" href={`https://hackamaps.com/hackathons-in-${cityConfig.slug}`} />
+                <meta property="og:url" content={`https://hackamaps.com/hackathons-in-${cityConfig.slug}`} />
+
                 {/* Event Schema: JSON-LD */}
                 <script type="application/ld+json">
                     {JSON.stringify({

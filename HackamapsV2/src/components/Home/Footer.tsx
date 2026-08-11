@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ViewState } from '../../types';
+import { SEOFooterLinks } from '../SEO/SEOFooterLinks';
 
 interface FooterProps {
     setView: (view: ViewState) => void;
@@ -16,8 +17,10 @@ export function Footer({ setView }: FooterProps) {
     };
 
     return (
-        <footer className="w-full mt-24 py-8 border-t border-white/5 bg-black/40 backdrop-blur-md">
-            <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-neutral-500">
+        <footer className="w-full mt-24 border-t border-white/5 bg-black/40 backdrop-blur-md">
+            {/* Crawlable internal-link index (cities & tags) for SEO. */}
+            <SEOFooterLinks />
+            <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-neutral-500">
                 
                 {/* Left Side: Brand */}
                 <div className="flex items-center gap-2">
