@@ -4,6 +4,7 @@ import { CATEGORIES } from '../../types';
 import { Globe, Plus, Filter } from 'lucide-react';
 import { Badge } from '../ui';
 import { trackEvent } from '../../lib/posthog';
+import { CARTO_DARK_URL, CARTO_ATTRIBUTION } from '../../lib/mapTiles';
 
 interface MapViewProps {
     events: HackathonEvent[];
@@ -72,14 +73,15 @@ const MapContainer = ({ events, selectedEventId }: { events: HackathonEvent[], s
         const L = (window as any).L;
         const map = L.map(mapContainer.current, {
             zoomControl: false,
-            attributionControl: false,
+            attributionControl: true,
             // Lock the view:
             minZoom: 2,
             maxBounds: [[-90, -180], [90, 180]], // Top-left, Bottom-right
             maxBoundsViscosity: 1.0 // 1.0 = strict solid wall, 0.0 = bouncy
         }).setView([20, 0], 2);
 
-        const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const tileLayer = L.tileLayer(CARTO_DARK_URL, {
+            attribution: CARTO_ATTRIBUTION,
             maxZoom: 19,
             noWrap: true, // Prevents the map from repeating horizontally
             bounds: [[-85.0511, -180], [85.0511, 180]] // Standard world bounds to prevent 400 errors for non-existent tiles

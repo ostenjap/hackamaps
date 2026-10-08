@@ -37,6 +37,7 @@ We've implemented a powerful, intuitive filter panel that helps you find exactly
     ```
 3.  **Environment Setup**:
     Ensure your `.env` file contains the necessary `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+    Also set `VITE_CARTO_API_KEY` (free key from https://carto.com/basemaps/apikey); without it the map tiles show an "API KEY REQUIRED" watermark.
 4.  **Run Development Server**:
     ```bash
     npm run dev

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { HackathonEvent } from '../../types';
 import { CATEGORIES } from '../../types';
+import { CARTO_DARK_URL, CARTO_ATTRIBUTION } from '../../lib/mapTiles';
 
 /**
  * Lightweight, data-driven Leaflet map for programmatic SEO pages.
@@ -49,11 +50,12 @@ export function SEOMap({
             const L = (window as any).L;
             const map = L.map(containerRef.current, {
                 zoomControl: true,
-                attributionControl: false,
+                attributionControl: true,
                 minZoom: 2,
             }).setView(center ?? [20, 0], center ? zoom : 2);
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            L.tileLayer(CARTO_DARK_URL, {
+                attribution: CARTO_ATTRIBUTION,
                 maxZoom: 19,
                 noWrap: true,
                 bounds: [[-85.0511, -180], [85.0511, 180]],

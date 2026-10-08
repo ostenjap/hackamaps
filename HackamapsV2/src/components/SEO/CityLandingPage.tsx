@@ -6,6 +6,7 @@ import { Badge } from '../ui';
 import { useEvents } from '../../hooks/useEvents';
 import { Helmet } from 'react-helmet-async';
 import { SEO_CITIES, type CityConfig } from '../../config/cities';
+import { CARTO_DARK_URL, CARTO_ATTRIBUTION } from '../../lib/mapTiles';
 
 const CityMapContainer = ({ events, cityConfig }: { events: HackathonEvent[], cityConfig: CityConfig }) => {
     const mapContainer = useRef<HTMLDivElement>(null);
@@ -53,11 +54,12 @@ const CityMapContainer = ({ events, cityConfig }: { events: HackathonEvent[], ci
         const L = (window as any).L;
         const map = L.map(mapContainer.current, {
             zoomControl: true,
-            attributionControl: false,
+            attributionControl: true,
             minZoom: 3,
         }).setView(cityConfig.coords, cityConfig.zoom);
 
-        const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const tileLayer = L.tileLayer(CARTO_DARK_URL, {
+            attribution: CARTO_ATTRIBUTION,
             maxZoom: 19,
             noWrap: true,
             bounds: [[-85.0511, -180], [85.0511, 180]]

@@ -3,6 +3,7 @@ import type { FacePin } from '../../types';
 import { User, Plus } from 'lucide-react';
 import { Badge } from '../ui';
 import { useAuth } from '../../contexts/AuthContext';
+import { CARTO_DARK_URL, CARTO_ATTRIBUTION } from '../../lib/mapTiles';
 
 interface FaceMapViewProps {
     pins: FacePin[];
@@ -63,13 +64,14 @@ const FaceMapContainer = ({ pins }: { pins: FacePin[] }) => {
         const L = (window as any).L;
         const map = L.map(mapContainer.current, {
             zoomControl: false,
-            attributionControl: false,
+            attributionControl: true,
             minZoom: 2,
             maxBounds: [[-90, -180], [90, 180]],
             maxBoundsViscosity: 1.0
         }).setView([20, 0], 2);
 
-        const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const tileLayer = L.tileLayer(CARTO_DARK_URL, {
+            attribution: CARTO_ATTRIBUTION,
             maxZoom: 19,
             noWrap: true,
             bounds: [[-85.0511, -180], [85.0511, 180]] // Clamp requests to valid world coordinates
