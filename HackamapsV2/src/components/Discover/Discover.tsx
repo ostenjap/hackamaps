@@ -4,7 +4,6 @@ import { Card, Badge, Button } from '../ui';
 import type { HackathonEvent, ViewState, FilterState } from '../../types';
 import { CATEGORIES } from '../../types';
 import { ExportButton } from '../Export/ExportButton';
-import { trackEvent } from '../../lib/posthog';
 
 interface DiscoverProps {
     events: HackathonEvent[];
@@ -43,14 +42,6 @@ export const Discover = ({ events, isLoading, setView, onOpenFilter, onSelectEve
                             <Card 
                                 key={event.id} 
                                 onClick={() => {
-                                    trackEvent('hackathon_selected', {
-                                        event_id: event.id,
-                                        title: event.title,
-                                        location: event.location,
-                                        prize: event.prize,
-                                        date: event.date,
-                                        source: event.source || 'user'
-                                    });
                                     onSelectEvent?.(event.id);
                                 }} 
                                 className="cursor-pointer group relative p-6 flex flex-col justify-between min-h-[280px]"

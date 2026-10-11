@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import AppContent from './AppContent';
-// import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '@vercel/analytics/react';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { CityLandingPage } from './components/SEO/CityLandingPage';
@@ -17,6 +17,7 @@ export default function App() {
     return (
       <HelmetProvider>
         <ProgrammaticSEOLayout mode="tag" slug={tagMatch[1]} />
+        <Analytics />
       </HelmetProvider>
     );
   }
@@ -35,7 +36,7 @@ export default function App() {
         ) : (
           <ProgrammaticSEOLayout mode="city" slug={cityKey} />
         )}
-        {/* <Analytics /> */}
+        <Analytics />
       </HelmetProvider>
     );
   }
@@ -64,7 +65,7 @@ export default function App() {
     <HelmetProvider>
       <AuthProvider>
         <AppContent />
-        {/* <Analytics /> */}
+        <Analytics />
       </AuthProvider>
     </HelmetProvider>
   );

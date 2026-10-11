@@ -28,9 +28,7 @@ import { DownloadSuccessModal } from './components/Export/DownloadSuccessModal';
 import { Impressum } from './components/Legal/Impressum';
 import { PrivacyPolicy } from './components/Legal/PrivacyPolicy';
 import { Footer } from './components/Home/Footer';
-import { CookieConsent } from './components/ui/CookieConsent';
 import { Helmet } from 'react-helmet-async';
-import { trackPageView, trackEvent } from './lib/posthog';
 
 export default function AppContent() {
     const [view, setView] = useState<ViewState>(() => {
@@ -270,17 +268,10 @@ export default function AppContent() {
         const query = new URLSearchParams(window.location.search);
         if (query.get('export_success') === 'true') {
             setIsExportSuccessOpen(true);
-            trackEvent('export_successful', {
-                type: 'one_dollar_checkout'
-            });
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
         } else if (query.get('session_id')) {
             setShowSuccessToast(true);
-            trackEvent('payment_successful', {
-                session_id: query.get('session_id'),
-                type: 'membership_upgrade'
-            });
             // Remove the query param from URL without reloading
             window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -288,11 +279,6 @@ export default function AppContent() {
             setTimeout(() => setShowSuccessToast(false), 5000);
         }
     }, []);
-
-    // Track tab/view changes in PostHog
-    useEffect(() => {
-        trackPageView(view);
-    }, [view]);
 
     return (
         <div className="relative w-full h-screen overflow-hidden bg-[#050505] text-white font-sans selection:bg-blue-500/30">
@@ -556,9 +542,6 @@ export default function AppContent() {
                     <span className="text-[10px] font-medium">Facemap</span>
                 </button>
             </nav>
-
-            {/* GDPR Cookie Consent Banner */}
-            <CookieConsent />
         </div>
     );
 }

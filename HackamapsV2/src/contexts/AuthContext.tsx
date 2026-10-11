@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
-import { identifyUser, resetUser } from '../lib/posthog';
 
 interface Profile {
     id: string;
@@ -42,7 +41,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
-                identifyUser(session.user.id, { email: session.user.email });
                 fetchProfile(session.user.id);
             } else {
                 setIsLoading(false);
@@ -59,7 +57,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
-                identifyUser(session.user.id, { email: session.user.email });
                 fetchProfile(session.user.id);
             } else {
                 setProfile(null);
@@ -80,12 +77,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (!error && data) {
                 setProfile(data);
-                identifyUser(userId, {
-                    username: data.username,
-                    full_name: data.full_name,
-                    tier: data.tier,
-                    is_premium: data.is_premium
-                });
             }
         } catch (error) {
             console.error("Error fetching profile:", error);
@@ -102,7 +93,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const signOut = async () => {
         await supabase.auth.signOut();
-        resetUser();
         setProfile(null);
         setUser(null);
         setSession(null);

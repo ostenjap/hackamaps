@@ -65,15 +65,12 @@ export function PrivacyPolicy() {
                         Diese Freigabe erfolgt ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Sie können Ihre Einwilligung und Ihren Pin jederzeit über Ihr Profil löschen.
                     </p>
 
-                    <h3 className="font-semibold text-white mt-4 mb-1">F. Analyse-Dienst (PostHog)</h3>
+                    <h3 className="font-semibold text-white mt-4 mb-1">F. Reichweitenmessung (Vercel Web Analytics)</h3>
                     <p className="mb-2">
-                        Wir nutzen zur Analyse des Nutzerverhaltens und zur Verbesserung unseres Angebots den Open-Source-Analysedienst PostHog (PostHog, Inc., 2261 Market Street #4008, San Francisco, CA 94114, USA). Die von uns genutzte Instanz wird auf Servern innerhalb der Europäischen Union (Frankfurt am Main, Deutschland, eu.i.posthog.com) betrieben.
-                    </p>
-                    <p className="mb-2">
-                        Die Nutzung erfolgt ausschließlich nach Ihrer ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Wenn Sie der Erfassung zustimmen, werden pseudonymisierte Nutzungsdaten (z. B. aufgerufene Seiten, Klicks, Browsertyp) erhoben. Bei angemeldeten Nutzern können zudem Ihre Benutzer-ID sowie Profildaten (wie Name, E-Mail-Adresse und Abonnement-Status) verknüpft werden, um das Nutzungserlebnis und den Support zu optimieren.
+                        Zur statistischen Auswertung der Seitenaufrufe nutzen wir Vercel Web Analytics (Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA). Vercel Web Analytics setzt keine Cookies und speichert keine Informationen auf Ihrem Endgerät. Es werden ausschließlich anonymisierte, aggregierte Daten erfasst (z. B. aufgerufene Seite, Referrer, Land, Browser- und Gerätetyp). Eine Identifizierung einzelner Nutzer oder eine seitenübergreifende Nachverfolgung findet nicht statt.
                     </p>
                     <p>
-                        Die Datenverarbeitung und Speicherung erfolgt ausschließlich in der EU (Frankfurt). Ein Datentransfer in Drittländer wird dadurch vermieden. Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft über die "Cookie Settings" im Footer der Website widerrufen.
+                        Rechtsgrundlage ist unser berechtigtes Interesse an der Analyse und Verbesserung unseres Angebots gemäß Art. 6 Abs. 1 lit. f DSGVO.
                     </p>
                 </div>
 
